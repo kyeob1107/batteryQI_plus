@@ -14,6 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Models\DB.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Folder Include="weight\" />
   </ItemGroup>
 
