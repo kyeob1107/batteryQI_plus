@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Button Content="DB연결" Command="{Binding LinkDBCommand}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="49" Width="66" Margin="311,168,0,0"/>
 
     </Grid>
 </Window>
