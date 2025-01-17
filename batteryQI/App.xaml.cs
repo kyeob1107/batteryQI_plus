@@ -10,10 +10,18 @@ namespace batteryQI
     /// </summary>
     public partial class App : Application
     {
-        private void Application_Startup(object sender, StartupEventArgs e)
+        //private void Application_Startup(object sender, StartupEventArgs e)
+        //{
+        //    MainWindow main = new();
+        //    main.ShowDialog();
+        //}
+
+        protected override void OnStartup(StartupEventArgs e)
         {
-            MainWindow main = new();
-            main.ShowDialog();
+            base.OnStartup(e);
+
+            var loginWindow = new LoginWindow();
+            loginWindow.Show();
         }
     }
 
