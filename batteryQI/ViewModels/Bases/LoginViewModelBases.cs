@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace batteryQI.ViewModels.Bases
     internal partial class LoginViewModelBases : ObservableObject
     {
         private Manager _manager;
+        private DBlink DBConnection;
         public Manager Manager
         {
             get => _manager;
@@ -23,30 +25,33 @@ namespace batteryQI.ViewModels.Bases
         }
         public LoginViewModelBases()
         {
-            // Model 객체 초기화
-            _manager = new Manager();
+            // Manager 객체 생성
+            _manager = Manager.Instance();
             // 로그인 창 열면서 DB 연결
-            DBlink DBConnection = new DBlink();
+            DBConnection = DBlink.Instance();
             DBConnection.Connect();
         }
+
         [RelayCommand]
         private void Login(object obj)
         {
             PasswordBox pw = obj as PasswordBox;
 
-            if (Manager.ManagerID == "manager1" && pw.Password == "1234")
+            if (DBConnection.ConnectOk())
             {
-                MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                string sql = "";
+                DBConnection.Select(sql);
+                MessageBox.Show("Hello World");
+                // MainWindow로 Navigation 처리
                 var mainWindow = new MainWindow();
                 mainWindow.Show();
 
                 // 현재 창 닫기
-                Application.Current.Windows[0]?.Close();
+                Application.Current.Windows[0]?.Close();  // 첫 번째 창 닫기 (로그인 창)
             }
             else
             {
-                MessageBox.Show("아이디 및 비밀번호를 확인해 주세요", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("DB 연결 오류! 다시 시도해주세요", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
