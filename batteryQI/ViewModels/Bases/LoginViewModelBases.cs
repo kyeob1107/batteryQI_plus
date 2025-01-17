@@ -33,26 +33,27 @@ namespace batteryQI.ViewModels.Bases
         }
 
         [RelayCommand]
+
         private void Login(object obj)
         {
-            PasswordBox pw = obj as PasswordBox;
-
-            if (DBConnection.ConnectOk())
+            // DB가 제대로 연결되어 있고 PassBox가 안 비어져 있으면 수행
+            if(DBConnection.ConnectOk() && obj is PasswordBox pw)
             {
-                string sql = "";
-                DBConnection.Select(sql);
-                MessageBox.Show("Hello World");
-                // MainWindow로 Navigation 처리
-                var mainWindow = new MainWindow();
-                mainWindow.Show();
+                List<Dictionary<string, object>> login = DBConnection.Select($"SELECT managerId, managerPw FROM manager WHERE managerId='{Manager.ManagerID}';");
+                if (login.Count != 0 && (pw.Password == login[0]["managerPw"].ToString()))
+                {
+                    MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // 현재 창 닫기
-                Application.Current.Windows[0]?.Close();  // 첫 번째 창 닫기 (로그인 창)
-            }
-            else
-            {
-                MessageBox.Show("DB 연결 오류! 다시 시도해주세요", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                    var mainWindow = new MainWindow();
+                    mainWindow.Show();
+
+                    // 현재 창 닫기
+                    Application.Current.Windows[0]?.Close();
+                }
+                else
+                {
+                    MessageBox.Show("아이디 및 비밀번호를 확인해 주세요", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
         }
     }
 }
