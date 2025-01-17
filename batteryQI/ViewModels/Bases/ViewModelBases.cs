@@ -7,6 +7,8 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using batteryQI.Models;
+using batteryQI.Views;
+using System.Windows.Controls;
 
 namespace batteryQI.ViewModels.Bases
 {
