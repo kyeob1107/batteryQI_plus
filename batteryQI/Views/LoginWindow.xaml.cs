@@ -25,6 +25,5 @@ namespace batteryQI.Views
             InitializeComponent();
             this.DataContext = new loginViewModel();
         }
-
     }
 }
