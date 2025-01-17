@@ -26,34 +26,5 @@ namespace batteryQI.Views
             this.DataContext = new loginViewModel();
         }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
-        {
-            string username = UsernameBox.Text;
-            string password = PasswordBox.Password;
-
-
-            //if (username == "manager1" && password == "1234")
-            //{
-            //    MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            //    var mainWindow = new MainWindow();
-            //    mainWindow.Show();
-
-            //    this.Close();
-            //}
-            //else
-            //{
-            //    MessageBox.Show("아이디 및 비밀번호를 확인해 주세요", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
-
-            MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            var mainWindow = new MainWindow();
-            mainWindow.Show();
-
-            this.Close();
-
-
-        }
     }
 }

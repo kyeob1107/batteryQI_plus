@@ -42,23 +42,8 @@ namespace batteryQI.Models
 
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(myConnection))
-                {
-                    connection.Open();
-                    string sql = "SELECT * FROM manager"; // 테스트 쿼리
-
-                    // ExecuteReader를 이용하여
-                    // 연결 모드로 데이터 가져오기
-                    MySqlCommand cmd = new MySqlCommand(sql, connection);
-                    MySqlDataReader table = cmd.ExecuteReader();
-                    string x = "";
-                    while (table.Read())
-                    {
-                        x += $"{table["managerId"]}\r\n";
-                    }
-                    table.Close();
-                    MessageBox.Show(x);
-                }
+                MySqlConnection connection = new MySqlConnection(myConnection);
+                connection.Open(); // DB 오픈
             }
             catch(Exception E)
             {
