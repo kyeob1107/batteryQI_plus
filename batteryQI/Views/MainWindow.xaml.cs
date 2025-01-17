@@ -22,31 +22,9 @@ namespace batteryQI.Views
         public MainWindow()
         {
             InitializeComponent();
-            // 초기 화면 설정
-            MainFrame.Content = new DashboardView();
+            var viewModel = new MainWindowViewModel();
+            viewModel.CloseAction = () => this.Close();
+            DataContext = viewModel;
         }
-
-
-
-        private void HomeButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Content = new DashboardView();
-        }
-
-        private void ChartButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Content = new ChartView();
-        }
-
-        private void ManagerButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Content = new ManagerView();
-        }
-
-        private void ExitButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
     }
 }
