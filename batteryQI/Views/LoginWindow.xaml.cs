@@ -31,7 +31,6 @@ namespace batteryQI.Views
             string username = UsernameBox.Text;
             string password = PasswordBox.Password;
 
-
             //if (username == "manager1" && password == "1234")
             //{
             //    MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
