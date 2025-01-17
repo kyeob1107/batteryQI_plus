@@ -31,5 +31,12 @@ namespace batteryQI.Models
                 SetProperty(ref _totalInspectNum, value); 
             } 
         }
+
+        public Statistics()
+        {
+            this._manageID = "manager_None";
+            this._totalInspectNum = 0;
+            this._defectList = new List<string>() { "오염", "파손", "기타" };
+        }
     }
 }
