@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace batteryQI.Models
 {
+    // 싱글톤 패턴
     internal class Manager : ObservableObject
     {
     }
