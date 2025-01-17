@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace batteryQI.Views
+namespace batteryQI.UserControls
 {
     /// <summary>
     /// Interaction logic for ManagerPage.xaml
