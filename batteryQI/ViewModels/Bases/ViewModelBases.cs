@@ -16,7 +16,7 @@ namespace batteryQI.ViewModels.Bases
         [RelayCommand]
         private void LinkDB()
         {
-            DBlink x = new(); 
+            DBlink x = new();
             x.Connect(); // 링크
         }
     }

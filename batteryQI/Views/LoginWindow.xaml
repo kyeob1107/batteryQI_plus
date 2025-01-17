@@ -1,6 +1,7 @@
 ﻿<Window x:Class="batteryQI.Views.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:batteryQI.Views"
         Title="LoginWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -12,7 +13,7 @@
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBox x:Name="UsernameBox" Width="200" Margin="5"/>
             <PasswordBox x:Name="PasswordBox" Width="200" Margin="5" />
-            <Button Content="Login" Width="200" Margin="5" Click="LoginButton_Click" />
+            <Button Content="Login" Width="200" Margin="5" Command= "{Binding LinkDBCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

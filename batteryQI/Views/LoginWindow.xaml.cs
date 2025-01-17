@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using batteryQI.ViewModels;
 
 namespace batteryQI.Views
 {
@@ -22,6 +23,7 @@ namespace batteryQI.Views
         public LoginWindow()
         {
             InitializeComponent();
+            this.DataContext = new loginViewModel();
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -29,7 +31,6 @@ namespace batteryQI.Views
             string username = UsernameBox.Text;
             string password = PasswordBox.Password;
 
-            
             //if (username == "manager1" && password == "1234")
             //{
             //    MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
