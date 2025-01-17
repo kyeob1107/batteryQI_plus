@@ -54,7 +54,6 @@ namespace batteryQI.ViewModels.Bases
                 {
                     MessageBox.Show("아이디 및 비밀번호를 확인해 주세요", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
         }
     }
 }

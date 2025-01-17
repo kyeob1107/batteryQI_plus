@@ -91,6 +91,7 @@ namespace batteryQI.Models
                 return false; // db insert 에러
             }
         }
+
         public List<Dictionary<string, object>> Select(string sql)
         {
             // 간단한 Select문 메소드, 불러오는 데이터가 크면 그냥 직접 Select을 하는 것을 추천
@@ -122,6 +123,11 @@ namespace batteryQI.Models
                 MessageBox.Show("데이터베이스 접속 오류", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return resultList;
+        }
+
+        public bool Select(string sql)
+        {
+            return false; // 테이블
         }
 
         public void Disconnect()
