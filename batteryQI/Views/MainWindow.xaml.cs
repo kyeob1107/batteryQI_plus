@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using batteryQI.ViewModels;
+using Microsoft.Win32;
 
 namespace batteryQI.Views
 {
@@ -20,7 +21,31 @@ namespace batteryQI.Views
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowViewModel();
+            // 초기 화면 설정
+            MainFrame.Content = new DashboardView();
         }
+
+
+
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new DashboardView();
+        }
+
+        private void ChartButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new ChartView();
+        }
+
+        private void ManagerButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new ManagerView();
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
     }
 }
