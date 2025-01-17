@@ -37,7 +37,7 @@ namespace batteryQI.ViewModels.Bases
         private void Login(object obj)
         {
             // DB가 제대로 연결되어 있고 PassBox가 안 비어져 있으면 수행
-            if(DBConnection.ConnectOk() && obj is PasswordBox pw)
+            if (DBConnection.ConnectOk() && obj is PasswordBox pw)
             {
                 List<Dictionary<string, object>> login = DBConnection.Select($"SELECT managerId, managerPw FROM manager WHERE managerId='{Manager.ManagerID}';");
                 if (login.Count != 0 && (pw.Password == login[0]["managerPw"].ToString()))
@@ -54,6 +54,7 @@ namespace batteryQI.ViewModels.Bases
                 {
                     MessageBox.Show("아이디 및 비밀번호를 확인해 주세요", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
         }
     }
 }

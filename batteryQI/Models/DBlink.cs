@@ -125,11 +125,6 @@ namespace batteryQI.Models
             return resultList;
         }
 
-        public bool Select(string sql)
-        {
-            return false; // 테이블
-        }
-
         public void Disconnect()
         {
             connection.Close(); // 연결 해제
