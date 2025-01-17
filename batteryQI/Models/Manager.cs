@@ -14,7 +14,15 @@ namespace batteryQI.Models
     {
         private string _managerID;
         private string _managerPW;
-
+        static Manager manager; // singleton
+        public static Manager Instance()
+        {
+            if(manager == null)
+            {
+                manager = new Manager(); // Manager 객체 생성
+            }
+            return manager;
+        }
         public string ManagerID
         {
             get { return _managerID; }
