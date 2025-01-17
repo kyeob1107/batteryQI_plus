@@ -5,7 +5,7 @@
 
 # Data Protect
 batteryQI/Models/DB.txt
-
+batteryQI/Weight/*.onnx
 # User-specific files
 *.rsuser
 *.suo
