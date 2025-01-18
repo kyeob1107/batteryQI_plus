@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace batteryQI.UserControls
+namespace batteryQI.Views.UserControls
 {
     /// <summary>
     /// Interaction logic for ErrorInspection.xaml

@@ -17,7 +17,7 @@ using ScottPlot.WPF;
 using ScottPlot;
 using ScottPlot.Plottables;
 
-namespace batteryQI.UserControls
+namespace batteryQI.Views.UserControls
 {
     /// <summary>
     /// Interaction logic for ChartPage.xaml

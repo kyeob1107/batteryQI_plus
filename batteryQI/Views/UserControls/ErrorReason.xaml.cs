@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using batteryQI.Views;
 
-namespace batteryQI.UserControls
+namespace batteryQI.Views.UserControls
 {
     /// <summary>
     /// Interaction logic for ErrorReason.xaml

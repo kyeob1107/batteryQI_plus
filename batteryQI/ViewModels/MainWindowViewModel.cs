@@ -8,7 +8,7 @@ using System.Windows;
 using batteryQI.Models;
 using batteryQI.ViewModels.Bases;
 using CommunityToolkit.Mvvm.Input;
-using batteryQI.UserControls;
+using batteryQI.Views.UserControls;
 using batteryQI.Views;
 
 namespace batteryQI.ViewModels
