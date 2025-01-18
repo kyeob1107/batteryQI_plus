@@ -34,6 +34,7 @@ namespace batteryQI.Models
             }
             return staticDBlink;
         }
+        // -----------
         private void setDBLink()
         {
             string relativePath = @".\Models\DB.txt";
