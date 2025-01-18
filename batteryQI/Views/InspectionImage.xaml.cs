@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using batteryQI.UserControls;
+using batteryQI.Views.UserControls;
 
 namespace batteryQI.Views
 {

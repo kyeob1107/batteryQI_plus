@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using batteryQI.Views;
 using Microsoft.Win32;
 
-namespace batteryQI.UserControls
+namespace batteryQI.Views.UserControls
 {
     /// <summary>
     /// Interaction logic for DashboardView.xaml

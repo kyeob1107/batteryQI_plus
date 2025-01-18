@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="batteryQI.UserControls.ErrorInspection"
+﻿<UserControl x:Class="batteryQI.Views.UserControls.ErrorInspection"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>

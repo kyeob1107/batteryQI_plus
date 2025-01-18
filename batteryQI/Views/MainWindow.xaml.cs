@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using batteryQI.UserControls;
+using batteryQI.Views.UserControls;
 using batteryQI.ViewModels;
 using Microsoft.Win32;
 

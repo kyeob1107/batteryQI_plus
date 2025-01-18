@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="batteryQI.UserControls.ChartView"
+﻿<UserControl x:Class="batteryQI.Views.UserControls.ChartView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:scottPlot="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF">
