@@ -24,7 +24,7 @@ namespace batteryQI.Views
             InitializeComponent();
             var viewModel = new MainWindowViewModel();
             viewModel.CloseAction = () => this.Close();
-            DataContext = viewModel;
+            this.DataContext = viewModel;
         }
     }
 }
