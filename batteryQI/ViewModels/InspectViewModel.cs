@@ -16,22 +16,26 @@ namespace batteryQI.ViewModels
     // 이미지 검사 이벤트
     internal partial class InspectViewModel : ObservableObject
     {
-        // binding할 변수 선언
         // combox 리스트
-        //private IList<string> _manufacList = new List<string>();
+        private IList<string> _manufacList = new List<string>(); // 제조사명 받아오기
+        private Dictionary<string, string> ManufacDict = new Dictionary<string, string>(); // viewmodel에서만 사용하는 딕셔너리 가져오기
         private IList<string>? _batteryTypeList = new List<string>() {"Cell", "Module", "Pack" };
-        private IList<string>? _batteryFormList = new List<string>() { "Pouch", "Cylinder" };
+        private IList<string>? _batteryShapeList = new List<string>() { "Pouch", "Cylinder" };
         private IList<string>? _usageList = new List<string>() { "Household", "Industrial" }; // 사용처 리스트업
         private Battery _battery;
         private DBlink DBConnection;
 
+        public IList<string>? ManufacList
+        {
+            get => _manufacList;
+        }
         public IList<string>? BatteryTypeList
         {
             get => _batteryTypeList;
         }
-        public IList<string>? BatteryFormList
+        public IList<string>? BatteryShapeList
         {
-            get => _batteryFormList;
+            get => _batteryShapeList;
         }
         public IList<string>? UsageList
         {
@@ -50,8 +54,38 @@ namespace batteryQI.ViewModels
             // 대시보드 열며 DB 연결
             DBConnection = DBlink.Instance();
             DBConnection.Connect();
+
+            getManafactureNameID();
         }
-        
+
+        // --------------------------------------------
+        private void getManafactureNameID() // DB에서 제조사 리스트 가져오기
+        {
+            // DB에서 가져와서 리스트 초기화하기, ID는 안 가져오고 Name만 추가
+            List<Dictionary<string, object>> ManufactureList_Raw = DBConnection.Select("SELECT * FROM manufacture;"); // 데이터 가져오기
+            for(int i = 0; i < ManufactureList_Raw.Count; i++)
+            {
+                string Name = "";
+                string ID = "";
+                 foreach(KeyValuePair<string, object> items in ManufactureList_Raw[i])
+                {
+                    // 제조사 이름 key, 제조사 id value
+                    //Name = items.
+                    if(items.Key == "manufacName")
+                    {
+                        Name = items.Value.ToString();
+                    }
+                    else if(items.Key == "manufacId")
+                    {
+                        ID = items.Value.ToString(); 
+                    }
+                }
+                _manufacList.Add(Name);
+                ManufacDict.Add(Name, ID);
+            }
+        }
+
+        // --------------------------------------------
         // 이벤트 핸들러
         [RelayCommand]
         private void ImageSelectButton_Click()

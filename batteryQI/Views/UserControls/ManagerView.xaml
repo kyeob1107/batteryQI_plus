@@ -23,7 +23,8 @@
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0 0 0 5">
                 <TextBlock Text="제조사 리스트" FontWeight="Bold" VerticalAlignment="Center" />
-                <Button Content="+" Width="30" Height="30" VerticalAlignment="Center" Margin="5 0 0 0" Click="AddManufacturerButton_Click" />
+                <TextBox Text="{Binding ManufacName, UpdateSourceTrigger=PropertyChanged }" Width="150" VerticalAlignment="Center" Margin="0 0 5 0"/>
+                <Button Content="+" Width="30" Height="30" VerticalAlignment="Center" Margin="5 0 0 0" Command="{Binding ManufactInsertCommand}" />
             </StackPanel>
 
             <ListBox x:Name="ManufacturerListBox" Grid.Row="1" Margin="0 5 0 0">

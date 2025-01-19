@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using batteryQI.ViewModels;
 
 namespace batteryQI.Views.UserControls
 {
@@ -23,14 +24,10 @@ namespace batteryQI.Views.UserControls
         public ManagerView()
         {
             InitializeComponent();
+            this.DataContext = new ManagerViewModel();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void AddManufacturerButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
