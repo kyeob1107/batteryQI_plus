@@ -99,7 +99,7 @@ namespace batteryQI.ViewModels
                 pie.ShowLabels = true;
                 pie.LegendLabels = Enumerable.Range(0, Values.Length)
                                    .Select(i => $"{Labels[i]} ({Values[i]})").ToArray();
-                    plot.Legend();
+                plot.Legend();
             }
             else 
             { 
