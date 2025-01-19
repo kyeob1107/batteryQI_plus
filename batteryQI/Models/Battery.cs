@@ -36,7 +36,7 @@ namespace batteryQI.Models
         // 사유: 여러 개의 배터리 객체를 관리하는 것이 아닌 순차적으로 배터리 객체를 활용하기 때문
         // (현재 검사 결과를 수행하지 않으면 다음 검사 불가, 이전 검사 결과는 휘발됨), 메모리 활용성을 위해서 재사용 하는 것으로 로직 변경
 
-        private string modelPath = @".\weight\deeplab_model2.onnx"; // 이미지 처리 모델 로드
+        private string modelPath = @".\weight\deeplab_model5.onnx"; // 이미지 처리 모델 로드
 
         static Battery staticBattery;
         public static Battery Instance()
@@ -102,58 +102,63 @@ namespace batteryQI.Models
         {
             // 이미지 로드
             Bitmap bitmap = new Bitmap(_imagePath);
-            int width = bitmap.Width;
-            int height = bitmap.Height;
 
             // ONNX 입력에 맞게 변환(RGB -> Float32 -> CHW)
-            var inputTensor = new DenseTensor<float>(new[] { 1, 3, 512, 512 });
-            using (var resizedImage = new Bitmap(bitmap, new Size(512, 512)))
+            int targetWidth = 512; // ONNX 모델의 입력 크기
+            int targetHeight = 512;
+
+            var inputTensor = new DenseTensor<float>(new[] { 1, 3, targetHeight, targetWidth });
+            using (var resizedImage = new Bitmap(bitmap, new Size(targetWidth, targetHeight)))
             {
-                for (int y = 0; y < 512; y++)
+                for (int y = 0; y < targetHeight; y++)
                 {
-                    for (int x = 0; x < 512; x++)
+                    for (int x = 0; x < targetWidth; x++)
                     {
                         Color pixel = resizedImage.GetPixel(x, y);
-                        inputTensor[0, 0, y, x] = pixel.R / 255.0f; // Red
-                        inputTensor[0, 1, y, x] = pixel.G / 255.0f; // Green
-                        inputTensor[0, 2, y, x] = pixel.B / 255.0f; // Blue
+                        inputTensor[0, 0, y, x] = (pixel.R / 255.0f - 0.5f) / 0.5f; // Red [-1, 1] 정규화
+                        inputTensor[0, 1, y, x] = (pixel.G / 255.0f - 0.5f) / 0.5f; // Green
+                        inputTensor[0, 2, y, x] = (pixel.B / 255.0f - 0.5f) / 0.5f; // Blue
                     }
                 }
             }
             return inputTensor;
         }
+
         private Bitmap Postprocess(Tensor<float> output)
         {
-            int numClasses = 4;
-            int height = output.Dimensions[1];
-            int width = output.Dimensions[2];
+            int numClasses = 4; // 클래스 수
+            int height = output.Dimensions[2]; // 출력 차원
+            int width = output.Dimensions[3];
             var colorMap = new int[,]
             {
-                { 0, 0, 0},
-                { 255, 0, 0 },
-                { 0, 255, 0 },
-                { 0, 0, 255 }
+                { 0, 0, 0 },     // 클래스 0
+                { 255, 0, 0 },   // 클래스 1
+                { 0, 255, 0 },   // 클래스 2
+                { 0, 0, 255 }    // 클래스 3
+
             };
 
             Bitmap resultBitmap = new Bitmap(width, height);
 
-            for(int y = 0; y < height; y++)
+            for (int y = 0; y < height; y++)
             {
-                for(int x = 0; x <width; x++)
+                for (int x = 0; x < width; x++)
                 {
                     int maxClass = 0;
                     float maxVal = float.MinValue;
 
-                    for(int c = 0; c < numClasses; c++)
+                    // 각 픽셀에서 가장 높은 클래스 확률 선택
+                    for (int c = 0; c < numClasses; c++)
                     {
                         float value = output[0, c, y, x];
-                        if(value > maxVal)
+                        if (value > maxVal)
                         {
                             maxVal = value;
                             maxClass = c;
                         }
                     }
 
+                    // 클래스 색상 매핑
                     Color classColor = Color.FromArgb(
                         colorMap[maxClass, 0],
                         colorMap[maxClass, 1],
@@ -162,20 +167,16 @@ namespace batteryQI.Models
                     resultBitmap.SetPixel(x, y, classColor);
                 }
             }
-
-            // 결과 비트맵을 전역변수 비트맵으로 변환
-            //BatteryBitmapImage = 
             return resultBitmap;
         }
+
         private BitmapImage BitmapToBitmapImage(Bitmap bitmap)
         {
             using (var memoryStream = new MemoryStream())
             {
-                // Bitmap 데이터를 MemoryStream으로 저장
                 bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
                 memoryStream.Position = 0;
 
-                // MemoryStream 데이터를 BitmapImage로 변환
                 BitmapImage bitmapImage = new BitmapImage();
                 bitmapImage.BeginInit();
                 bitmapImage.StreamSource = memoryStream;
@@ -188,35 +189,35 @@ namespace batteryQI.Models
 
         public void imgProcessing()
         {
-            //AI를 통해서 처리하는 부분
+            // AI 처리 로직
             try
             {
                 using var session = new InferenceSession(modelPath);
 
-                if (_imagePath != "")
+                if (!string.IsNullOrEmpty(_imagePath))
                 {
                     var inputTensor = PreprocessImage(); // 이미지 전처리
-                    var inputs = new List<NamedOnnxValue> { 
-                        NamedOnnxValue.CreateFromTensor("input", inputTensor) 
+                    var inputs = new List<NamedOnnxValue>
+                    {
+                        NamedOnnxValue.CreateFromTensor("input", inputTensor) // ONNX 입력 이름 확인 필요
                     };
 
                     using var results = session.Run(inputs);
                     var output = results.First().AsTensor<float>();
 
-                    Bitmap result = Postprocess(output);
-                    BatteryBitmapImage = BitmapToBitmapImage(result);
+                    Bitmap result = Postprocess(output); // 출력 후처리
+                    BatteryBitmapImage = BitmapToBitmapImage(result); // 결과 이미지 저장
                 }
                 else
                 {
-                    MessageBox.Show("이미지 업로드 오류", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return; // 경로가 없으면
+                    MessageBox.Show("이미지 경로가 비어 있습니다.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch(Exception e)
-            {   
-                MessageBox.Show(e.ToString());
-                MessageBox.Show("AI 오류!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            catch (Exception e)
+            {
+                MessageBox.Show($"오류 발생: {e.Message}\n{e.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 }
