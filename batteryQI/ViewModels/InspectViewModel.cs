@@ -96,54 +96,37 @@ namespace batteryQI.ViewModels
             if(openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 _battery.ImagePath = openFileDialog.FileName; // 배터리 객체에 이미지 경로 저장
-                //_battery.BatteryBitmapImage = new BitmapImage(new Uri(_battery.ImagePath)); // 이미지를 bitmap으로 변환
             }
             // 배터리 객체 자체는 하나의 배터리 객체로 계속 재활용
         }
 
         // 이미지 검사 이벤트 핸들러
+        [RelayCommand]
         private void ImageInspectionButton_Click()
         {
-            //if (PreviewImage.Source == null)
-            //{
-            //    MessageBox.Show("배터리 이미지가 업로드되지 않았습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
-            //else if (manufacture.SelectedIndex == 0 || batteryType.SelectedIndex == 0 || batteryShape.SelectedIndex == 0 || usage.SelectedIndex == 0)
-            //{
-            //    MessageBox.Show("배터리 이미지 정보를 모두 기입해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    return;
-            //}
-            //else
-            //{
-            //    InspectionImage();
-            //}
+            // 이미지 정보, 제조사 아이디
+            if(battery.ImagePath != "" && battery.ManufacName != "" && battery.BatteryShape != "" && battery.BatteryType != "" && battery.Usage != "")
+            {
+                // 이미지 검사 함수로 대체 예정
+                //battery.BatteryBitmapImage = new BitmapImage(new Uri(_battery.ImagePath)); // 이미지를 bitmap으로 변환
+                //imgProcessing
+                battery.imgProcessing(); 
+                // 정상 불량 판단 페이지로 넘어가게
+                var inspectionImage = new InspectionImage();
+                inspectionImage.ShowDialog();
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("모든 정보를 기입해주세요", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-
-        private void InspectionImage()
-        {
-            //var inspectionImage = new InspectionImage();
-
-            //if (PreviewImage.Source is BitmapImage previewImageSource)
-            //{
-            //    //inspectionImage.SetImage(previewImageSource);
-            //}
-
-            //inspectionImage.ShowDialog();
-        }
-
-        public void SetImage(BitmapImage image)
-        {
-            //AnalyzeImage.Source = image;
-        }
-
         // -------------------------------------- Inspection 결과 화면 이벤트 처리
         [RelayCommand]
         private void NomalButton_Click()
         {
             // DefectState는 정상인걸로
-            //Application.Current.Windows[0]?.Close(); // 왜 현재창을 닫지?
-            //MessageBox.Show("정상"); // 코드 정상 실행
+            battery.DefectStat = "정상";
+            System.Windows.Application.Current.Windows[0]?.Close();
         }
         [RelayCommand]
         private void ErrorButton_Click()
@@ -154,19 +137,6 @@ namespace batteryQI.ViewModels
             //errorReasonControl.ErrorConfirmed += OnErrorReasonConfirmed;
 
             //InspectionFrame.Content = errorReasonControl;
-        }
-        private void OnErrorReasonConfirmed(string selectedReason)
-        {
-            //if (AnalyzeImage.Source is BitmapImage analyzeImage)
-            //{
-            //    var errorInfoView = new ErrorInfoView();
-            //    errorInfoView.SetErrorInfo(analyzeImage);
-            //    errorInfoView.ShowDialog();
-            //}
-            //else
-            //{
-            //    MessageBox.Show("이미지를 로드할 수 없습니다.", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
         }
     }
 }

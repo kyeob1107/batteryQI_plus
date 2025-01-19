@@ -22,7 +22,7 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Image x:Name="AnalyzeImage" Stretch="Fill" Height="300"/>
+            <Image x:Name="AnalyzeImage" Source="{Binding battery.BatteryBitmapImage }" Stretch="Fill" Height="300"/>
         </Border>
 
         <Grid Grid.Row="2" x:Name="inspectionSection">

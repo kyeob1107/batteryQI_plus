@@ -43,7 +43,7 @@
                             </LinearGradientBrush>
                         </Border.Background>
 
-                        <Image Source="{Binding battery.ImagePath}" x:Name="PreviewImage" Stretch="Fill"/>
+                        <Image Source="{Binding battery.ImagePath}" Stretch="Uniform" x:Name="PreviewImage"/>
                     </Border>
 
                     <Button Style="{StaticResource imageSectionButton}" Margin="0 360 0 0" Content="이미지 선택" Command="{Binding ImageSelectButton_ClickCommand}" FontSize="17" FontWeight="SemiBold" />
@@ -63,7 +63,7 @@
 
                         <ComboBox x:Name="manufacture"
                                   ItemsSource="{Binding Path = DataContext.ManufacList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                  SelectedValue="{Binding battery.ManufacList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
+                                  SelectedValue="{Binding battery.ManufacName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}"/>
@@ -72,7 +72,7 @@
                         </ComboBox>
                         <ComboBox x:Name="batteryType"
                                   ItemsSource="{Binding Path = DataContext.BatteryTypeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                  SelectedValue="{Binding battery.BatteryTypedList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
+                                  SelectedValue="{Binding battery.BatteryType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}"/>
@@ -82,7 +82,7 @@
 
                         <ComboBox x:Name="batteryShape"
                                   ItemsSource="{Binding Path = DataContext.BatteryShapeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                  SelectedValue="{Binding battery.BatteryShapeList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
+                                  SelectedValue="{Binding battery.BatteryShape, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}"/>
@@ -101,7 +101,7 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <Button Style="{StaticResource imageSectionButton}" Margin="0 35 0 -10" Content="이미지 분석" FontSize="17" FontWeight="SemiBold" Command="{Binding ImageInspectionButton_Click}"/>
+                        <Button Style="{StaticResource imageSectionButton}" Margin="0 35 0 -10" Content="이미지 분석" FontSize="17" FontWeight="SemiBold" Command="{Binding ImageInspectionButton_ClickCommand}"/>
                     </StackPanel>
                 </Border>
             </Grid>
