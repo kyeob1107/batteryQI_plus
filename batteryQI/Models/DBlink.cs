@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,19 @@ using MySqlX.XDevAPI;
 
 namespace batteryQI.Models
 {
+    // DB select count결과 저장용도 - 추후 따로 cs분리해서 넣을까 고민중
+    public class CountResult
+    {
+        public List<object> defectGroups { get; set; }
+        public List<double> counts { get; set; }
+
+        public CountResult()
+        {
+            defectGroups = new List<object>();
+            counts = new List<double>();
+        }
+    }
+
     internal class DBlink : ObservableObject
     {
         private string _server = ""; // _server : ip 주소
@@ -124,6 +138,36 @@ namespace batteryQI.Models
                 MessageBox.Show("데이터베이스 접속 오류", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return resultList;
+        }
+
+        
+
+        // DB select count(*) action
+        public CountResult? CountQuery(string table, string groupingCriteria)
+        {
+            CountResult result = new CountResult();
+            string query = @$"
+                            SELECT
+	                            {groupingCriteria},
+	                            Count(*)
+                            FROM
+	                            {table}
+                            GROUP BY
+	                            {groupingCriteria};";
+
+            MySqlCommand cmd = new MySqlCommand(query, this.connection);
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                result.defectGroups.Add(reader[0]);
+                result.counts.Add(reader.GetDouble(1));
+            }
+            reader.Close();
+
+            Debug.WriteLine($"결과 입니다 \r\n {result}"); //디버깅용 추후 삭제예정
+            return result;
+
         }
 
         public void Disconnect()
