@@ -15,7 +15,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ScottPlot.WPF;
 using ScottPlot;
-using ScottPlot.Plottables;
 using batteryQI.ViewModels;
 
 namespace batteryQI.Views.UserControls

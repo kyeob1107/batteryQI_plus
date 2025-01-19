@@ -1,7 +1,6 @@
 ﻿<UserControl x:Class="batteryQI.Views.UserControls.ChartView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:scottPlot="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
              xmlns:local="clr-namespace:batteryQI.Extensions"
              xmlns:vm="clr-namespace:batteryQI.ViewModels">
 
@@ -16,9 +15,9 @@
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
+                <!-- ChartView와 ChartViewModel과 PlotExtension(첨부속성)을 연결하여 사용하는 부분 -->
                 <DataTemplate>
-                    <!--<ContentControl Content="{Binding Content}"/>-->
-                    <scottPlot:WpfPlot local:PlotExtensions.PlotData="{Binding Content}"/>
+                    <WpfPlot local:PlotExtensions.PlotData="{Binding Content}"/>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
