@@ -10,7 +10,7 @@ using Microsoft.ML.OnnxRuntime.Tensors;
 using Google.Protobuf.WellKnownTypes;
 using System.Windows.Forms;
 using System.Drawing;
-using SkiaSharp;
+//using SkiaSharp; // 아마 ScottPlot5 쓸데 있던 것 같은데 왜 여기에 있고, 남아있는지는 모르겠음
 using System.IO;
 //using Microsoft.ML.O
 
