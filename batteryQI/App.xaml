@@ -73,5 +73,24 @@
             <Setter Property="Height" Value="17"/>
         </Style>
 
+        <Style x:Key="commonButton" TargetType="Button" BasedOn="{StaticResource menuButton}">
+            <Setter Property="Background" Value="#5a5080"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="15"
+                                    BorderThickness="1" BorderBrush="#8a7fc7">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style TargetType="ComboBox">
+            <Setter Property="MaxDropDownHeight" Value="100"/>
+        </Style>
+
     </Application.Resources>
 </Application>

@@ -1,129 +1,161 @@
 ﻿<UserControl x:Class="batteryQI.Views.UserControls.DashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-        <!-- Main Section -->
-        <Grid x:Name="mainSection" Grid.Column="1" Margin="5 20 25 20" Panel.ZIndex="1">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="450"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!--Main Image Insert Section-->
-            <Border Grid.Row="1" Grid.ColumnSpan="2" CornerRadius="20" Margin="0 0 20 20">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                        <GradientStop Color="#6a5dae" Offset="0"/>
-                        <GradientStop Color="#54479c" Offset="1.2"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-
-                <!--Main Image PreView Section-->
-                <Grid>
+    <Viewbox Stretch="Uniform">
+        <Grid Width="1280" Height="720">
+            <Grid>
+                <!-- Main Section -->
+                <Grid x:Name="mainSection" Grid.Column="1" Margin="5 20 25 20" Panel.ZIndex="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="550"/>
+                        <RowDefinition Height="220"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="배터리 이미지" Margin="20 15" FontSize="20" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Top"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <Border CornerRadius="10" Margin="20 50 20 70">
+                    <!--Main Image Insert Section-->
+                    <Border Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="20" Margin="0 0 20 20">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                <GradientStop Color="White" Offset="0"/>
-                                <GradientStop Color="White" Offset="1.2"/>
+                                <GradientStop Color="#6a5dae" Offset="0"/>
+                                <GradientStop Color="#54479c" Offset="1.2"/>
                             </LinearGradientBrush>
                         </Border.Background>
 
-                        <Image Source="{Binding battery.ImagePath}" Stretch="Uniform" x:Name="PreviewImage"/>
+                        <!--Main Image PreView Section-->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="배터리 이미지" Margin="20 15" FontSize="20" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Top"/>
+
+                            <Border CornerRadius="10" Margin="20,70,20,70" ClipToBounds="True" Height="370" VerticalAlignment="Top">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                        <GradientStop Color="White" Offset="0"/>
+                                        <GradientStop Color="White" Offset="1.2"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+
+                                <Image Source="{Binding battery.ImagePath}" Stretch="Uniform" x:Name="PreviewImage" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+
+                            <Button Style="{StaticResource imageSectionButton}" Margin="0 460 0 0" Content="이미지 선택" Command="{Binding ImageSelectButton_ClickCommand}" FontSize="17" FontWeight="SemiBold" />
+                        </Grid>
                     </Border>
 
-                    <Button Style="{StaticResource imageSectionButton}" Margin="0 360 0 0" Content="이미지 선택" Command="{Binding ImageSelectButton_ClickCommand}" FontSize="17" FontWeight="SemiBold" />
-                </Grid>
-            </Border>
-
-            <!-- Image Info Section-->
-            <Grid Grid.Column="2" Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                
-                <Border CornerRadius="20" Background="#7163ba">
-                    <StackPanel Orientation="Vertical" Margin="20">
-                        <TextBlock Text="배터리 이미지 정보" Margin="0 0 0 0" FontSize="20" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-
-                        <ComboBox x:Name="manufacture"
+                    <!-- Image Info Section-->
+                    <Grid Grid.Column="2" Grid.Row="0">
+                        <Border CornerRadius="20" Background="#7163ba" Margin="0,0,0,22">
+                            <StackPanel Orientation="Vertical" Margin="20 20 20 0">
+                                <TextBlock Text="배터리 이미지 정보" Margin="0 0 0 0" FontSize="20" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                                
+                                <StackPanel Orientation="Vertical" Margin="10 40 0 0">
+                                    <TextBlock Text="제조사" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
+                                    <ComboBox x:Name="manufacture"
                                   ItemsSource="{Binding Path = DataContext.ManufacList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                  SelectedValue="{Binding battery.ManufacName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <ComboBox x:Name="batteryType"
+                                  SelectedValue="{Binding battery.ManufacName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="150" Margin="0 10 0 0">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical" Margin="10 20 0 0">
+                                    <TextBlock Text="배터리 타입" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
+                                    <ComboBox x:Name="batteryType"
                                   ItemsSource="{Binding Path = DataContext.BatteryTypeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                  SelectedValue="{Binding battery.BatteryType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                                  SelectedValue="{Binding battery.BatteryType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
 
-                        <ComboBox x:Name="batteryShape"
+                                <StackPanel Orientation="Vertical" Margin="10 20 0 0">
+                                    <TextBlock Text="배터리 형태" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
+                                    <ComboBox x:Name="batteryShape"
                                   ItemsSource="{Binding Path = DataContext.BatteryShapeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                  SelectedValue="{Binding battery.BatteryShape, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
+                                  SelectedValue="{Binding battery.BatteryShape, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
 
-                        </ComboBox>
-                        <ComboBox 
+                                <StackPanel Orientation="Vertical" Margin="10 20 0 0">
+                                    <TextBlock Text="사용처" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
+                                    <ComboBox 
                             x:Name="battryUsage"
                             ItemsSource = "{Binding Path = DataContext.UsageList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                            SelectedValue="{Binding battery.Usage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                            SelectedValue="{Binding battery.Usage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
 
-                        <Button Style="{StaticResource imageSectionButton}" Margin="0 35 0 -10" Content="이미지 분석" FontSize="17" FontWeight="SemiBold" Command="{Binding ImageInspectionButton_ClickCommand}"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
+                                <Button Style="{StaticResource imageSectionButton}" Margin="0 65 0 0" Content="이미지 분석" FontSize="17" FontWeight="SemiBold" Command="{Binding ImageInspectionButton_ClickCommand}"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
 
-            <!-- Progress Section -->
-            <Border Grid.Row="2" Grid.ColumnSpan="3" CornerRadius="10" Background="#7163ba" Padding="0 0 0 10">
-                <Grid>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Margin="10" Text="검사 진행률" FontSize="17" Foreground="white" FontWeight="SemiBold" />
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="20 0 0 0" Text="할당량: "/>
-                            <TextBlock Margin="20 0 0 0" Text="검사완료: "/>
-                            <TextBlock Margin="20 0 0 0" Text="검사진행률: "/>
-                        </StackPanel>
+                    <!-- Progress Section -->
+                    <Border Grid.Row="1" Grid.ColumnSpan="3" CornerRadius="10" Background="#7163ba" Padding="0 0 0 10" Margin="0,20,0,83">
+                        <Grid>
+                            <StackPanel Orientation="Vertical">
+                                <!-- 제목 -->
+                                <TextBlock Margin="10" Text="검사 진행률" FontSize="17" Foreground="White" FontWeight="SemiBold" />
 
-                        <ProgressBar Margin="20 10 20 0" Height="20" Value="20" Maximum="100" />
-                    </StackPanel>
+                                <!-- 검사 정보 -->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="20 0 0 0" Text="할당량 : " Foreground="White" FontSize="15"/>
+                                    <TextBlock Margin="60 0 0 0" Text="검사완료 : " Foreground="White" FontSize="15"/>
+                                    <TextBlock Margin="60 0 0 0" Text="검사진행률 : " Foreground="White" FontSize="15"/>
+                                </StackPanel>
+
+                                <!-- ProgressBar와 퍼센트 -->
+                                <Grid Margin="20 10 20 0" VerticalAlignment="Center">
+                                    <!-- ProgressBar -->
+                                    <ProgressBar Height="20" Value="20" Maximum="100">
+                                        <ProgressBar.Resources>
+                                            <!-- ProgressBar 색상 변경 -->
+                                            <Style TargetType="ProgressBar">
+                                                <Setter Property="Foreground" Value="#E5D1FF" />
+                                                <!-- 진행 부분 색상 -->
+                                                <Setter Property="Background" Value="#9A8CCC" />
+                                                <!-- 배경 색상 -->
+                                            </Style>
+                                        </ProgressBar.Resources>
+                                    </ProgressBar>
+
+                                    <!-- 퍼센트 텍스트 -->
+                                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0" FontSize="14" Foreground="White" FontWeight="SemiBold" Text="20%" />
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
                 </Grid>
-            </Border>
 
-            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+            </Grid>
         </Grid>
-
-    </Grid>
+    </Viewbox>
 </UserControl>
