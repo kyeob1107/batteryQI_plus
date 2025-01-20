@@ -126,7 +126,7 @@ namespace batteryQI.ViewModels
         {
             // DefectState는 정상인걸로
             battery.DefectStat = "정상";
-            System.Windows.Application.Current.Windows[0]?.Close();
+            //System.Windows.Application.Current.Windows[1]?.Close();
         }
         [RelayCommand]
         private void ErrorButton_Click()
