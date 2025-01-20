@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using batteryQI.Views;
+using batteryQI.ViewModels;
 
 namespace batteryQI.Views.UserControls
 {
@@ -27,6 +28,7 @@ namespace batteryQI.Views.UserControls
         public ErrorReason()
         {
             InitializeComponent();
+            this.DataContext = new InspectViewModel();
         }
 
         //private void ErrorConfirmButton_Click(object sender, RoutedEventArgs e)
