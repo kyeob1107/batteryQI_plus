@@ -27,9 +27,5 @@ namespace batteryQI.Views.UserControls
             this.DataContext = new ManagerViewModel();
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

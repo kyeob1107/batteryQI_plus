@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using batteryQI.ViewModels;
 
 namespace batteryQI.Views
 {
@@ -22,16 +23,7 @@ namespace batteryQI.Views
         public ErrorInfoView()
         {
             InitializeComponent();
-        }
-
-        public void SetErrorInfo(BitmapImage image)
-        {
-            ErrorInfoImage.Source = image;
-        }
-
-        private void confirmErrorInfoButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
+            this.DataContext = new InspectViewModel();
         }
     }
 }
