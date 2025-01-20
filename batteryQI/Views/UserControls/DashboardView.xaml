@@ -43,10 +43,10 @@
                             </LinearGradientBrush>
                         </Border.Background>
 
-                        <Image x:Name="PreviewImage" Stretch="Fill"/>
+                        <Image Source="{Binding battery.ImagePath}" Stretch="Uniform" x:Name="PreviewImage"/>
                     </Border>
 
-                    <Button Style="{StaticResource imageSectionButton}" Margin="0 360 0 0" Content="이미지 선택" Click="ImageSelectButton_Click" FontSize="17" FontWeight="SemiBold" />
+                    <Button Style="{StaticResource imageSectionButton}" Margin="0 360 0 0" Content="이미지 선택" Command="{Binding ImageSelectButton_ClickCommand}" FontSize="17" FontWeight="SemiBold" />
                 </Grid>
             </Border>
 
@@ -56,40 +56,52 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-
+                
                 <Border CornerRadius="20" Background="#7163ba">
                     <StackPanel Orientation="Vertical" Margin="20">
                         <TextBlock Text="배터리 이미지 정보" Margin="0 0 0 0" FontSize="20" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center"/>
 
-                        <ComboBox x:Name="manufacture" Width="150" Margin="10 50 0 0" SelectedIndex="0">
-                            <ComboBoxItem Content="제조사"/>
-                            <ComboBoxItem Content="옵션 1"/>
-                            <ComboBoxItem Content="옵션 2"/>
-                            <ComboBoxItem Content="옵션 3"/>
+                        <ComboBox x:Name="manufacture"
+                                  ItemsSource="{Binding Path = DataContext.ManufacList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                  SelectedValue="{Binding battery.ManufacName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox x:Name="batteryType"
+                                  ItemsSource="{Binding Path = DataContext.BatteryTypeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                  SelectedValue="{Binding battery.BatteryType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <ComboBox x:Name="batteryType" Width="150" Margin="10 50 0 0" SelectedIndex="0">
-                            <ComboBoxItem Content="배터리 타입"/>
-                            <ComboBoxItem Content="옵션 1"/>
-                            <ComboBoxItem Content="옵션 2"/>
-                            <ComboBoxItem Content="옵션 3"/>
+                        <ComboBox x:Name="batteryShape"
+                                  ItemsSource="{Binding Path = DataContext.BatteryShapeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                  SelectedValue="{Binding battery.BatteryShape, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+
+                        </ComboBox>
+                        <ComboBox 
+                            x:Name="battryUsage"
+                            ItemsSource = "{Binding Path = DataContext.UsageList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                            SelectedValue="{Binding battery.Usage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="10 50 0 0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <ComboBox x:Name="batteryShape" Width="150" Margin="10 50 0 0" SelectedIndex="0">
-                            <ComboBoxItem Content="배터리 형태"/>
-                            <ComboBoxItem Content="옵션 1"/>
-                            <ComboBoxItem Content="옵션 2"/>
-                            <ComboBoxItem Content="옵션 3"/>
-                        </ComboBox>
-
-                        <ComboBox x:Name="usage" Width="150" Margin="10 50 0 0" SelectedIndex="0">
-                            <ComboBoxItem Content="사용처"/>
-                            <ComboBoxItem Content="옵션 1"/>
-                            <ComboBoxItem Content="옵션 2"/>
-                            <ComboBoxItem Content="옵션 3"/>
-                        </ComboBox>
-
-                        <Button Style="{StaticResource imageSectionButton}" Margin="0 35 0 -10" Content="이미지 분석" FontSize="17" FontWeight="SemiBold" Click="ImageInspectionButton_Click"/>
+                        <Button Style="{StaticResource imageSectionButton}" Margin="0 35 0 -10" Content="이미지 분석" FontSize="17" FontWeight="SemiBold" Command="{Binding ImageInspectionButton_ClickCommand}"/>
                     </StackPanel>
                 </Border>
             </Grid>
