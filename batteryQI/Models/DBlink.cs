@@ -30,7 +30,7 @@ namespace batteryQI.Models
         }
     }
 
-    internal class DBlink : ObservableObject
+    public class DBlink : ObservableObject
     {
         private string _server = ""; // _server : ip 주소
         private string _port = ""; // _port : 포트번호
@@ -155,10 +155,15 @@ namespace batteryQI.Models
         
 
         // DB select count(*) action
-        public CountResult? CountQuery(string table, string groupingCriteria)
+        public CountResult? CountQuery(string table, string groupingCriteria, string mode = "label")
         {
             CountResult result = new CountResult();
-            string query = @$"
+            string query = "";
+            
+            // label이 default
+            if (mode == "label")
+            {
+                query = @$"
                             SELECT
 	                            {groupingCriteria},
 	                            Count(*)
@@ -166,6 +171,24 @@ namespace batteryQI.Models
 	                            {table}
                             GROUP BY
 	                            {groupingCriteria};";
+
+                
+            }
+            else if (mode == "timestamp")
+            {
+                query = @$"
+                            SELECT
+                             DATE_FORMAT({groupingCriteria}, '%Y-%m-%d %H:00:00') AS hour_interval,
+                             COUNT(*) AS count
+                            FROM
+                             {table}
+                            WHERE 
+                                defectStat = 1
+                            GROUP BY
+                             hour_interval
+                            ORDER BY
+                             hour_interval;";
+            }
 
             MySqlCommand cmd = new MySqlCommand(query, this.connection);
             MySqlDataReader reader = cmd.ExecuteReader();
@@ -177,7 +200,6 @@ namespace batteryQI.Models
             }
             reader.Close();
 
-            Debug.WriteLine($"결과 입니다 \r\n {result}"); //디버깅용 추후 삭제예정
             return result;
 
         }

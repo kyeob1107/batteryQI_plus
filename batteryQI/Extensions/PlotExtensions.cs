@@ -38,13 +38,17 @@ namespace batteryQI.Extensions
                 wpfPlot.Plot.ResetLayout();
                 wpfPlot.Render();
 
-                if (data is Chart1ViewModel chart1Data)
+                if (data is DefectTypePieViewModel DefectTypePieData)
                 {
-                    chart1Data.ConfigureChart(wpfPlot.Plot);
+                    DefectTypePieData.ConfigureChart(wpfPlot.Plot);
                 }
-                else if (data is Chart2ViewModel chart2Data)
+                else if (data is HourlyDefectChartViewModel HourlyDefectChartData)
                 {
-                    chart2Data.ConfigureChart(wpfPlot.Plot);
+                    HourlyDefectChartData.ConfigureChart(wpfPlot.Plot);
+                }
+                else if (data is DefectTypeChartByCategoryViewModel DefectTypeChartByCategoryData)
+                {
+                    DefectTypeChartByCategoryData.ConfigureChart(wpfPlot.Plot);
                 }
 
                 wpfPlot.Refresh();
