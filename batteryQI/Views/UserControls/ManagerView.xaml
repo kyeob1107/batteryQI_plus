@@ -10,9 +10,9 @@
 
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0 0 0 10">
             <TextBlock Text="월 검사 할당량: " VerticalAlignment="Center" Margin="0 0 5 0" />
-            <TextBox x:Name="InspectionLimitBox" Width="150" VerticalAlignment="Center" Margin="0 0 5 0" />
+            <TextBox Text="{Binding Manager.WorkAmount, UpdateSourceTrigger=PropertyChanged}" x:Name="InspectionLimitBox" Width="150" VerticalAlignment="Center" Margin="0 0 5 0" />
             <TextBlock Text="건" VerticalAlignment="Center" Margin="0 0 10 0" />
-            <Button Content="저장" Width="60" Height="30" VerticalAlignment="Center" Click="SaveButton_Click" />
+            <Button Content="저장" Width="60" Height="30" VerticalAlignment="Center" Command="{Binding SaveButton_ClickCommand}" />
         </StackPanel>
 
         <Grid Grid.Row="1">

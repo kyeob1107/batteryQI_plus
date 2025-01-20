@@ -93,6 +93,18 @@ namespace batteryQI.Models
             }
         }
 
+        public void Update(string sql)
+        {
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sql, this.connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                MessageBox.Show("데이터가 반영되지 않았습니다!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         public List<Dictionary<string, object>> Select(string sql)
         {
             // 간단한 Select문 메소드, 불러오는 데이터가 크면 그냥 직접 Select을 하는 것을 추천

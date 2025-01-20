@@ -138,5 +138,23 @@ namespace batteryQI.ViewModels
 
             //InspectionFrame.Content = errorReasonControl;
         }
+
+
+
+        // ------------------------
+        // ErrorInfo.xaml 이벤트 핸들링 (데이터 가용성을 위해서 여기서 코딩함..)
+        [RelayCommand]
+        private void confirmErrorInfoButton_Click()
+        {
+            if (DBConnection.ConnectOk()) // 배터리 정보 insert
+            {
+                DBConnection.Insert($"INSERT INTO batteryInfo (batteryId, shootDate, `usage`, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
+                    $"VALUES(0, '', '', '', 0, '', '', '', 0, 0, '');");
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("DB 연결 이상", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
