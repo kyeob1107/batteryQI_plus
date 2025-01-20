@@ -1,40 +1,57 @@
 ﻿<UserControl x:Class="batteryQI.Views.UserControls.ManagerView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="400">
 
-    <Grid Margin="10 70">
+    <Grid Margin="80">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0 0 0 10">
+        <!-- Monthly Inspection Allocation -->
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="-55,0,55,0">
             <TextBlock Text="월 검사 할당량: " VerticalAlignment="Center" Margin="0 0 5 0" />
-            <TextBox Text="{Binding Manager.WorkAmount, UpdateSourceTrigger=PropertyChanged}" x:Name="InspectionLimitBox" Width="150" VerticalAlignment="Center" Margin="0 0 5 0" />
+            <TextBox Text="{Binding Manager.WorkAmount, UpdateSourceTrigger=PropertyChanged}"
+                     x:Name="InspectionLimitBox" Width="150" VerticalAlignment="Center" Margin="0 0 5 0" />
             <TextBlock Text="건" VerticalAlignment="Center" Margin="0 0 10 0" />
-            <Button Content="저장" Width="60" Height="30" VerticalAlignment="Center" Command="{Binding SaveButton_ClickCommand}" />
+            <Button Content="저장"
+                    Width="60" Height="30"
+                    VerticalAlignment="Center"
+                    Command="{Binding SaveButton_ClickCommand}" />
         </StackPanel>
 
-        <Grid Grid.Row="1">
+        <!-- Manufacturer List -->
+        <Grid Grid.Row="1" Margin="-55,0,55,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0 0 0 5">
-                <TextBlock Text="제조사 리스트" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBox Text="{Binding ManufacName, UpdateSourceTrigger=PropertyChanged }" Width="150" VerticalAlignment="Center" Margin="0 0 5 0"/>
-                <Button Content="+" Width="30" Height="30" VerticalAlignment="Center" Margin="5 0 0 0" Command="{Binding ManufactInsertCommand}" />
+                <TextBlock Text="제조사 리스트:" FontWeight="Bold" VerticalAlignment="Center" Margin="0 0 5 0" />
+                <TextBox Text="{Binding ManufacName, UpdateSourceTrigger=PropertyChanged}"
+                         Width="150" VerticalAlignment="Center" Margin="0 0 5 0" />
+                <Button Content="+" Width="30" Height="30" VerticalAlignment="Center"
+                        Command="{Binding ManufactInsertCommand}" />
             </StackPanel>
 
-            <ListBox x:Name="ManufacturerListBox" Grid.Row="1" Margin="0 5 0 0">
-                <ListBoxItem>에너자이저</ListBoxItem>
-                <ListBoxItem>듀라셀</ListBoxItem>
-                <ListBoxItem>삼성</ListBoxItem>
-                <ListBoxItem>LG</ListBoxItem>
-                <ListBoxItem>SK</ListBoxItem>
-                <ListBoxItem>파나소닉</ListBoxItem>
-                <ListBoxItem>소니</ListBoxItem>
+            <ListBox ItemsSource="{Binding ManufacDict, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Value}" Margin="0 8 5 0" FontWeight="Bold" />
+                            <TextBlock Grid.Column="1" Text="{Binding Key}" Margin="0 8 0 0" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
     </Grid>
