@@ -25,7 +25,7 @@
                 </LinearGradientBrush>
             </Border.Background>
 
-            <Image x:Name="ErrorInfoImage" Stretch="Fill" Height="300"/>
+            <Image Source="{Binding battery.BatteryBitmapImage}" x:Name="ErrorInfoImage" Stretch="Fill" Height="300"/>
         </Border>
 
         <Border Grid.Row="1" Grid.Column="1" CornerRadius="10" Padding="10" Margin="10">
@@ -58,7 +58,7 @@
             </Grid>
         </Border>
 
-        <Button Grid.Row="2" Grid.ColumnSpan="2" Content="확인" Width="200" Height="50" Click="confirmErrorInfoButton_Click"/>
+        <Button Grid.Row="2" Grid.ColumnSpan="2" Content="확인" Width="200" Height="50" Command="{Binding confirmErrorInfoButton_ClickCommand}"/>
 
 
 
