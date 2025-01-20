@@ -15,7 +15,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ScottPlot.WPF;
 using ScottPlot;
-using ScottPlot.Plottables;
 using batteryQI.ViewModels;
 
 namespace batteryQI.Views.UserControls
@@ -28,7 +27,7 @@ namespace batteryQI.Views.UserControls
         public ChartView()
         {
             InitializeComponent();
-            this.DataContext = new ChartViewModel();
+            this.DataContext = new TabControlViewModel();
         }
     }
 }

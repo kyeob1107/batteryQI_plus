@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,20 @@ using MySqlX.XDevAPI;
 
 namespace batteryQI.Models
 {
-    internal class DBlink : ObservableObject
+    // DB select count결과 저장용도 - 추후 따로 cs분리해서 넣을까 고민중
+    public class CountResult
+    {
+        public List<object> defectGroups { get; set; }
+        public List<double> counts { get; set; }
+
+        public CountResult()
+        {
+            defectGroups = new List<object>();
+            counts = new List<double>();
+        }
+    }
+
+    public class DBlink : ObservableObject
     {
         private string _server = ""; // _server : ip 주소
         private string _port = ""; // _port : 포트번호
@@ -136,6 +150,58 @@ namespace batteryQI.Models
                 MessageBox.Show("데이터베이스 접속 오류", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return resultList;
+        }
+
+        
+
+        // DB select count(*) action
+        public CountResult? CountQuery(string table, string groupingCriteria, string mode = "label")
+        {
+            CountResult result = new CountResult();
+            string query = "";
+            
+            // label이 default
+            if (mode == "label")
+            {
+                query = @$"
+                            SELECT
+	                            {groupingCriteria},
+	                            Count(*)
+                            FROM
+	                            {table}
+                            GROUP BY
+	                            {groupingCriteria};";
+
+                
+            }
+            else if (mode == "timestamp")
+            {
+                query = @$"
+                            SELECT
+                             DATE_FORMAT({groupingCriteria}, '%Y-%m-%d %H:00:00') AS hour_interval,
+                             COUNT(*) AS count
+                            FROM
+                             {table}
+                            WHERE 
+                                defectStat = 1
+                            GROUP BY
+                             hour_interval
+                            ORDER BY
+                             hour_interval;";
+            }
+
+            MySqlCommand cmd = new MySqlCommand(query, this.connection);
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                result.defectGroups.Add(reader[0]);
+                result.counts.Add(reader.GetDouble(1));
+            }
+            reader.Close();
+
+            return result;
+
         }
 
         public void Disconnect()
