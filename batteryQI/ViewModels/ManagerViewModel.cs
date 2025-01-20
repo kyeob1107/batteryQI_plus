@@ -16,7 +16,7 @@ namespace batteryQI.ViewModels
     // 관리자 페이지
     internal partial class ManagerViewModel : ObservableObject
     {
-        private string _manufacName;
+        private string _manufacName = "";
         //private IList<string> _manufacList = new List<string>(); // 제조사 리스트 가져오기
         //private IList<string> _manufacIDList = new List<string>(); // 제조사 id 리스트
         private IDictionary<string, string> _manufacDict = new Dictionary<string, string>();
@@ -77,10 +77,17 @@ namespace batteryQI.ViewModels
             {
                 if (DBConnection.ConnectOk())
                 {
-                    DBConnection.Insert($"INSERT INTO manufacture (manufacId, manufacName) VALUES(0, '{ManufacName}');");
-                    _manufacDict.Clear();
-                    getManafactureNameID();
-                    MessageBox.Show("완료");
+                    if(ManufacName != "")
+                    {
+                        DBConnection.Insert($"INSERT INTO manufacture (manufacId, manufacName) VALUES(0, '{ManufacName}');");
+                        _manufacDict.Clear();
+                        getManafactureNameID();
+                        MessageBox.Show("완료");
+                    }
+                    else
+                    {
+                        MessageBox.Show("제조사를 입력해주세요", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             catch
