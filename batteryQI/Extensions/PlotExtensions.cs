@@ -34,9 +34,10 @@ namespace batteryQI.Extensions
             if (d is WpfPlot wpfPlot)
             {
                 var data = e.NewValue;
-                wpfPlot.Plot.Clear();
+                wpfPlot.Reset();
+                //wpfPlot.Plot.Clear();
                 //wpfPlot.Render();
-                wpfPlot.Plot.AxisAuto();
+                //wpfPlot.Plot.AxisAuto();
 
                 if (data is DefectTypePieViewModel DefectTypePieData)
                 {
