@@ -29,32 +29,64 @@
         </Border>
 
         <Border Grid.Row="1" Grid.Column="1" CornerRadius="10" Padding="10" Margin="10">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
 
-                <!-- Battery Info -->
-                <TextBlock Grid.Row="0" Text="배터리 아이디: " FontSize="16" FontWeight="SemiBold" Margin="10 0 0 0"/>
-                <TextBlock Grid.Row="1" Text="제조사: 에너자이저" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
-                <TextBlock Grid.Row="2" Text="촬영일자: 2025.01.14" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
-                <TextBlock Grid.Row="3" Text="촬영 장소: Line1" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
-                <TextBlock Grid.Row="4" Text="사용처: 가정용" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
-                <TextBlock Grid.Row="5" Text="배터리 타입: cell" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
-                <TextBlock Grid.Row="6" Text="배터리 형태: cylinder" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
-                <TextBlock Grid.Row="7" Text="관리자: sf_zone" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
-                <TextBlock Grid.Row="8" Text="불량 여부: yes" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
-                <TextBlock Grid.Row="9" Text="결함 종류: 오염" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
+                    <!-- Battery Info -->
+                    <TextBlock Grid.Row="0" Text="배터리 아이디" FontSize="16" FontWeight="SemiBold" Margin="10 0 0 0"/>
+                    <TextBlock Grid.Row="1" Text="제조사" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="2" Text="촬영일자" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="3" Text="촬영 장소" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="4" Text="사용처" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="5" Text="배터리 타입" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="6" Text="배터리 형태" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="7" Text="관리자" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="8" Text="불량 여부" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="9" Text="결함 종류" FontSize="16" FontWeight="SemiBold" Margin="10 10 0 0"/>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Battery Info -->
+                    <TextBlock Grid.Row="0" Text="" FontSize="16" FontWeight="Bold" Margin="10 0 0 0"/>
+                    <TextBlock Grid.Row="1" Text="" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="2" Text="" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="3" Text="" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="4" Text="" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="5" Text="" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="6" Text="" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="7" Text="" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="8" Text="" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
+                    <TextBlock Grid.Row="9" Text="" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
+                </Grid>
             </Grid>
         </Border>
 
