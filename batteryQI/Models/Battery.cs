@@ -44,7 +44,7 @@ namespace batteryQI.Models
         // ViewModel에서 사용할 변수 선언, imagePath 필요..(이미지 변수에 이미지를 넣을 때, 파일 경로로 로드)
         public string ShootDate
         {
-            get { return DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"); }
+            get { return DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"); }
         }
         public string Usage
         {

@@ -27,6 +27,7 @@ namespace batteryQI.ViewModels
         private IList<string>? _usageList = new List<string>() { "Household", "Industrial" }; // 사용처 리스트업
         private IList<string>? _defectList = new List<string>() { "Damage", "Pollution", "Damage and Pollution", "Etc.." };
         private Battery _battery;
+        private Manager _manager;
         private DBlink DBConnection;
 
         private Visibility _errorInspectionVisibility = Visibility.Visible; // 첫 번째 UserControl (ErrorInspection) Visibility 제어
@@ -62,6 +63,7 @@ namespace batteryQI.ViewModels
         {
             // Manager 객체 생성
             _battery = Battery.Instance();
+            _manager = Manager.Instance();
             // 대시보드 열며 DB 연결
             DBConnection = DBlink.Instance();
             DBConnection.Connect();
@@ -163,7 +165,7 @@ namespace batteryQI.ViewModels
         {
             // DefectState는 정상인걸로
             battery.DefectStat = "정상";
-
+            battery.DefectName = "Normal";
             var errorInfoView = new ErrorInfoView();
             errorInfoView.Show();
 
@@ -197,7 +199,25 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void confirmErrorInfoButton_Click(System.Windows.Window window)
         {
-            //System.Windows.MessageBox.Show(battery.DefectName);
+            // DB 정보 인서트
+
+            if (DBConnection.ConnectOk())
+            {
+                int defectState = -1;
+                if (battery.DefectStat == "정상")
+                    defectState = 1;
+                else
+                    defectState = 0;
+
+                //DBConnection.Insert($"INSERT INTO manufacture (manufacId, manufacName) VALUES(0, '{ManufacName}');");
+
+                if (DBConnection.Insert($"INSERT INTO batteryInfo (batteryId, shootDate, usageName, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
+                    $"VALUES(0, '{battery.ShootDate}', '{battery.Usage}', '{battery.BatteryType}', {ManufacDict[battery.ManufacName]}, '{battery.BatteryShape}', 'CodingOn', NULL, {_manager.ManagerNum}, {defectState}, '{battery.DefectName}');"))
+                    System.Windows.MessageBox.Show("완료!");
+                else
+                    System.Windows.MessageBox.Show("실패");
+            }
+            //System.Windows.Application.Current.Windows[0]?.Close();
             window?.Close();
         }
     }

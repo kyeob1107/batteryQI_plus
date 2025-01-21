@@ -26,6 +26,7 @@ namespace batteryQI.ViewModels
 
         public ChartViewModel() 
         {
+            System.Windows.MessageBox.Show("Hello1");
             // CountQuery 메소드 호출 및 결과 저장
             var chartData = _dblink.CountQuery("batteryInfo", "defectName");
             Values = chartData.counts.ToArray();
@@ -36,6 +37,8 @@ namespace batteryQI.ViewModels
 
         public ChartViewModel(string table, string groupingCriteria, string XAxis = "label")
         {
+            System.Windows.MessageBox.Show("Hello2");
+
             // CountQuery 메소드 호출 및 결과 저장
             // CountQuery에서는 mode라는 매개변수명으로 되어 있으나 XAis와 동일한 키워드를 가짐
             if (XAxis == "groupbar") 

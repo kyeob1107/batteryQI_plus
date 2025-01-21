@@ -12,6 +12,7 @@ namespace batteryQI.Models
     // 싱글톤 패턴
     internal class Manager : ObservableObject
     {
+        private int _managerNum;
         private string _managerID; // 담당자 아이디
         private string _managerPW; // 담당자 비번
         private int _workAmount; // 담당자 할당량
@@ -31,6 +32,14 @@ namespace batteryQI.Models
             set
             {
                 SetProperty(ref _managerID, value);
+            }
+        }
+        public int ManagerNum
+        {
+            get { return _managerNum; }
+            set
+            {
+                SetProperty(ref _managerNum, value);
             }
         }
         public string ManagerPW
