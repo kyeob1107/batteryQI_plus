@@ -22,13 +22,10 @@ namespace batteryQI.Views.UserControls
     /// </summary>
     public partial class ErrorReason : UserControl
     {
-        // 선택된 데이터 전달 이벤트
-        public event Action<string> ErrorConfirmed;
-
         public ErrorReason()
         {
             InitializeComponent();
-            this.DataContext = new InspectViewModel();
+            //this.DataContext = new InspectViewModel();
         }
 
         //private void ErrorConfirmButton_Click(object sender, RoutedEventArgs e)
@@ -42,32 +39,5 @@ namespace batteryQI.Views.UserControls
         //        MessageBox.Show("불량 유형을 선택해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Warning);
         //    }
         //}
-
-        //private void ShowErrorInfo()
-        //{
-        //    var errorInfoView = new ErrorInfoView();
-
-        //    //if (PreviewImage.Source is BitmapImage previewImageSource)
-        //    //{
-        //    //    inspectionImage.SetImage(previewImageSource);
-        //    //}
-
-        //    Window.GetWindow(this).Close();
-        //    errorInfoView.ShowDialog();
-        //}
-
-        private void ErrorConfirmButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (errorReasonCombo.SelectedIndex > 0)
-            {
-                // 선택된 콤보박스 값 전달
-                string selectedReason = (errorReasonCombo.SelectedItem as ComboBoxItem)?.Content.ToString();
-                ErrorConfirmed?.Invoke(selectedReason);
-            }
-            else
-            {
-                MessageBox.Show("불량 유형을 선택해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-        }
     }
 }

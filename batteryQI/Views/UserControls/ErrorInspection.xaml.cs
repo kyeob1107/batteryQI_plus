@@ -24,15 +24,5 @@ namespace batteryQI.Views.UserControls
         {
             InitializeComponent();
         }
-
-        private void NomalButton_Click(object sender, RoutedEventArgs e)
-        {
-            Window.GetWindow(this).Close();
-        }
-
-        private void ErrorButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
     }
 }

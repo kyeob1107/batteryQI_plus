@@ -73,7 +73,7 @@ namespace batteryQI.ViewModels
             // 아직 공통적으로 구현할 것 없어서 형식만 둠
         }
     }
-    public class TabControlViewModel : ViewModelBases
+    public partial class TabControlViewModel : ViewModelBases
     {
 
         public ObservableCollection<TabItemViewModel> Tabs { get; } = new ObservableCollection<TabItemViewModel>();

@@ -1,10 +1,14 @@
 ﻿<UserControl x:Class="batteryQI.Views.UserControls.ErrorInspection"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Visibility="{Binding ErrorInspectionVisibility}">
+
     <Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Width="50" Margin="0 0 20 0" Content="불량" Click="ErrorButton_Click"/>
-            <Button Width="50" Margin="20 0 0 0" Content="정상" Click="NomalButton_Click"/>
+            <Button Width="50" Margin="0 0 20 0" Content="불량" Command="{Binding ErrorButton_ClickCommand}"/>
+            <Button Width="50" Margin="20 0 0 0" Content="정상" Command="{Binding NomalButton_ClickCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+
         </StackPanel>
     </Grid>
 </UserControl>
