@@ -10,6 +10,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Forms;
 using batteryQI.Models;
+using batteryQI.Views.UserControls;
+using System.Windows.Controls;
 
 namespace batteryQI.ViewModels
 {
@@ -24,6 +26,9 @@ namespace batteryQI.ViewModels
         private IList<string>? _usageList = new List<string>() { "Household", "Industrial" }; // 사용처 리스트업
         private Battery _battery;
         private DBlink DBConnection;
+        private Visibility _errorInspectionVisibility = Visibility.Visible; // 첫 번째 UserControl (ErrorInspection) Visibility 제어
+        private Visibility _errorReasonVisibility = Visibility.Collapsed; // 두 번째 UserControl (ErrorReason) Visibility 제어
+
 
         public IList<string>? ManufacList
         {
@@ -85,6 +90,21 @@ namespace batteryQI.ViewModels
             }
         }
 
+        // 첫 번째 UserControl (ErrorInspection) Visibility 제어
+        public Visibility ErrorInspectionVisibility
+        {
+            get => _errorInspectionVisibility;
+            set => SetProperty(ref _errorInspectionVisibility, value);
+        }
+
+        // 두 번째 UserControl (ErrorReason) Visibility 제어
+        public Visibility ErrorReasonVisibility
+        {
+            get => _errorReasonVisibility;
+            set => SetProperty(ref _errorReasonVisibility, value);
+        }
+
+
         // --------------------------------------------
         // 이벤트 핸들러
         [RelayCommand]
@@ -122,30 +142,12 @@ namespace batteryQI.ViewModels
         }
         // -------------------------------------- Inspection 결과 화면 이벤트 처리
         [RelayCommand]
-        private void NomalButton_Click()
+        private void NomalButton_Click(Window window)
         {
             // DefectState는 정상인걸로
             battery.DefectStat = "정상";
-            //System.Windows.Application.Current.Windows[1]?.Close();
-        }
-        [RelayCommand]
-        private void ErrorButton_Click()
-        {
-            //inspectionSection.Visibility = Visibility.Collapsed;
 
-            //var errorReasonControl = new UserControls.ErrorReason();
-            //errorReasonControl.ErrorConfirmed += OnErrorReasonConfirmed;
-
-            //InspectionFrame.Content = errorReasonControl;
-        }
-
-
-
-        // ------------------------
-        // ErrorInfo.xaml 이벤트 핸들링 (데이터 가용성을 위해서 여기서 코딩함..)
-        [RelayCommand]
-        private void confirmErrorInfoButton_Click()
-        {
+            // 정상 배터리 DB Insert 구현 필요
             if (DBConnection.ConnectOk()) // 배터리 정보 insert
             {
                 DBConnection.Insert($"INSERT INTO batteryInfo (batteryId, shootDate, `usage`, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
@@ -155,6 +157,57 @@ namespace batteryQI.ViewModels
             {
                 System.Windows.MessageBox.Show("DB 연결 이상", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            window?.Close(); // 현재 창 닫기
+
+            //System.Windows.Application.Current.Windows[1]?.Close();
+        }
+        [RelayCommand]
+        private void ErrorButton_Click()
+        {
+            // 버튼 영역(정상/불량 버튼 숨기기)
+            ErrorInspectionVisibility = Visibility.Collapsed;
+            // Frame 영역 보이기
+            ErrorReasonVisibility = Visibility.Visible;
+
+        }
+
+        [RelayCommand]
+        private void ConfirmErrorReasonButton_Click(Window window)
+        {
+            //// 선택된 불량 유형을 배터리 구조체에 반영 구현 중
+
+            //var selectedDefect = (window.FindName("ErrorReasonCombo") as ComboBox)?.SelectedItem as ComboBoxItem;
+            //if (selectedDefect != null)
+            //{
+            //    battery.DefectName = selectedDefect.Content.ToString();
+            //}
+
+            // 세 번째 페이지로 이동
+            var errorInfoView = new ErrorInfoView();
+            errorInfoView.Show();
+
+            // 현재 창 닫기
+            window?.Close();
+        }
+
+
+        // ------------------------
+        // ErrorInfo.xaml 이벤트 핸들링 (데이터 가용성을 위해서 여기서 코딩함..)
+        [RelayCommand]
+        private void confirmErrorInfoButton_Click(Window window)
+        {
+            // 배터리 검사 결과 불량인 경우 DB Insert 구현 필요
+            if (DBConnection.ConnectOk()) // 배터리 정보 insert
+            {
+                DBConnection.Insert($"INSERT INTO batteryInfo (batteryId, shootDate, `usage`, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
+                    $"VALUES(0, '', '', '', 0, '', '', '', 0, 0, '');");
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("DB 연결 이상", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            window?.Close(); // 현재 창 닫기
         }
     }
 }
