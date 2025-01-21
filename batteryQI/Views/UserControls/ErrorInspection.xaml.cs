@@ -24,17 +24,6 @@ namespace batteryQI.Views.UserControls
         public ErrorInspection()
         {
             InitializeComponent();
-            //this.DataContext = new InspectViewModel();
         }
-
-        //private void NomalButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //Window.GetWindow(this).Close();
-        //}
-
-        //private void ErrorButton_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //}
     }
 }

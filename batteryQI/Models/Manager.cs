@@ -15,7 +15,7 @@ namespace batteryQI.Models
         private string _managerID; // 담당자 아이디
         private string _managerPW; // 담당자 비번
         private int _workAmount; // 담당자 할당량
-
+        private int _totalInspectNum; // 오늘 수행량 저장 변수
         static Manager manager; // singleton
         public static Manager Instance()
         {
@@ -47,6 +47,14 @@ namespace batteryQI.Models
             set
             {
                 SetProperty(ref _workAmount, value);
+            }
+        }
+        public int TotalInspectNum
+        {
+            get { return _totalInspectNum; }
+            set
+            {
+                SetProperty(ref _totalInspectNum, value);
             }
         }
     }

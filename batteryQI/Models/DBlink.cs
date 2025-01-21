@@ -13,6 +13,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Google.Protobuf;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
+using MySqlX.XDevAPI.Common;
 
 
 namespace batteryQI.Models
@@ -158,23 +159,18 @@ namespace batteryQI.Models
         public CountResult? CountQuery(string table, string groupingCriteria, string mode = "label")
         {
             CountResult result = new CountResult();
-            string query = "";
             
             // label이 default
-            if (mode == "label")
-            {
-                query = @$"
-                            SELECT
-	                            {groupingCriteria},
-	                            Count(*)
-                            FROM
-	                            {table}
-                            GROUP BY
-	                            {groupingCriteria};";
+            string query = @$"
+                        SELECT
+	                        {groupingCriteria},
+	                        Count(*)
+                        FROM
+	                        {table}
+                        GROUP BY
+	                        {groupingCriteria};";
 
-                
-            }
-            else if (mode == "timestamp")
+            if (mode == "timestamp")
             {
                 query = @$"
                             SELECT
@@ -202,6 +198,31 @@ namespace batteryQI.Models
 
             return result;
 
+        }
+
+        // 저장할 구조가 달라서 따로 선언
+        public List<(string, string, int)> GroupCountQuery(string table, string groupingCriteria, string mode = "label")
+        {
+            List<(string, string, int)>result = new List<(string, string, int)>();
+            string query = @$"
+                        SELECT
+	                        {groupingCriteria},
+	                        Count(*)
+                        FROM
+	                        {table}
+                        GROUP BY
+	                        {groupingCriteria};";
+            
+            MySqlCommand cmd = new MySqlCommand(query, this.connection);
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                result.Add((reader.GetString(0), reader.GetString(1), reader.GetInt16(2)));
+            }
+            reader.Close();
+
+            return result;
         }
 
         public void Disconnect()

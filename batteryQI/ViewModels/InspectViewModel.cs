@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using batteryQI.Models;
 using batteryQI.Views.UserControls;
 using System.Windows.Controls;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace batteryQI.ViewModels
 {
@@ -24,11 +25,12 @@ namespace batteryQI.ViewModels
         private IList<string>? _batteryTypeList = new List<string>() {"Cell", "Module", "Pack" };
         private IList<string>? _batteryShapeList = new List<string>() { "Pouch", "Cylinder" };
         private IList<string>? _usageList = new List<string>() { "Household", "Industrial" }; // 사용처 리스트업
+        private IList<string>? _defectList = new List<string>() { "Damage", "Pollution", "Damage and Pollution", "Etc.." };
         private Battery _battery;
         private DBlink DBConnection;
+
         private Visibility _errorInspectionVisibility = Visibility.Visible; // 첫 번째 UserControl (ErrorInspection) Visibility 제어
         private Visibility _errorReasonVisibility = Visibility.Collapsed; // 두 번째 UserControl (ErrorReason) Visibility 제어
-
 
         public IList<string>? ManufacList
         {
@@ -45,6 +47,10 @@ namespace batteryQI.ViewModels
         public IList<string>? UsageList
         {
             get => _usageList;
+        }
+        public IList<string>? DefectList
+        {
+            get => _defectList;
         }
         // ----------------
         public Battery battery
@@ -75,7 +81,6 @@ namespace batteryQI.ViewModels
                  foreach(KeyValuePair<string, object> items in ManufactureList_Raw[i])
                 {
                     // 제조사 이름 key, 제조사 id value
-                    //Name = items.
                     if(items.Key == "manufacName")
                     {
                         Name = items.Value.ToString();
@@ -124,12 +129,18 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void ImageInspectionButton_Click()
         {
+            List<string> emptyFields = new List<string>();
+
+            if (string.IsNullOrEmpty(battery.ImagePath)) emptyFields.Add("이미지");
+            if (string.IsNullOrEmpty(battery.ManufacName)) emptyFields.Add("제조사명");
+            if (string.IsNullOrEmpty(battery.BatteryShape)) emptyFields.Add("배터리 형태");
+            if (string.IsNullOrEmpty(battery.BatteryType)) emptyFields.Add("배터리 타입");
+            if (string.IsNullOrEmpty(battery.Usage)) emptyFields.Add("사용 용도");
+
             // 이미지 정보, 제조사 아이디
-            if(battery.ImagePath != "" && battery.ManufacName != "" && battery.BatteryShape != "" && battery.BatteryType != "" && battery.Usage != "")
+            if (battery.ImagePath != "" && battery.ManufacName != "" && battery.BatteryShape != "" && battery.BatteryType != "" && battery.Usage != "")
             {
                 // 이미지 검사 함수로 대체 예정
-                //battery.BatteryBitmapImage = new BitmapImage(new Uri(_battery.ImagePath)); // 이미지를 bitmap으로 변환
-                //imgProcessing
                 battery.imgProcessing(); 
                 // 정상 불량 판단 페이지로 넘어가게
                 var inspectionImage = new InspectionImage();
@@ -137,18 +148,22 @@ namespace batteryQI.ViewModels
             }
             else
             {
-                System.Windows.MessageBox.Show("모든 정보를 기입해주세요", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                string emptyFieldsMessage = string.Join(", ", emptyFields);
+                System.Windows.MessageBox.Show(
+                    $"다음 정보를 기입해주세요: {emptyFieldsMessage}",
+                    "입력 오류",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
         // -------------------------------------- Inspection 결과 화면 이벤트 처리
         [RelayCommand]
-        private void NomalButton_Click(Window window)
+        private void NomalButton_Click(System.Windows.Window window)
         {
             // DefectState는 정상인걸로
             battery.DefectStat = "정상";
-
-            // 정상 배터리 DB Insert 구현 필요
-            if (DBConnection.ConnectOk()) // 배터리 정보 insert
+            if (DBConnection.ConnectOk())
             {
                 DBConnection.Insert($"INSERT INTO batteryInfo (batteryId, shootDate, `usage`, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
                     $"VALUES(0, '', '', '', 0, '', '', '', 0, 0, '');");
@@ -158,8 +173,6 @@ namespace batteryQI.ViewModels
                 System.Windows.MessageBox.Show("DB 연결 이상", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             window?.Close(); // 현재 창 닫기
-
-            //System.Windows.Application.Current.Windows[1]?.Close();
         }
         [RelayCommand]
         private void ErrorButton_Click()
@@ -168,11 +181,14 @@ namespace batteryQI.ViewModels
             ErrorInspectionVisibility = Visibility.Collapsed;
             // Frame 영역 보이기
             ErrorReasonVisibility = Visibility.Visible;
-
         }
 
+
+        // ------------------------
+        // ErrorInfo.xaml 이벤트 핸들링 (데이터 가용성을 위해서 여기서 코딩함..)
+
         [RelayCommand]
-        private void ConfirmErrorReasonButton_Click(Window window)
+        private void ConfirmErrorReasonButton_Click(System.Windows.Window window)
         {
             //// 선택된 불량 유형을 배터리 구조체에 반영 구현 중
 
@@ -189,12 +205,8 @@ namespace batteryQI.ViewModels
             // 현재 창 닫기
             window?.Close();
         }
-
-
-        // ------------------------
-        // ErrorInfo.xaml 이벤트 핸들링 (데이터 가용성을 위해서 여기서 코딩함..)
         [RelayCommand]
-        private void confirmErrorInfoButton_Click(Window window)
+        private void confirmErrorInfoButton_Click(System.Windows.Window window)
         {
             // 배터리 검사 결과 불량인 경우 DB Insert 구현 필요
             if (DBConnection.ConnectOk()) // 배터리 정보 insert
@@ -206,8 +218,15 @@ namespace batteryQI.ViewModels
             {
                 System.Windows.MessageBox.Show("DB 연결 이상", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            window?.Close();
+            // 선택된 불량 유형을 배터리 구조체에 반영 구현 중
 
-            window?.Close(); // 현재 창 닫기
+            //var selectedDefect = (window.FindName("ErrorReasonCombo") as ComboBox)?.SelectedItem as ComboBoxItem;
+            //if (selectedDefect != null)
+            //{
+            //    battery.DefectName = selectedDefect.Content.ToString();
+            //}
+
         }
     }
 }
