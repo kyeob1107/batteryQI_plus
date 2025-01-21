@@ -6,7 +6,7 @@
         <Grid Width="1280" Height="720">
             <Grid>
                 <!-- Main Section -->
-                <Grid x:Name="mainSection" Grid.Column="1" Margin="5 20 25 20" Panel.ZIndex="1">
+                <Grid x:Name="mainSection" Margin="5 20 25 10" Panel.ZIndex="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="550"/>
                         <RowDefinition Height="220"/>
