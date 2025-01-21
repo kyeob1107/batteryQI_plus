@@ -163,27 +163,21 @@ namespace batteryQI.ViewModels
         {
             // DefectState는 정상인걸로
             battery.DefectStat = "정상";
-            if (DBConnection.ConnectOk())
-            {
-                DBConnection.Insert($"INSERT INTO batteryInfo (batteryId, shootDate, `usage`, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
-                    $"VALUES(0, '', '', '', 0, '', '', '', 0, 0, '');");
-            }
-            else
-            {
-                System.Windows.MessageBox.Show("DB 연결 이상", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+
+            var errorInfoView = new ErrorInfoView();
+            errorInfoView.Show();
+
             window?.Close(); // 현재 창 닫기
         }
         [RelayCommand]
         private void ErrorButton_Click()
         {
+            battery.DefectStat = "불량";
             // 버튼 영역(정상/불량 버튼 숨기기)
             ErrorInspectionVisibility = Visibility.Collapsed;
             // Frame 영역 보이기
             ErrorReasonVisibility = Visibility.Visible;
         }
-
-
 
         // ------------------------
         // ErrorInfo.xaml 이벤트 핸들링 (데이터 가용성을 위해서 여기서 코딩함..)
@@ -192,12 +186,6 @@ namespace batteryQI.ViewModels
         private void ConfirmErrorReasonButton_Click(System.Windows.Window window)
         {
             //// 선택된 불량 유형을 배터리 구조체에 반영 구현 중
-
-            //var selectedDefect = (window.FindName("ErrorReasonCombo") as ComboBox)?.SelectedItem as ComboBoxItem;
-            //if (selectedDefect != null)
-            //{
-            //    battery.DefectName = selectedDefect.Content.ToString();
-            //}
 
             // 세 번째 페이지로 이동
             var errorInfoView = new ErrorInfoView();
@@ -209,24 +197,8 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void confirmErrorInfoButton_Click(System.Windows.Window window)
         {
-            if (DBConnection.ConnectOk()) // 배터리 정보 insert
-            {
-                DBConnection.Insert($"INSERT INTO batteryInfo (batteryId, shootDate, `usage`, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
-                    $"VALUES(0, '', '', '', 0, '', '', '', 0, 0, '');");
-            }
-            else
-            {
-                System.Windows.MessageBox.Show("DB 연결 이상", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            //System.Windows.MessageBox.Show(battery.DefectName);
             window?.Close();
-            // 선택된 불량 유형을 배터리 구조체에 반영 구현 중
-
-            //var selectedDefect = (window.FindName("ErrorReasonCombo") as ComboBox)?.SelectedItem as ComboBoxItem;
-            //if (selectedDefect != null)
-            //{
-            //    battery.DefectName = selectedDefect.Content.ToString();
-            //}
-
         }
     }
 }
