@@ -25,19 +25,6 @@ namespace batteryQI.Views.UserControls
         public ErrorReason()
         {
             InitializeComponent();
-            //this.DataContext = new InspectViewModel();
         }
-
-        //private void ErrorConfirmButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (errorReasonCombo.SelectedIndex != 0)
-        //    {
-        //        ShowErrorInfo();
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("불량 유형을 선택해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //    }
-        //}
     }
 }
