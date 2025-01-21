@@ -213,7 +213,18 @@ namespace batteryQI.ViewModels
 
                 if (DBConnection.Insert($"INSERT INTO batteryInfo (batteryId, shootDate, usageName, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
                     $"VALUES(0, '{battery.ShootDate}', '{battery.Usage}', '{battery.BatteryType}', {ManufacDict[battery.ManufacName]}, '{battery.BatteryShape}', 'CodingOn', NULL, {_manager.ManagerNum}, {defectState}, '{battery.DefectName}');"))
+                {
                     System.Windows.MessageBox.Show("완료!");
+                    // 데이터 초기화
+                    battery.Usage = "";
+                    battery.BatteryType = "";
+                    battery.ManufacName = ""; 
+                    battery.BatteryShape = "";
+                    _manager.ManagerNum = 0;
+                    battery.DefectName = "";
+                    battery.ImagePath = "";
+                    battery.BatteryBitmapImage = null; // bitmap 이미지 초기화
+                }
                 else
                     System.Windows.MessageBox.Show("실패");
             }
