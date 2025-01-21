@@ -184,10 +184,11 @@ namespace batteryQI.ViewModels
             // display the bar plot using a time axis
             var bar = plot.AddBar(Values, positions);
             plot.XAxis.DateTimeFormat(true); //x축 포멧을 DateTime으로 설정
-            plot.Frameless(false);
-            plot.XAxis2.Ticks(true);
-            plot.XAxis2.Ticks(false);
-            plot.YAxis2.Ticks(false);
+            //plot.Frameless(false);
+            //plot.XAxis.Ticks(true);
+            //plot.XAxis2.Ticks(false);
+            //plot.YAxis2.Ticks(false);
+            //plot.Ticks()
 
             // indicate each bar width should be 1/바갯수 of a day then shrink sligtly to add spacing between bars
             bar.BarWidth = (1.0 / pointCount) * .8;
@@ -280,13 +281,11 @@ namespace batteryQI.ViewModels
             
             plot.Legend(location: Alignment.UpperRight);
             plot.SetAxisLimits(yMin: 0);
-            plot.Legend(location: Alignment.UpperRight);
-            plot.SetAxisLimits(yMin: 0);
-            plot.Frameless(false);
-            //plot.XAxis.Ticks(false);
-            plot.XAxis2.Ticks(false);
-            plot.YAxis2.Ticks(false);
-            plot.XAxis.DateTimeFormat(false); //x축 포멧을 DateTime으로 설정
+            //plot.Frameless(false);
+            ////plot.XAxis.Ticks(false);
+            //plot.XAxis2.Ticks(false);
+            //plot.YAxis2.Ticks(false);
+            //plot.XAxis.DateTimeFormat(false); //x축 포멧을 DateTime으로 설정
             #endregion
         }
     }
