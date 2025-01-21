@@ -179,21 +179,69 @@ namespace batteryQI.ViewModels
             for (int i = 0; i < pointCount; i++)
                 positions[i] = start.AddHours(i).ToOADate();
 
-            // display the bar plot using a time axis
-            var bar = plot.AddBar(Values, positions);
+            // 최소~최대 사이의 시간대의 count가 0이라 빠진 부분 0으로 추가하여 x, y 길이 맞추기
+            // Timestamps와 Values를 이용하여 딕셔너리 생성
+            Dictionary<double, double> valuesDict = new Dictionary<double, double>();
+            for (int i = 0; i < TimeStamps.Length; i++)
+            {
+                valuesDict[TimeStamps[i].ToOADate()] = Values[i];
+            }
+
+            // ValuesCompletedHour 생성 및 채우기
+            double[] ValuesCompletedHour = new double[positions.Length];
+            for (int i = 0; i < positions.Length; i++)
+            {
+                if (valuesDict.TryGetValue(positions[i], out double value))
+                {
+                    ValuesCompletedHour[i] = value;
+                }
+                else
+                {
+                    ValuesCompletedHour[i] = 0;
+                }
+            }
+
+            #region bar그래프버전(쿼리 결과데이터에 없는 시간대 추가하지 않은 버전)
+            ////Debug.WriteLine("값은" + $"{String.Join(",", Values.Select(v => v.ToString()).ToArray())}");
+            //var bar = plot.AddBar(Values, TimeStamps.Select(t => t.ToOADate()).ToArray());
+            //bar.BarWidth = (1.0 / TimeStamps.Length) * .8;
+
+            //// adjust axis limits so there is no padding below the bar graph
+            //plot.SetAxisLimits(yMin: 0);
+            //plot.Layout(right: 20); // add room for the far right date tick
+            #endregion
+
+            #region bar그래프버전(시간대의 값이 0인 것도 추가한 버전)
+            //// display the bar plot using a time axis
+            //var bar = plot.AddBar(ValuesCompletedHour, positions);
+
+            //// indicate each bar width should be 1/바갯수 of a day then shrink sligtly to add spacing between bars
+            //bar.BarWidth = (1.0 / pointCount) * .8;
+            #endregion
+            #region 꺾은선그래프(시그널)버전
+            ////AddSignal(ys, sampleRate)인데 sampleRate는 시간간격인데 scottPlot에서는 하루라는 시간 동안 샘플 수
+            //var signalPlot = plot.AddSignal(ValuesCompletedHour, 24.0);
+            //// Set start date
+            //signalPlot.OffsetX = TimeStamps.Min().ToOADate();
+
+            #endregion
+
+            #region 꺾은선 그래프(불연속 시간간격용, 0인 시간대 포함한 버전)
+            var scatter = plot.AddScatter(positions, ValuesCompletedHour, lineWidth: 2);
+            #endregion
+
+            #region 꺾은선 그래프(불연속 시간간격용, 0인 시간대 제외한 버전)
+            //var scatter = plot.AddScatter(TimeStamps.Select(t => t.ToOADate()).ToArray(), Values, lineWidth: 5);
+            #endregion
+
+            // 그래프 설정
             plot.XAxis.DateTimeFormat(true); //x축 포멧을 DateTime으로 설정
-            //plot.Frameless(false);
-            //plot.XAxis.Ticks(true);
-            //plot.XAxis2.Ticks(false);
-            //plot.YAxis2.Ticks(false);
-            //plot.Ticks()
-
-            // indicate each bar width should be 1/바갯수 of a day then shrink sligtly to add spacing between bars
-            bar.BarWidth = (1.0 / pointCount) * .8;
-
-            // adjust axis limits so there is no padding below the bar graph
-            plot.SetAxisLimits(yMin: 0);
-            plot.Layout(right: 20); // add room for the far right date tick
+            ////plot.Frameless(false);
+            ////plot.XAxis.Ticks(true);
+            ////plot.XAxis2.Ticks(false);
+            ////plot.YAxis2.Ticks(false);
+            ////plot.Ticks()
+            
             #endregion
         }
     }
