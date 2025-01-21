@@ -70,7 +70,6 @@ namespace batteryQI.ViewModels
                  foreach(KeyValuePair<string, object> items in ManufactureList_Raw[i])
                 {
                     // 제조사 이름 key, 제조사 id value
-                    //Name = items.
                     if(items.Key == "manufacName")
                     {
                         Name = items.Value.ToString();
@@ -104,12 +103,18 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void ImageInspectionButton_Click()
         {
+            List<string> emptyFields = new List<string>();
+
+            if (string.IsNullOrEmpty(battery.ImagePath)) emptyFields.Add("이미지");
+            if (string.IsNullOrEmpty(battery.ManufacName)) emptyFields.Add("제조사명");
+            if (string.IsNullOrEmpty(battery.BatteryShape)) emptyFields.Add("배터리 형태");
+            if (string.IsNullOrEmpty(battery.BatteryType)) emptyFields.Add("배터리 타입");
+            if (string.IsNullOrEmpty(battery.Usage)) emptyFields.Add("사용 용도");
+
             // 이미지 정보, 제조사 아이디
-            if(battery.ImagePath != "" && battery.ManufacName != "" && battery.BatteryShape != "" && battery.BatteryType != "" && battery.Usage != "")
+            if (battery.ImagePath != "" && battery.ManufacName != "" && battery.BatteryShape != "" && battery.BatteryType != "" && battery.Usage != "")
             {
                 // 이미지 검사 함수로 대체 예정
-                //battery.BatteryBitmapImage = new BitmapImage(new Uri(_battery.ImagePath)); // 이미지를 bitmap으로 변환
-                //imgProcessing
                 battery.imgProcessing(); 
                 // 정상 불량 판단 페이지로 넘어가게
                 var inspectionImage = new InspectionImage();
@@ -117,7 +122,13 @@ namespace batteryQI.ViewModels
             }
             else
             {
-                System.Windows.MessageBox.Show("모든 정보를 기입해주세요", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                string emptyFieldsMessage = string.Join(", ", emptyFields);
+                System.Windows.MessageBox.Show(
+                    $"다음 정보를 기입해주세요: {emptyFieldsMessage}",
+                    "입력 오류",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
         // -------------------------------------- Inspection 결과 화면 이벤트 처리
@@ -126,7 +137,6 @@ namespace batteryQI.ViewModels
         {
             // DefectState는 정상인걸로
             battery.DefectStat = "정상";
-            //System.Windows.Application.Current.Windows[1]?.Close();
         }
         [RelayCommand]
         private void ErrorButton_Click()

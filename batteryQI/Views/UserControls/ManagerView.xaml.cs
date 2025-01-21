@@ -26,6 +26,5 @@ namespace batteryQI.Views.UserControls
             InitializeComponent();
             this.DataContext = new ManagerViewModel();
         }
-
     }
 }

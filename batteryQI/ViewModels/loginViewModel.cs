@@ -10,7 +10,6 @@ namespace batteryQI.ViewModels
 {
     internal class loginViewModel : LoginViewModelBases
     {
-
         public loginViewModel()
         {
             

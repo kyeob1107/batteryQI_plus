@@ -17,8 +17,6 @@ namespace batteryQI.ViewModels
     internal partial class ManagerViewModel : ObservableObject
     {
         private string _manufacName = "";
-        //private IList<string> _manufacList = new List<string>(); // 제조사 리스트 가져오기
-        //private IList<string> _manufacIDList = new List<string>(); // 제조사 id 리스트
         private IDictionary<string, string> _manufacDict = new Dictionary<string, string>();
         public IDictionary<string, string> ManufacDict
         {
@@ -55,7 +53,6 @@ namespace batteryQI.ViewModels
                 foreach (KeyValuePair<string, object> items in ManufactureList_Raw[i])
                 {
                     // 제조사 이름 key, 제조사 id value
-                    //Name = items.
                     if (items.Key == "manufacName")
                     {
                         Name = items.Value.ToString();
