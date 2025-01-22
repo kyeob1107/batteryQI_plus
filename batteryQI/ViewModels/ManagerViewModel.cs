@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Mysqlx.Crud;
 using batteryQI.ViewModels.Bases;
 using System.Windows;
+using System.Data;
 
 namespace batteryQI.ViewModels
 {
@@ -31,6 +32,7 @@ namespace batteryQI.ViewModels
             get => _manufacName;
             set => SetProperty(ref _manufacName, value);
         }
+        DBlink DBConnection;
         public Manager Manager
         {
             get => _manager;
@@ -43,6 +45,11 @@ namespace batteryQI.ViewModels
         }
         public ManagerViewModel()
         {
+            DBConnection = DBlink.Instance(); // DB객체 연결
+            _manager = Manager.Instance();
+
+            _manager.TotalInspectNum = completeAmount();
+
             getManafactureNameID();
             _newAmount = _manager.WorkAmount;
         }
@@ -114,6 +121,40 @@ namespace batteryQI.ViewModels
             else
             {
                 System.Windows.MessageBox.Show("DB 연결 오류", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private string completeAmount()
+        {
+            try
+            {
+                // 분석 완료 개수 가져오기
+                string query = @$"
+                        SELECT COUNT(*) 
+                        FROM batteryInfo
+                        WHERE DATE_FORMAT(shootDate, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+                        AND ManagerNum = {_manager.ManagerNum};
+                        ";
+
+                // 데이터베이스 연결 및 쿼리 실행
+                var result = DBConnection.Select(query);
+
+                // 데이터가 있는 경우
+                if (result != null && result.Count > 0)
+                {
+                    // 첫 번째 결과를 문자열로 변환
+                    return result[0]["COUNT(*)"]?.ToString() ?? "0";
+                }
+                else
+                {
+                    return "0"; // 데이터가 없는 경우
+                }
+            }
+            catch (Exception ex)
+            {
+                // 오류 발생 시 처리
+                System.Windows.MessageBox.Show($"작업량 데이터 가져오기 실패", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return "Error";
             }
         }
     }
