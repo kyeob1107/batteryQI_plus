@@ -10,7 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace batteryQI.Models
 {
     // 싱글톤 패턴
-    public class Manager : ObservableObject
+    internal class Manager : ObservableObject
     {
         private int _managerNum;
         private string _managerID; // 담당자 아이디
