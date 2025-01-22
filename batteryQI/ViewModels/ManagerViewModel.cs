@@ -66,7 +66,7 @@ namespace batteryQI.ViewModels
         {
             // DB에서 가져와서 리스트 초기화하기, ID는 안 가져오고 Name만 추가
             _manufacCollection.Clear();
-            List<Dictionary<string, object>> ManufactureList_Raw = DBConnection.Select("SELECT * FROM manufacture;");
+            List<Dictionary<string, object>> ManufactureList_Raw = DBConnection.Select("SELECT * FROM manufacture order by manufacId ASC;");
             foreach (var row in ManufactureList_Raw)
             {
                 string name = row["manufacName"].ToString();
