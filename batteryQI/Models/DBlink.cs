@@ -41,6 +41,8 @@ namespace batteryQI.Models
 
         static DBlink staticDBlink; // DB 연결 객체 생성
         MySqlConnection connection; // DB connection 객체
+
+        private DBlink() { } // 생성자 접근 제어 변경
         public static DBlink Instance()
         {
             if(staticDBlink == null)

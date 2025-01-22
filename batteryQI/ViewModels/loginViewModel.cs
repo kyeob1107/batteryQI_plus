@@ -42,9 +42,9 @@ namespace batteryQI.ViewModels.Bases
                 if (login.Count != 0 && (pw.Password == login[0]["managerPw"].ToString()))
                 {
                     MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    _manager.ManagerNum = (int)login[0]["managerNum"];
-                    _manager.ManagerID = login[0]["managerId"].ToString();
-                    _manager.WorkAmount = (int)login[0]["workAmount"];
+                    _manager.ManagerNum = (int)login[0]["managerNum"]; // 관리자 번호 저장
+                    _manager.ManagerID = login[0]["managerId"].ToString(); // 관리자 아이디 저장
+                    _manager.WorkAmount = (int)login[0]["workAmount"]; // DB에 저장된 작업량 가져옴
 
                     var mainWindow = new MainWindow();
                     mainWindow.Show();

@@ -35,6 +35,7 @@ namespace batteryQI.Models
         private string modelPath = @".\weight\deeplab_model5.onnx"; // 이미지 처리 모델 로드
 
         static Battery staticBattery;
+        private Battery() { } // 생성자 접근 제어 변경
         public static Battery Instance()
         {
             if (staticBattery == null)

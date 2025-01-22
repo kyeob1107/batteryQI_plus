@@ -18,6 +18,8 @@ namespace batteryQI.Models
         private int _workAmount; // 담당자 할당량
         private int _totalInspectNum; // 오늘 수행량 저장 변수
         static Manager manager; // singleton
+
+        private Manager() { } // 생성자 접근 제어 변경
         public static Manager Instance()
         {
             if(manager == null)
