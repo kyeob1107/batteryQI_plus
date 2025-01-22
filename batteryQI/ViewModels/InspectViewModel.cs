@@ -68,6 +68,9 @@ namespace batteryQI.ViewModels
             DBConnection = DBlink.Instance();
             DBConnection.Connect();
 
+            // 다음 AUTO_INCREMENT 값 가져오기
+            _battery.BatteryID = GetNextAutoIncrementId();
+
             getManafactureNameID();
         }
 
@@ -187,7 +190,18 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void ConfirmErrorReasonButton_Click(System.Windows.Window window)
         {
-            //// 선택된 불량 유형을 배터리 구조체에 반영 구현 중
+            // 선택한 값이 "불량 유형을 선택하세요"이거나 null일 경우 예외 처리
+            if (string.IsNullOrEmpty(battery.DefectName) || battery.DefectName == "불량 유형을 선택하세요")
+            {
+                System.Windows.MessageBox.Show(
+                    "불량 유형을 선택해주세요.",
+                    "입력 오류",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return; // 동작 중단
+            }
+
 
             // 세 번째 페이지로 이동
             var errorInfoView = new ErrorInfoView();
@@ -230,6 +244,39 @@ namespace batteryQI.ViewModels
             }
             //System.Windows.Application.Current.Windows[0]?.Close();
             window?.Close();
+        }
+
+        private string GetNextAutoIncrementId()
+        {
+            try
+            {
+                // 다음 AUTO_INCREMENT 값 가져오기
+                string query = @"
+                                SELECT AUTO_INCREMENT
+                                       FROM INFORMATION_SCHEMA.TABLES
+                                 WHERE TABLE_SCHEMA = 'batteryQI' 
+                                       AND TABLE_NAME = 'batteryInfo';
+                                 ";
+
+                // 데이터베이스 연결 및 쿼리 실행
+                var result = DBConnection.Select(query);
+
+                if (result.Count > 0)
+                {
+                    // AUTO_INCREMENT 값을 문자열로 반환
+                    return result[0]["AUTO_INCREMENT"].ToString();
+                }
+                else
+                {
+                    return "알 수 없음"; // 데이터가 없는 경우
+                }
+            }
+            catch (Exception ex)
+            {
+                // 오류 발생 시 처리
+                System.Windows.MessageBox.Show($"Battery ID 가져오기 실패: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                return "오류";
+            }
         }
     }
 }

@@ -27,10 +27,11 @@ namespace batteryQI.Models
         private string? _imagePath = ""; // 파일 로드 경로 저장 -> 이미지 로드
         private string _defectStat; // 직접 기입(불량, 정상 선택으로)
         private string _defectName; // 직접 기입
+        private string _batteryId; // 배터리 아이디
         // -------------
         // 배터리 객체도 싱글톤으로 수행
         // 사유: 여러 개의 배터리 객체를 관리하는 것이 아닌 순차적으로 배터리 객체를 활용하기 때문
-        
+
         private string modelPath = @".\weight\deeplab_model5.onnx"; // 이미지 처리 모델 로드
 
         static Battery staticBattery;
@@ -85,6 +86,12 @@ namespace batteryQI.Models
         {
             get { return _defectName; }
             set { SetProperty(ref _defectName, value); }
+        }
+
+        public string BatteryID
+        {
+            get { return _batteryId; }
+            set { SetProperty(ref _batteryId, value); }
         }
         public BitmapImage BatteryBitmapImage { get; set; }
         // --------------------------

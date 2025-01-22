@@ -23,7 +23,7 @@ namespace batteryQI.Views
         public ErrorInfoView()
         {
             InitializeComponent();
-            this.DataContext = new InspectViewModel();
+            this.DataContext = new CompositeViewModel();
         }
     }
 }
