@@ -14,7 +14,7 @@ namespace batteryQI.ViewModels
         // combox 리스트
 
         private IList<string> _manufacList = new List<string>(); // 제조사명 받아오기
-        private Dictionary<string, string> ManufacDict = new Dictionary<string, string>(); // viewmodel에서만 사용하는 딕셔너리 가져오기
+        private IDictionary<string, string> ManufacDict = new Dictionary<string, string>(); // viewmodel에서만 사용하는 딕셔너리 가져오기
         private IList<string>? _batteryTypeList = new List<string>() { "Cell", "Module", "Pack" };
         private IList<string>? _batteryShapeList = new List<string>() { "Pouch", "Cylinder" };
         private IList<string>? _usageList = new List<string>() { "Household", "Industrial" }; // 사용처 리스트업

@@ -45,7 +45,7 @@
                     </StackPanel>
 
                     <Border Grid.Row="1" Margin="0 50 0 0" BorderBrush="#7163ba" BorderThickness="2" Width="700" HorizontalAlignment="Left" CornerRadius="10">
-                        <ListBox ItemsSource="{Binding ManufacDict, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Transparent" Background="Transparent">
+                        <ListBox ItemsSource="{Binding ManufacCollection}" BorderBrush="Transparent" Background="Transparent" x:Name="ManufacItems">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>

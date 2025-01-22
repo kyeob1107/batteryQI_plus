@@ -13,6 +13,7 @@ using Mysqlx.Crud;
 using batteryQI.ViewModels.Bases;
 using System.Windows;
 using System.Data;
+using System.Collections.ObjectModel;
 
 namespace batteryQI.ViewModels
 {
@@ -22,6 +23,7 @@ namespace batteryQI.ViewModels
         private Manager _manager = Manager.Instance();
         private string _manufacName = "";
         private IDictionary<string, string> _manufacDict = new Dictionary<string, string>();
+        private ObservableCollection<KeyValuePair<string, string>> _manufacCollection = new ObservableCollection<KeyValuePair<string, string>>();
         private int _newAmount;
         public IDictionary<string, string> ManufacDict
         {
@@ -37,6 +39,11 @@ namespace batteryQI.ViewModels
         {
             get => _manager;
             set => SetProperty(ref _manager, value);
+        }
+        public ObservableCollection<KeyValuePair<string, string>> ManufacCollection
+        {
+            get => _manufacCollection;
+            set => SetProperty(ref _manufacCollection, value);
         }
         public int NewAmount
         {
@@ -58,24 +65,13 @@ namespace batteryQI.ViewModels
         private void getManafactureNameID() // DB에서 제조사 리스트 가져오기
         {
             // DB에서 가져와서 리스트 초기화하기, ID는 안 가져오고 Name만 추가
-            List<Dictionary<string, object>> ManufactureList_Raw = _dblink.Select("SELECT * FROM manufacture;"); // 데이터 가져오기
-            for (int i = 0; i < ManufactureList_Raw.Count; i++)
+            _manufacCollection.Clear();
+            List<Dictionary<string, object>> ManufactureList_Raw = DBConnection.Select("SELECT * FROM manufacture;");
+            foreach (var row in ManufactureList_Raw)
             {
-                string Name = "";
-                string ID = "";
-                foreach (KeyValuePair<string, object> items in ManufactureList_Raw[i])
-                {
-                    // 제조사 이름 key, 제조사 id value
-                    if (items.Key == "manufacName")
-                    {
-                        Name = items.Value.ToString();
-                    }
-                    else if (items.Key == "manufacId")
-                    {
-                        ID = items.Value.ToString();
-                    }
-                }
-                _manufacDict.Add(Name, ID);
+                string name = row["manufacName"].ToString();
+                string id = row["manufacId"].ToString();
+                _manufacCollection.Add(new KeyValuePair<string, string>(name, id));
             }
         }
 
