@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:viewmodels="clr-namespace:batteryQI.ViewModels"
-        Title="BatteryQI" Height="760" Width="1280" Background="White"
-        WindowStartupLocation="CenterOwner">
+        Title="BatteryQI"         
+        WindowStartupLocation="CenterScreen" 
+        WindowState="Maximized" 
+        Background="White">
 
     <Border Background="#cfd5e5" CornerRadius="10" BorderThickness="2" BorderBrush="#ebedf3"
     Padding="20">
@@ -84,10 +86,10 @@
                                 <StackPanel Orientation="Horizontal" Margin="0 50 0 0">
                                     <Ellipse Width="30" Height="30">
                                         <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/1.png"/>
+                                            <ImageBrush ImageSource="/Images/7.png"/>
                                         </Ellipse.Fill>
                                     </Ellipse>
-                                    <TextBlock Text="A 팀장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
+                                    <TextBlock Text="한도윤 본부장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
                                 </StackPanel>
 
                                 <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
@@ -95,10 +97,10 @@
                                 <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
                                     <Ellipse Width="30" Height="30">
                                         <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/1.png"/>
+                                            <ImageBrush ImageSource="/Images/2.png"/>
                                         </Ellipse.Fill>
                                     </Ellipse>
-                                    <TextBlock Text="A 팀장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
+                                    <TextBlock Text="김영훈 이사 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
                                 </StackPanel>
 
                                 <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
@@ -106,10 +108,10 @@
                                 <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
                                     <Ellipse Width="30" Height="30">
                                         <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/1.png"/>
+                                            <ImageBrush ImageSource="/Images/3.png"/>
                                         </Ellipse.Fill>
                                     </Ellipse>
-                                    <TextBlock Text="A 팀장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
+                                    <TextBlock Text="이민아 부장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
                                 </StackPanel>
 
                                 <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
@@ -117,10 +119,10 @@
                                 <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
                                     <Ellipse Width="30" Height="30">
                                         <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/1.png"/>
+                                            <ImageBrush ImageSource="/Images/4.png"/>
                                         </Ellipse.Fill>
                                     </Ellipse>
-                                    <TextBlock Text="A 팀장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
+                                    <TextBlock Text="박성준 과장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
                                 </StackPanel>
 
                                 <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
@@ -128,10 +130,10 @@
                                 <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
                                     <Ellipse Width="30" Height="30">
                                         <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/1.png"/>
+                                            <ImageBrush ImageSource="/Images/5.png"/>
                                         </Ellipse.Fill>
                                     </Ellipse>
-                                    <TextBlock Text="A 팀장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
+                                    <TextBlock Text="최수연 대리 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
                                 </StackPanel>
 
                                 <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
@@ -139,10 +141,10 @@
                                 <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
                                     <Ellipse Width="30" Height="30">
                                         <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/1.png"/>
+                                            <ImageBrush ImageSource="/Images/6.png"/>
                                         </Ellipse.Fill>
                                     </Ellipse>
-                                    <TextBlock Text="A 팀장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
+                                    <TextBlock Text="정현우 사원 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
                                 </StackPanel>
 
                                 <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
