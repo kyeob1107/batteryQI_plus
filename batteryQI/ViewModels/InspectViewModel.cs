@@ -14,6 +14,7 @@ using batteryQI.Views.UserControls;
 using System.Windows.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using batteryQI.ViewModels.Bases;
+using System.Data.Common;
 
 namespace batteryQI.ViewModels
 {
@@ -26,6 +27,8 @@ namespace batteryQI.ViewModels
         {
             // DB에서 가져와서 리스트 초기화하기, ID는 안 가져오고 Name만 추가
             List<Dictionary<string, object>> ManufactureList_Raw = _dblink.Select("SELECT * FROM manufacture;"); // 데이터 가져오기
+            ManufacDict.Clear();
+            
             for(int i = 0; i < ManufactureList_Raw.Count; i++)
             {
                 string Name = "";
@@ -42,8 +45,11 @@ namespace batteryQI.ViewModels
                         ID = items.Value.ToString(); 
                     }
                 }
+                if (!ManufacDict.ContainsKey(Name))
+                {
+                    ManufacDict.Add(Name, ID);
+                }
                 _manufacList.Add(Name);
-                ManufacDict.Add(Name, ID);
             }
         }
 
