@@ -98,6 +98,7 @@ namespace batteryQI.Models
                 {
                     WorkProgress = 0; // 할당량이 0일 경우 진행률은 0
                 }
+                if (WorkProgress > 100) WorkProgress = 100;
             }
             catch (Exception ex)
             {

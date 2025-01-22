@@ -34,7 +34,6 @@ namespace batteryQI.ViewModels
             get => _manufacName;
             set => SetProperty(ref _manufacName, value);
         }
-        DBlink DBConnection;
         public Manager Manager
         {
             get => _manager;
@@ -52,7 +51,6 @@ namespace batteryQI.ViewModels
         }
         public ManagerViewModel()
         {
-            DBConnection = DBlink.Instance(); // DB객체 연결
             _manager = Manager.Instance();
 
             _manager.TotalInspectNum = completeAmount();
@@ -66,7 +64,7 @@ namespace batteryQI.ViewModels
         {
             // DB에서 가져와서 리스트 초기화하기, ID는 안 가져오고 Name만 추가
             _manufacCollection.Clear();
-            List<Dictionary<string, object>> ManufactureList_Raw = DBConnection.Select("SELECT * FROM manufacture order by manufacId ASC;");
+            List<Dictionary<string, object>> ManufactureList_Raw = _dblink.Select("SELECT * FROM manufacture order by manufacId ASC;");
             foreach (var row in ManufactureList_Raw)
             {
                 string name = row["manufacName"].ToString();
@@ -120,7 +118,7 @@ namespace batteryQI.ViewModels
             }
         }
 
-        private string completeAmount()
+        public string completeAmount()
         {
             try
             {
@@ -133,7 +131,7 @@ namespace batteryQI.ViewModels
                         ";
 
                 // 데이터베이스 연결 및 쿼리 실행
-                var result = DBConnection.Select(query);
+                var result = _dblink.Select(query);
 
                 // 데이터가 있는 경우
                 if (result != null && result.Count > 0)
