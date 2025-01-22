@@ -13,10 +13,11 @@ namespace batteryQI.ViewModels
 {
     internal partial class InspectViewModel : ViewModelBases
     {
-        // 이벤트 핸들러
+        // InspectViewModel 이벤트 핸들러 정리 파일
         [RelayCommand]
         private void ImageSelectButton_Click()
         {
+            // 이미지 파일 선택 함수
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files|*.jpg;*.png;";
 
@@ -31,8 +32,8 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void ImageInspectionButton_Click()
         {
+            // 콤보박스에서 선택한 값들을 저장함.
             List<string> emptyFields = new List<string>();
-
             if (string.IsNullOrEmpty(battery.ImagePath)) emptyFields.Add("이미지");
             if (string.IsNullOrEmpty(battery.ManufacName)) emptyFields.Add("제조사명");
             if (string.IsNullOrEmpty(battery.BatteryShape)) emptyFields.Add("배터리 형태");
@@ -85,7 +86,7 @@ namespace batteryQI.ViewModels
         // ErrorInfo.xaml 이벤트 핸들링 (데이터 가용성을 위해서 여기서 코딩함..)
 
         [RelayCommand]
-        private void ConfirmErrorReasonButton_Click(System.Windows.Window window)
+        private void confirmErrorReasonSelectButton_Click(System.Windows.Window window)
         {
             // 선택한 값이 "불량 유형을 선택하세요"이거나 null일 경우 예외 처리
             if (string.IsNullOrEmpty(battery.DefectName) || battery.DefectName == "불량 유형을 선택하세요")
@@ -108,7 +109,7 @@ namespace batteryQI.ViewModels
             window?.Close();
         }
         [RelayCommand]
-        private void confirmErrorInfoButton_Click(System.Windows.Window window)
+        private void confirmErrorInfoCheckButton_Click(System.Windows.Window window)
         {
             // DB 정보 인서트
 
@@ -136,7 +137,7 @@ namespace batteryQI.ViewModels
                 else
                     System.Windows.MessageBox.Show("실패");
             }
-            window?.Close();
+            window?.Close(); // 데이터 info 창 닫기
         }
     }
 }

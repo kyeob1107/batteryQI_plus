@@ -98,12 +98,8 @@
                         </Grid>
                     </Grid>
                 </Border>
-
-                <Button Grid.Row="2" Grid.ColumnSpan="2" Content="확인" FontSize="20" FontWeight="SemiBold" Width="200" Height="50" Command="{Binding InspectViewModel.confirmErrorInfoButton_ClickCommand}"
+                <Button Grid.Row="2" Grid.ColumnSpan="2" Content="확인" FontSize="20" FontWeight="SemiBold" Width="200" Height="50" Command="{Binding InspectViewModel.confirmErrorInfoCheckButton_ClickCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Style="{StaticResource commonButton}"/>
-
-
-
             </Grid>
         </Border>
     </Border>

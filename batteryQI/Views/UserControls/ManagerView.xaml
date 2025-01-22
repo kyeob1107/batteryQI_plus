@@ -25,7 +25,7 @@
                     Width="70" Height="40"
                     VerticalAlignment="Center"
                     Style="{StaticResource commonButton}" Margin="5 0 0 0" FontSize="20"        
-                    Command="{Binding SaveButton_ClickCommand}" />
+                    Command="{Binding amountSaveButton_ClickCommand}" />
                 </StackPanel>
 
                 <!-- Manufacturer List -->
