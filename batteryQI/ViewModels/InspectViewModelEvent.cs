@@ -124,6 +124,10 @@ namespace batteryQI.ViewModels
                 if (_dblink.Insert($"INSERT INTO batteryInfo (shootDate, usageName, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
                     $"VALUES( '{_battery.ShootDate}', '{_battery.Usage}', '{_battery.BatteryType}', {ManufacDict[battery.ManufacName]}, '{_battery.BatteryShape}', 'CodingOn', NULL, {_manager.ManagerNum}, {defectState}, '{_battery.DefectName}');"))
                 {
+                    // 데이터 입력 갯수 갱신
+                    ManagerViewModel managerViewModel = new ManagerViewModel(); // MVVM패턴에 위배될듯 후에 수정
+                    _manager.TotalInspectNum = managerViewModel.completeAmount();
+                    
                     System.Windows.MessageBox.Show("완료!");
                     // 데이터 초기화
                     _battery.Usage = "";
