@@ -190,7 +190,18 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void ConfirmErrorReasonButton_Click(System.Windows.Window window)
         {
-            //// 선택된 불량 유형을 배터리 구조체에 반영 구현 중
+            // 선택한 값이 "불량 유형을 선택하세요"이거나 null일 경우 예외 처리
+            if (string.IsNullOrEmpty(battery.DefectName) || battery.DefectName == "불량 유형을 선택하세요")
+            {
+                System.Windows.MessageBox.Show(
+                    "불량 유형을 선택해주세요.",
+                    "입력 오류",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return; // 동작 중단
+            }
+
 
             // 세 번째 페이지로 이동
             var errorInfoView = new ErrorInfoView();
