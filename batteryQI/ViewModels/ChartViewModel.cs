@@ -94,13 +94,35 @@ namespace batteryQI.ViewModels
             {
                 var pie = plot.AddPie(Values);
                 double total = Values.Sum();
+
+                //pie.SliceLabels = Enumerable.Range(0, Values.Length)
+                //                   .Select(i => $"{Labels[i]}\r\n({Values[i] / total:P1})").ToArray(); ;
+                //pie.SliceLabelPosition = 0.4; // 값이 클 수록 바깥쪽에 가깝게 표시
+                //pie.SliceFont.Size = 20; // 파이차이에 labe 글자 크기
+                ////pie.ShowPercentages = true; //%값표시
+                ////pie.ShowValues = true; // 값표시
+                //pie.ShowLabels = true;
+
+
+                // 안쪽에 label표시용
+                //pie.SliceLabelPosition = 0.4; // 값이 클 수록 바깥쪽에 가깝게 표시
+                //pie.ShowLabels = true;
+                //pie.SliceLabels = Enumerable.Range(0, Values.Length)
+                //                   .Select(i => $"{Labels[i]}\r\n({Values[i] / total:P1})").ToArray();
+
+
+                // 바깥쪽에 label표시용
+                pie.Size = .7;
+                pie.SliceLabelPosition = 0.6;
+                pie.SliceLabelColors = pie.SliceFillColors;
                 pie.SliceLabels = Enumerable.Range(0, Values.Length)
-                                   .Select(i => $"{Labels[i]}\r\n({Values[i] / total:P1})").ToArray(); ;
-                pie.SliceLabelPosition = 0.4; // 값이 클 수록 바깥쪽에 가깝게 표시
-                pie.SliceFont.Size = 20; // 파이차이에 labe 글자 크기
+                                   .Select(i => $"{Values[i] / total:P1}").ToArray();
                 //pie.ShowPercentages = true; //%값표시
                 //pie.ShowValues = true; // 값표시
                 pie.ShowLabels = true;
+
+                // 공통
+                pie.SliceFont.Size = 20; // 파이차이에 labe 글자 크기
                 pie.LegendLabels = Enumerable.Range(0, Values.Length)
                                    .Select(i => $"{Labels[i]} ({Values[i]})").ToArray();
                 plot.Legend();
