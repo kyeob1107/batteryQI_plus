@@ -10,12 +10,14 @@ using System.Data.Common;
 using batteryQI.Models;
 using System.Windows.Forms;
 using Mysqlx.Crud;
+using batteryQI.ViewModels.Bases;
 
 namespace batteryQI.ViewModels
 {
     // 관리자 페이지
-    internal partial class ManagerViewModel : ObservableObject
+    internal partial class ManagerViewModel : ViewModelBases
     {
+        private Manager _manager = Manager.Instance();
         private string _manufacName = "";
         private IDictionary<string, string> _manufacDict = new Dictionary<string, string>();
         public IDictionary<string, string> ManufacDict
@@ -27,9 +29,6 @@ namespace batteryQI.ViewModels
             get => _manufacName;
             set => SetProperty(ref _manufacName, value);
         }
-
-        DBlink DBConnection;
-        Manager _manager;
         public Manager Manager
         {
             get => _manager;
@@ -37,15 +36,13 @@ namespace batteryQI.ViewModels
         }
         public ManagerViewModel()
         {
-            DBConnection = DBlink.Instance(); // DB객체 연결
-            _manager = Manager.Instance();
             getManafactureNameID();
         }
 
         private void getManafactureNameID() // DB에서 제조사 리스트 가져오기
         {
             // DB에서 가져와서 리스트 초기화하기, ID는 안 가져오고 Name만 추가
-            List<Dictionary<string, object>> ManufactureList_Raw = DBConnection.Select("SELECT * FROM manufacture;"); // 데이터 가져오기
+            List<Dictionary<string, object>> ManufactureList_Raw = _dblink.Select("SELECT * FROM manufacture;"); // 데이터 가져오기
             for (int i = 0; i < ManufactureList_Raw.Count; i++)
             {
                 string Name = "";
@@ -72,11 +69,11 @@ namespace batteryQI.ViewModels
             // 제조사 인풋
             try
             {
-                if (DBConnection.ConnectOk())
+                if (_dblink.ConnectOk())
                 {
                     if(ManufacName != "")
                     {
-                        DBConnection.Insert($"INSERT INTO manufacture (manufacId, manufacName) VALUES(0, '{ManufacName}');");
+                        _dblink.Insert($"INSERT INTO manufacture (manufacId, manufacName) VALUES(0, '{ManufacName}');");
                         _manufacDict.Clear();
                         getManafactureNameID();
                         MessageBox.Show("완료");
@@ -96,9 +93,9 @@ namespace batteryQI.ViewModels
         private void SaveButton_Click()
         {
             // 월 검사 할당량 수정 이벤트
-            if (DBConnection.ConnectOk())
+            if (_dblink.ConnectOk())
             {
-                DBConnection.Update($"UPDATE manager SET workAmount={_manager.WorkAmount} WHERE managerId='{_manager.ManagerID}';");
+                _dblink.Update($"UPDATE manager SET workAmount={_manager.WorkAmount} WHERE managerId='{_manager.ManagerID}';");
                 MessageBox.Show("수정 완료!");
             }
             else

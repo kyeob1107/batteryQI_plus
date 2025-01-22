@@ -22,9 +22,8 @@ namespace batteryQI.ViewModels
             get => _currentPage;
             set => SetProperty(ref _currentPage, value);
         }
-
         public Action? CloseAction { get; set; }
-        DBlink DBConnection = DBlink.Instance();
+
         public MainWindowViewModel()
         {
             // 초기 화면 설정
@@ -52,7 +51,7 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void ExitButton()
         {
-            DBConnection.Disconnect(); // DB 연결 끊기
+            _dblink.Disconnect(); // DB 연결 끊기
             CloseAction?.Invoke();
         }
     }
