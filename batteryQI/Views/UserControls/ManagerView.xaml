@@ -19,7 +19,7 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0 0 0 10">
                     <TextBlock Text="월 검사 할당량" VerticalAlignment="Center" Margin="0 0 5 0" FontSize="25" FontWeight="SemiBold"/>
                     <TextBox Text="{Binding NewAmount, UpdateSourceTrigger=PropertyChanged}"
-                     x:Name="InspectionLimitBox" Width="150" VerticalAlignment="Center" Margin="20 0 5 0" Height="auto" FontSize="20"/>
+                     x:Name="InspectionLimitBox" Width="150" VerticalAlignment="Center" Margin="20 0 5 0" Height="auto" FontSize="20" TextChanged="InspectionLimitBox_TextChanged"/>
                     <TextBlock Text="건" VerticalAlignment="Center" Margin="0 0 10 0" FontSize="25" FontWeight="SemiBold"/>
                     <Button Content="저장"
                     Width="70" Height="40"
