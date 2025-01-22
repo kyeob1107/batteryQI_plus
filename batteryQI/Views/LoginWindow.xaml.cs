@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using batteryQI.ViewModels;
+using batteryQI.ViewModels.Bases;
 
 namespace batteryQI.Views
 {
@@ -23,7 +23,7 @@ namespace batteryQI.Views
         public LoginWindow()
         {
             InitializeComponent();
-            this.DataContext = new loginViewModel();
+            this.DataContext = new LoginViewModel();
         }
     }
 }

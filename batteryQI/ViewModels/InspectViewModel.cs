@@ -13,11 +13,12 @@ using batteryQI.Models;
 using batteryQI.Views.UserControls;
 using System.Windows.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using batteryQI.ViewModels.Bases;
 
 namespace batteryQI.ViewModels
 {
     // 이미지 검사 이벤트
-    internal partial class InspectViewModel : ObservableObject
+    internal partial class InspectViewModel : ViewModelBases
     {
         // combox 리스트
         private IList<string> _manufacList = new List<string>(); // 제조사명 받아오기
@@ -26,10 +27,10 @@ namespace batteryQI.ViewModels
         private IList<string>? _batteryShapeList = new List<string>() { "Pouch", "Cylinder" };
         private IList<string>? _usageList = new List<string>() { "Household", "Industrial" }; // 사용처 리스트업
         private IList<string>? _defectList = new List<string>() { "Damage", "Pollution", "Damage and Pollution", "Etc.." };
-        private Battery _battery;
-        private Manager _manager;
-        private DBlink DBConnection;
 
+        private Battery _battery = Battery.Instance();
+        private Manager _manager = Manager.Instance();
+        
         private Visibility _errorInspectionVisibility = Visibility.Visible; // 첫 번째 UserControl (ErrorInspection) Visibility 제어
         private Visibility _errorReasonVisibility = Visibility.Collapsed; // 두 번째 UserControl (ErrorReason) Visibility 제어
 
@@ -61,16 +62,8 @@ namespace batteryQI.ViewModels
         }
         public InspectViewModel()
         {
-            // Manager 객체 생성
-            _battery = Battery.Instance();
-            _manager = Manager.Instance();
-            // 대시보드 열며 DB 연결
-            DBConnection = DBlink.Instance();
-            DBConnection.Connect();
-
             // 다음 AUTO_INCREMENT 값 가져오기
             _battery.BatteryID = GetNextAutoIncrementId();
-
             getManafactureNameID();
         }
 
@@ -78,7 +71,7 @@ namespace batteryQI.ViewModels
         private void getManafactureNameID() // DB에서 제조사 리스트 가져오기
         {
             // DB에서 가져와서 리스트 초기화하기, ID는 안 가져오고 Name만 추가
-            List<Dictionary<string, object>> ManufactureList_Raw = DBConnection.Select("SELECT * FROM manufacture;"); // 데이터 가져오기
+            List<Dictionary<string, object>> ManufactureList_Raw = _dblink.Select("SELECT * FROM manufacture;"); // 데이터 가져오기
             for(int i = 0; i < ManufactureList_Raw.Count; i++)
             {
                 string Name = "";
@@ -215,7 +208,7 @@ namespace batteryQI.ViewModels
         {
             // DB 정보 인서트
 
-            if (DBConnection.ConnectOk())
+            if (_dblink.ConnectOk())
             {
                 int defectState = -1;
                 if (battery.DefectStat == "정상")
@@ -223,26 +216,22 @@ namespace batteryQI.ViewModels
                 else
                     defectState = 0;
 
-                //DBConnection.Insert($"INSERT INTO manufacture (manufacId, manufacName) VALUES(0, '{ManufacName}');");
-
-                if (DBConnection.Insert($"INSERT INTO batteryInfo (batteryId, shootDate, usageName, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
-                    $"VALUES(0, '{battery.ShootDate}', '{battery.Usage}', '{battery.BatteryType}', {ManufacDict[battery.ManufacName]}, '{battery.BatteryShape}', 'CodingOn', NULL, {_manager.ManagerNum}, {defectState}, '{battery.DefectName}');"))
+                if (_dblink.Insert($"INSERT INTO batteryInfo (batteryId, shootDate, usageName, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
+                    $"VALUES(0, '{_battery.ShootDate}', '{_battery.Usage}', '{_battery.BatteryType}', {ManufacDict[battery.ManufacName]}, '{_battery.BatteryShape}', 'CodingOn', NULL, {_manager.ManagerNum}, {defectState}, '{_battery.DefectName}');"))
                 {
                     System.Windows.MessageBox.Show("완료!");
                     // 데이터 초기화
-                    battery.Usage = "";
-                    battery.BatteryType = "";
-                    battery.ManufacName = ""; 
-                    battery.BatteryShape = "";
-                    _manager.ManagerNum = 0;
-                    battery.DefectName = "";
-                    battery.ImagePath = "";
-                    battery.BatteryBitmapImage = null; // bitmap 이미지 초기화
+                    _battery.Usage = "";
+                    _battery.BatteryType = "";
+                    _battery.ManufacName = "";
+                    _battery.BatteryShape = "";
+                    _battery.DefectName = "";
+                    _battery.ImagePath = "";
+                    _battery.BatteryBitmapImage = null; // bitmap 이미지 초기화
                 }
                 else
                     System.Windows.MessageBox.Show("실패");
             }
-            //System.Windows.Application.Current.Windows[0]?.Close();
             window?.Close();
         }
 
@@ -259,7 +248,7 @@ namespace batteryQI.ViewModels
                                  ";
 
                 // 데이터베이스 연결 및 쿼리 실행
-                var result = DBConnection.Select(query);
+                var result = _dblink.Select(query);
 
                 if (result.Count > 0)
                 {

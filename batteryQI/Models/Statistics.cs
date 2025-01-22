@@ -13,16 +13,6 @@ namespace batteryQI.Models
         private List<string> _defectList; //
         private int _totalInspectNum; // 검사한 갯수 카운트 기록
 
-        //public string ManageID
-        //{
-        //    get { return _manageID; }
-        //    set
-        //    {
-        //        SetProperty(ref _manageID, value);
-        //    }
-        //}
-
-        //public List<string> DefectList { }
         public int TotalInspectNum
         { 
             get { return _totalInspectNum; } 

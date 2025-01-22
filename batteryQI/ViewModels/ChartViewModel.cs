@@ -19,7 +19,7 @@ namespace batteryQI.ViewModels
 {
     public class ChartViewModel
     {
-        protected DBlink _dblink = DBlink.Instance(); //DB연결 사용
+        protected DBlink _dblink = DBlink.Instance(); //DB연결 사용 // 수정 필요한지는 피드백 받고 결정
         public string[] Labels { get; protected set; }
         public double[] Values { get; protected set; }
         public DateTime[] TimeStamps { get; protected set; } 
