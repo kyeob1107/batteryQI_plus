@@ -45,10 +45,10 @@
                                     </LinearGradientBrush>
                                 </Border.Background>
 
-                                <Image Source="{Binding battery.ImagePath}" Stretch="Uniform" x:Name="PreviewImage" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <Image Source="{Binding DataContext.InspectViewModel.battery.ImagePath, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Stretch="Uniform" x:Name="PreviewImage" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </Border>
 
-                            <Button Style="{StaticResource imageSectionButton}" Margin="0 460 0 0" Content="이미지 선택" Command="{Binding ImageSelectButton_ClickCommand}" FontSize="17" FontWeight="SemiBold" />
+                            <Button Style="{StaticResource imageSectionButton}" Margin="0 460 0 0" Content="이미지 선택" Command="{Binding InspectViewModel.ImageSelectButton_ClickCommand}" FontSize="17" FontWeight="SemiBold" />
                         </Grid>
                     </Border>
 
@@ -57,12 +57,12 @@
                         <Border CornerRadius="20" Background="#7163ba" Margin="0,0,0,22">
                             <StackPanel Orientation="Vertical" Margin="20 20 20 0">
                                 <TextBlock Text="배터리 이미지 정보" Margin="0 0 0 0" FontSize="20" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-                                
+
                                 <StackPanel Orientation="Vertical" Margin="10 40 0 0">
                                     <TextBlock Text="제조사" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
                                     <ComboBox x:Name="manufacture"
-                                  ItemsSource="{Binding Path = DataContext.ManufacList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                  SelectedValue="{Binding battery.ManufacName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="150" Margin="0 10 0 0">
+                                  ItemsSource="{Binding Path = DataContext.InspectViewModel.ManufacList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                  SelectedValue="{Binding DataContext.InspectViewModel.battery.ManufacName, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="150" Margin="0 10 0 0">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding}"/>
@@ -74,8 +74,8 @@
                                 <StackPanel Orientation="Vertical" Margin="10 20 0 0">
                                     <TextBlock Text="배터리 타입" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
                                     <ComboBox x:Name="batteryType"
-                                  ItemsSource="{Binding Path = DataContext.BatteryTypeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                  SelectedValue="{Binding battery.BatteryType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
+                                  ItemsSource="{Binding Path = DataContext.InspectViewModel.BatteryTypeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                  SelectedValue="{Binding DataContext.InspectViewModel.battery.BatteryType, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding}"/>
@@ -87,8 +87,8 @@
                                 <StackPanel Orientation="Vertical" Margin="10 20 0 0">
                                     <TextBlock Text="배터리 형태" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
                                     <ComboBox x:Name="batteryShape"
-                                  ItemsSource="{Binding Path = DataContext.BatteryShapeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                  SelectedValue="{Binding battery.BatteryShape, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
+                                  ItemsSource="{Binding Path = DataContext.InspectViewModel.BatteryShapeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                  SelectedValue="{Binding DataContext.InspectViewModel.battery.BatteryShape, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding}"/>
@@ -101,8 +101,8 @@
                                     <TextBlock Text="사용처" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
                                     <ComboBox 
                             x:Name="battryUsage"
-                            ItemsSource = "{Binding Path = DataContext.UsageList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                            SelectedValue="{Binding battery.Usage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
+                            ItemsSource = "{Binding Path = DataContext.InspectViewModel.UsageList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                            SelectedValue="{Binding DataContext.InspectViewModel.battery.Usage, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding}"/>
@@ -111,7 +111,9 @@
                                     </ComboBox>
                                 </StackPanel>
 
-                                <Button Style="{StaticResource imageSectionButton}" Margin="0 65 0 0" Content="이미지 분석" FontSize="17" FontWeight="SemiBold" Command="{Binding ImageInspectionButton_ClickCommand}"/>
+                                <Button Style="{StaticResource imageSectionButton}" Margin="0 65 0 0" Content="이미지 분석" FontSize="17" FontWeight="SemiBold" 
+                                    Command="{Binding DataContext.InspectViewModel.ImageInspectionButton_ClickCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -125,15 +127,18 @@
 
                                 <!-- 검사 정보 -->
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Margin="20 0 0 0" Text="할당량 : " Foreground="White" FontSize="15"/>
-                                    <TextBlock Margin="60 0 0 0" Text="검사완료 : " Foreground="White" FontSize="15"/>
-                                    <TextBlock Margin="60 0 0 0" Text="검사진행률 : " Foreground="White" FontSize="15"/>
+                                    <TextBlock Margin="20 0 0 0" Text="{Binding ManagerViewModel.Manager.WorkAmount, Mode=Oneway, UpdateSourceTrigger=PropertyChanged, StringFormat='할당량: {0}'}" 
+                                               Foreground="White" FontSize="15"/>
+                                    <TextBlock Margin="20 0 0 0" Text="{Binding ManagerViewModel.Manager.TotalInspectNum, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat='검사 완료: {0}'}" 
+                                               Foreground="White" FontSize="15"/>
+                                    <TextBlock Margin="20 0 0 0" Text="{Binding ManagerViewModel.Manager.WorkProgress, Mode=Oneway, UpdateSourceTrigger=PropertyChanged, StringFormat='작업 진행률: {0}%'}"
+                                               Foreground="White" FontSize="15"/>
                                 </StackPanel>
 
                                 <!-- ProgressBar와 퍼센트 -->
                                 <Grid Margin="20 10 20 0" VerticalAlignment="Center">
                                     <!-- ProgressBar -->
-                                    <ProgressBar Height="20" Value="20" Maximum="100">
+                                    <ProgressBar Height="20" Value="{Binding ManagerViewModel.Manager.WorkProgress, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100">
                                         <ProgressBar.Resources>
                                             <!-- ProgressBar 색상 변경 -->
                                             <Style TargetType="ProgressBar">
@@ -146,7 +151,7 @@
                                     </ProgressBar>
 
                                     <!-- 퍼센트 텍스트 -->
-                                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0" FontSize="14" Foreground="White" FontWeight="SemiBold" Text="20%" />
+                                    <TextBlock HorizontalAlignment="Right" Foreground="#54479c" VerticalAlignment="Center" Margin="0 0 10 0" FontSize="14" FontWeight="SemiBold" Text="{Binding ManagerViewModel.Manager.WorkProgress, Mode=Oneway, UpdateSourceTrigger=PropertyChanged, StringFormat=' {0}%'}" />
                                 </Grid>
                             </StackPanel>
                         </Grid>

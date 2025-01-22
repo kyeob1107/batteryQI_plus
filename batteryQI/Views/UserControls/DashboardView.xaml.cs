@@ -26,7 +26,7 @@ namespace batteryQI.Views.UserControls
         public DashboardView()
         {
             InitializeComponent();
-            this.DataContext = new InspectViewModel(); // ViewModel 연결
+            this.DataContext = new CompositeViewModel(); // ViewModel 연결
         }
 
     }
