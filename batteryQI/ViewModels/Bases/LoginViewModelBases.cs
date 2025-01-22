@@ -45,6 +45,8 @@ namespace batteryQI.ViewModels.Bases
                     MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     _manager.ManagerNum = (int)login[0]["managerNum"];
                     _manager.ManagerID = login[0]["managerId"].ToString();
+                    _manager.WorkAmount = (int)login[0]["managerWorkAmount"];
+
                     var mainWindow = new MainWindow();
                     mainWindow.Show();
 
