@@ -106,7 +106,7 @@ namespace batteryQI.ViewModels
             }
         }
         [RelayCommand]
-        private void SaveButton_Click()
+        private void amountSaveButton_Click()
         {
             // 월 검사 할당량 수정 이벤트
             if (_dblink.ConnectOk())
