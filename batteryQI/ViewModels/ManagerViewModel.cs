@@ -11,6 +11,7 @@ using batteryQI.Models;
 using System.Windows.Forms;
 using Mysqlx.Crud;
 using batteryQI.ViewModels.Bases;
+using System.Windows;
 
 namespace batteryQI.ViewModels
 {
@@ -20,6 +21,7 @@ namespace batteryQI.ViewModels
         private Manager _manager = Manager.Instance();
         private string _manufacName = "";
         private IDictionary<string, string> _manufacDict = new Dictionary<string, string>();
+        private int _newAmount;
         public IDictionary<string, string> ManufacDict
         {
             get => _manufacDict;
@@ -34,10 +36,17 @@ namespace batteryQI.ViewModels
             get => _manager;
             set => SetProperty(ref _manager, value);
         }
+        public int NewAmount
+        {
+            get => _newAmount;
+            set => SetProperty(ref _newAmount, value);
+        }
         public ManagerViewModel()
         {
             getManafactureNameID();
+            _newAmount = _manager.WorkAmount;
         }
+
 
         private void getManafactureNameID() // DB에서 제조사 리스트 가져오기
         {
@@ -76,17 +85,17 @@ namespace batteryQI.ViewModels
                         _dblink.Insert($"INSERT INTO manufacture (manufacId, manufacName) VALUES(0, '{ManufacName}');");
                         _manufacDict.Clear();
                         getManafactureNameID();
-                        MessageBox.Show("완료");
+                        System.Windows.MessageBox.Show("완료");
                     }
                     else
                     {
-                        MessageBox.Show("제조사를 입력해주세요", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        System.Windows.MessageBox.Show("제조사를 입력해주세요", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
             catch
             {
-                MessageBox.Show("입력 오류", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Windows.MessageBox.Show("입력 오류", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         [RelayCommand]
@@ -95,12 +104,16 @@ namespace batteryQI.ViewModels
             // 월 검사 할당량 수정 이벤트
             if (_dblink.ConnectOk())
             {
-                _dblink.Update($"UPDATE manager SET workAmount={_manager.WorkAmount} WHERE managerId='{_manager.ManagerID}';");
-                MessageBox.Show("수정 완료!");
+                if (System.Windows.MessageBox.Show($"할당량을 {_newAmount}로 변경할까요?", "warning", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    _manager.WorkAmount = _newAmount;
+                    _dblink.Update($"UPDATE manager SET workAmount={_manager.WorkAmount} WHERE managerId='{_manager.ManagerID}';");
+                    System.Windows.MessageBox.Show($"할당량을 {_manager.WorkAmount}로 수정 완료!");
+                }
             }
             else
             {
-                MessageBox.Show("DB 연결 오류", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Windows.MessageBox.Show("DB 연결 오류", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
