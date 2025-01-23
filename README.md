@@ -55,3 +55,17 @@ Members : <a href = "https://github.com/hyeyeoung">김혜영</a>, <a href = "htt
 
 ##### AI 및 데이터 제공
 <a href = "https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=data&dataSetSn=71687"> AI hub</a>
+
+---
+## 시스템 구조소개
+- 클래스 간의 관계   
+<img src = "./img/batteryQI-클래스간 관계.drawio.svg"/>
+
+- Model 클래스 다이어그램   
+<img src = "./img/batteryQI-Model.drawio.svg"/>
+
+- ViewModel 클래스 다이어그램   
+<img src = "./img/batteryQI-ViewModel.drawio.svg"/>
+
+- View 클래스 다이어그램   
+<img src = "./img/batteryQI-View.drawio.svg"/>
