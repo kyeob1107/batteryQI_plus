@@ -1,7 +1,7 @@
 ﻿<Window x:Class="batteryQI.Views.ErrorInfoView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Height="600" Width="850">
+        Height="600" Width="880">
 
     <Border Background="#cfd5e5" CornerRadius="10" BorderThickness="2" BorderBrush="#ebedf3" Padding="20">
         <Border CornerRadius="30">
@@ -85,16 +85,16 @@
                             </Grid.RowDefinitions>
 
                             <!-- Battery Info -->
-                            <TextBlock Grid.Row="0" Text="{Binding InspectViewModel.battery.BatteryID}" FontSize="16" FontWeight="Bold" Margin="10 0 0 0"/>
-                            <TextBlock Grid.Row="1" Text="{Binding ManagerViewModel.Manager.ManagerID}" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
-                            <TextBlock Grid.Row="2" Text="{Binding InspectViewModel.battery.ManufacName}" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
-                            <TextBlock Grid.Row="3" Text="{Binding InspectViewModel.battery.ShootDate}" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
-                            <TextBlock Grid.Row="4" Text="{Binding InspectViewModel.battery.ShootPlace}" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
-                            <TextBlock Grid.Row="5" Text="{Binding InspectViewModel.battery.Usage}" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
-                            <TextBlock Grid.Row="6" Text="{Binding InspectViewModel.battery.BatteryType}" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
-                            <TextBlock Grid.Row="7" Text="{Binding InspectViewModel.battery.BatteryShape}" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
-                            <TextBlock Grid.Row="8" Text="{Binding InspectViewModel.battery.DefectStat}" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
-                            <TextBlock Grid.Row="9" Text="{Binding InspectViewModel.battery.DefectName}" FontSize="16" FontWeight="Bold" Margin="10 10 0 0"/>
+                            <TextBlock Grid.Row="0" Text="{Binding InspectViewModel.battery.BatteryID}" FontSize="16" FontWeight="Bold" Margin="0 0 0 0"/>
+                            <TextBlock Grid.Row="1" Text="{Binding ManagerViewModel.Manager.ManagerID}" FontSize="16" FontWeight="Bold" Margin="0 10 0 0"/>
+                            <TextBlock Grid.Row="2" Text="{Binding InspectViewModel.battery.ManufacName}" FontSize="16" FontWeight="Bold" Margin="0 10 0 0"/>
+                            <TextBlock Grid.Row="3" Text="{Binding InspectViewModel.battery.ShootDate}" FontSize="16" FontWeight="Bold" Margin="0 10 0 0"/>
+                            <TextBlock Grid.Row="4" Text="{Binding InspectViewModel.battery.ShootPlace}" FontSize="16" FontWeight="Bold" Margin="0 10 0 0"/>
+                            <TextBlock Grid.Row="5" Text="{Binding InspectViewModel.battery.Usage}" FontSize="16" FontWeight="Bold" Margin="0 10 0 0"/>
+                            <TextBlock Grid.Row="6" Text="{Binding InspectViewModel.battery.BatteryType}" FontSize="16" FontWeight="Bold" Margin="0 10 0 0"/>
+                            <TextBlock Grid.Row="7" Text="{Binding InspectViewModel.battery.BatteryShape}" FontSize="16" FontWeight="Bold" Margin="0 10 0 0"/>
+                            <TextBlock Grid.Row="8" Text="{Binding InspectViewModel.battery.DefectStat}" FontSize="16" FontWeight="Bold" Margin="0 10 0 0"/>
+                            <TextBlock Grid.Row="9" Text="{Binding InspectViewModel.battery.DefectName}" FontSize="16" FontWeight="Bold" Margin="0 10 0 0"/>
                         </Grid>
                     </Grid>
                 </Border>
