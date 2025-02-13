@@ -4,8 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # Data Protect
-batteryQI/Models/DB.txt
-batteryQI/weight/*.onnx
+batteryQI_plus/Models/DB.txt
+batteryQI_plus/weight/*.onnx
 # User-specific files
 *.rsuser
 *.suo
