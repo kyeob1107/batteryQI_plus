@@ -67,7 +67,12 @@ namespace batteryQI.Models
         public void Connect()
         {
             this.setDBLink();
-            string myConnection = "Server="+_server + ";Port=" + _port + ";Database=" + _dbName + ";User Id = " + _dbId + ";Password = " + _dbPw + ";CharSet=utf8;";
+            string myConnection = "Server="+_server + 
+                                    ";Port=" + _port + 
+                                    ";Database=" + _dbName + 
+                                    ";User Id = " + _dbId + 
+                                    ";Password = " + _dbPw + 
+                                    ";CharSet=utf8;";
             try
             {
                 connection = new MySqlConnection(myConnection);
