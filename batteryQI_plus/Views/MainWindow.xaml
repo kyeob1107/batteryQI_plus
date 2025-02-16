@@ -43,7 +43,7 @@
                                 <fa:IconImage Icon="ChartSimple" Style="{StaticResource menuButtonIcon}"/>
                             </Button>
                             <Button Style="{StaticResource topMenuButton}" Background="#5a5080" Command="{Binding ManagerButtonCommand}">
-                                <fa:IconImage Icon="user" Style="{StaticResource menuButtonIcon}"/>
+                                <fa:IconImage Icon="Gear" Style="{StaticResource menuButtonIcon}"/>
                             </Button>
                         </StackPanel>
 
