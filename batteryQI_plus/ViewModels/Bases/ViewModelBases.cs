@@ -9,17 +9,28 @@ using CommunityToolkit.Mvvm.Input;
 using batteryQI.Models;
 using batteryQI.Views;
 using System.Windows.Controls;
+using System.Data.Common;
 
 namespace batteryQI.ViewModels.Bases
 {
-    public partial class ViewModelBases : ObservableObject
+    public partial class ViewModelBases : ObservableObject, IDisposable
     {
         // DB 객체 생성
         protected DBlink _dblink;
         public ViewModelBases()
         {
             // 객체 연결
-            _dblink = DBlink.Instance(); 
+            _dblink = DBlink.Instance();
+        }
+
+        // Dispose 메서드 구현
+        public void Dispose()
+        {
+            if (_dblink != null)
+            {
+                _dblink.Dispose(); // 리소스 해제
+                _dblink = null;
+            }
         }
     }
 }

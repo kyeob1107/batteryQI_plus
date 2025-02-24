@@ -31,7 +31,7 @@ namespace batteryQI.Models
         }
     }
 
-    public class DBlink : ObservableObject
+    public class DBlink : ObservableObject, IDisposable
     {
         private string _server = ""; // _server : ip 주소
         private string _port = ""; // _port : 포트번호
@@ -236,9 +236,15 @@ namespace batteryQI.Models
             return result;
         }
 
-        public void Disconnect()
+        // 연결 해제 및 리소스 정리
+        public void Dispose() 
         {
-            connection.Close(); // 연결 해제
+            if (connection != null && connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close(); // 연결 해제
+                connection.Dispose();
+                connection = null;
+            }
         }
     }
 }

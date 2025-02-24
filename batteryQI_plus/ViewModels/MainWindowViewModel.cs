@@ -51,7 +51,7 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void ExitButton()
         {
-            _dblink.Disconnect(); // DB 연결 끊기
+            _dblink.Dispose(); // DB 연결 끊기
             CloseAction?.Invoke();
         }
     }

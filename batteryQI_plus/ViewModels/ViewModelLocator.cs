@@ -84,5 +84,45 @@ namespace batteryQI.ViewModels
                 return _tabControlViewModel;
             }
         }
+
+        public void Cleanup()
+        {
+            if (_loginViewModel != null)
+            {
+                _loginViewModel.Dispose();
+                _loginViewModel = null;
+            }
+
+            if (_mainWindowViewModel != null)
+            {
+                _mainWindowViewModel.Dispose();
+                _mainWindowViewModel = null;
+            }
+
+            // 얘는 다른 방식으로 처리할 수 있으면 처리 시도해야함 응급처치로 ViewModelBase상속하게 해서 해결했음
+            if (_compositeViewModel != null) 
+            {
+                _compositeViewModel.Dispose();
+                _compositeViewModel = null;
+            }
+
+            if (_inspectViewModel != null)
+            {
+                _inspectViewModel.Dispose();
+                _inspectViewModel = null;
+            }
+
+            if (_managerViewModel != null)
+            {
+                _managerViewModel.Dispose();
+                _managerViewModel = null;
+            }
+
+            if (_tabControlViewModel != null)
+            {
+                _tabControlViewModel.Dispose();
+                _tabControlViewModel = null;
+            }
+        }
     }
 }
