@@ -1,166 +1,172 @@
 ﻿<UserControl x:Class="batteryQI.Views.UserControls.DashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             >
+    <UserControl.DataContext>
+        <Binding Path="CompositeViewModel" Source="{StaticResource Locator}" />
+    </UserControl.DataContext>
+    
+    <Border Background="White">
+        <Viewbox Stretch="Uniform">
+            <Grid Width="1280" Height="720">
+                <Grid>
+                    <!-- Main Section -->
+                    <Grid x:Name="mainSection" Margin="5 20 25 10" Panel.ZIndex="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="550"/>
+                            <RowDefinition Height="220"/>
+                        </Grid.RowDefinitions>
 
-    <Viewbox Stretch="Uniform">
-        <Grid Width="1280" Height="720">
-            <Grid>
-                <!-- Main Section -->
-                <Grid x:Name="mainSection" Margin="5 20 25 10" Panel.ZIndex="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="550"/>
-                        <RowDefinition Height="220"/>
-                    </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="2*"/>
-                    </Grid.ColumnDefinitions>
+                        <!--Main Image Insert Section-->
+                        <Border Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="20" Margin="0 0 20 20">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                    <GradientStop Color="#6a5dae" Offset="0"/>
+                                    <GradientStop Color="#54479c" Offset="1.2"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
 
-                    <!--Main Image Insert Section-->
-                    <Border Grid.Row="0" Grid.ColumnSpan="2" CornerRadius="20" Margin="0 0 20 20">
-                        <Border.Background>
-                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                <GradientStop Color="#6a5dae" Offset="0"/>
-                                <GradientStop Color="#54479c" Offset="1.2"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
+                            <!--Main Image PreView Section-->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
-                        <!--Main Image PreView Section-->
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                                <TextBlock Text="배터리 이미지" Margin="20 15" FontSize="20" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Top"/>
 
-                            <TextBlock Text="배터리 이미지" Margin="20 15" FontSize="20" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Top"/>
+                                <Border CornerRadius="10" Margin="20,70,20,70" ClipToBounds="True" Height="370" VerticalAlignment="Top">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Color="White" Offset="0"/>
+                                            <GradientStop Color="White" Offset="1.2"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
 
-                            <Border CornerRadius="10" Margin="20,70,20,70" ClipToBounds="True" Height="370" VerticalAlignment="Top">
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                        <GradientStop Color="White" Offset="0"/>
-                                        <GradientStop Color="White" Offset="1.2"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
+                                    <Image Source="{Binding DataContext.InspectViewModel.battery.ImagePath, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Stretch="Uniform" x:Name="PreviewImage" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
 
-                                <Image Source="{Binding DataContext.InspectViewModel.battery.ImagePath, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Stretch="Uniform" x:Name="PreviewImage" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            </Border>
+                                <Button Style="{StaticResource imageSectionButton}" Margin="0 460 0 0" Content="이미지 선택" Command="{Binding InspectViewModel.ImageSelectButton_ClickCommand}" FontSize="17" FontWeight="SemiBold" />
+                            </Grid>
+                        </Border>
 
-                            <Button Style="{StaticResource imageSectionButton}" Margin="0 460 0 0" Content="이미지 선택" Command="{Binding InspectViewModel.ImageSelectButton_ClickCommand}" FontSize="17" FontWeight="SemiBold" />
-                        </Grid>
-                    </Border>
+                        <!-- Image Info Section-->
+                        <Grid Grid.Column="2" Grid.Row="0">
+                            <Border CornerRadius="20" Background="#7163ba" Margin="0,0,0,22">
+                                <StackPanel Orientation="Vertical" Margin="20 20 20 0">
+                                    <TextBlock Text="배터리 이미지 정보" Margin="0 0 0 0" FontSize="20" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center"/>
 
-                    <!-- Image Info Section-->
-                    <Grid Grid.Column="2" Grid.Row="0">
-                        <Border CornerRadius="20" Background="#7163ba" Margin="0,0,0,22">
-                            <StackPanel Orientation="Vertical" Margin="20 20 20 0">
-                                <TextBlock Text="배터리 이미지 정보" Margin="0 0 0 0" FontSize="20" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-
-                                <StackPanel Orientation="Vertical" Margin="10 40 0 0">
-                                    <TextBlock Text="제조사" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
-                                    <ComboBox x:Name="manufacture"
+                                    <StackPanel Orientation="Vertical" Margin="10 40 0 0">
+                                        <TextBlock Text="제조사" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
+                                        <ComboBox x:Name="manufacture"
                                   ItemsSource="{Binding Path = DataContext.InspectViewModel.ManufacList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                                   SelectedValue="{Binding DataContext.InspectViewModel.battery.ManufacName, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="150" Margin="0 10 0 0">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding}"/>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                </StackPanel>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
 
-                                <StackPanel Orientation="Vertical" Margin="10 20 0 0">
-                                    <TextBlock Text="배터리 타입" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
-                                    <ComboBox x:Name="batteryType"
+                                    <StackPanel Orientation="Vertical" Margin="10 20 0 0">
+                                        <TextBlock Text="배터리 타입" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
+                                        <ComboBox x:Name="batteryType"
                                   ItemsSource="{Binding Path = DataContext.InspectViewModel.BatteryTypeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                                   SelectedValue="{Binding DataContext.InspectViewModel.battery.BatteryType, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding}"/>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                </StackPanel>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
 
-                                <StackPanel Orientation="Vertical" Margin="10 20 0 0">
-                                    <TextBlock Text="배터리 형태" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
-                                    <ComboBox x:Name="batteryShape"
+                                    <StackPanel Orientation="Vertical" Margin="10 20 0 0">
+                                        <TextBlock Text="배터리 형태" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
+                                        <ComboBox x:Name="batteryShape"
                                   ItemsSource="{Binding Path = DataContext.InspectViewModel.BatteryShapeList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                                   SelectedValue="{Binding DataContext.InspectViewModel.battery.BatteryShape, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding}"/>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                </StackPanel>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
 
-                                <StackPanel Orientation="Vertical" Margin="10 20 0 0">
-                                    <TextBlock Text="사용처" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
-                                    <ComboBox 
+                                    <StackPanel Orientation="Vertical" Margin="10 20 0 0">
+                                        <TextBlock Text="사용처" FontSize="14" FontWeight="SemiBold" Foreground="White" Margin="75 5 5 5"/>
+                                        <ComboBox 
                             x:Name="battryUsage"
                             ItemsSource = "{Binding Path = DataContext.InspectViewModel.UsageList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                             SelectedValue="{Binding DataContext.InspectViewModel.battery.Usage, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0 10 0 0">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding}"/>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                </StackPanel>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
 
-                                <Button Style="{StaticResource imageSectionButton}" Margin="0 65 0 0" Content="이미지 분석" FontSize="17" FontWeight="SemiBold" 
+                                    <Button Style="{StaticResource imageSectionButton}" Margin="0 65 0 0" Content="이미지 분석" FontSize="17" FontWeight="SemiBold" 
                                     Command="{Binding DataContext.InspectViewModel.ImageInspectionButton_ClickCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
 
-                            </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- Progress Section -->
+                        <Border Grid.Row="1" Grid.ColumnSpan="3" CornerRadius="10" Background="#7163ba" Padding="0 0 0 10" Margin="0,20,0,83">
+                            <Grid>
+                                <StackPanel Orientation="Vertical">
+                                    <!-- 제목 -->
+                                    <TextBlock Margin="10" Text="검사 진행률" FontSize="17" Foreground="White" FontWeight="SemiBold" />
+
+                                    <!-- 검사 정보 -->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Margin="20 0 0 0" Text="{Binding ManagerViewModel.Manager.WorkAmount, Mode=Oneway, UpdateSourceTrigger=PropertyChanged, StringFormat='할당량: {0}'}" 
+                                               Foreground="White" FontSize="15"/>
+                                        <TextBlock Margin="20 0 0 0" Text="{Binding ManagerViewModel.Manager.TotalInspectNum, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat='검사 완료: {0}'}" 
+                                               Foreground="White" FontSize="15"/>
+                                        <TextBlock Margin="20 0 0 0" Text="{Binding ManagerViewModel.Manager.WorkProgress, Mode=Oneway, UpdateSourceTrigger=PropertyChanged, StringFormat='작업 진행률: {0}%'}"
+                                               Foreground="White" FontSize="15"/>
+                                    </StackPanel>
+
+                                    <!-- ProgressBar와 퍼센트 -->
+                                    <Grid Margin="20 10 20 0" VerticalAlignment="Center">
+                                        <!-- ProgressBar -->
+                                        <ProgressBar Height="20" Value="{Binding ManagerViewModel.Manager.WorkProgress, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100">
+                                            <ProgressBar.Resources>
+                                                <!-- ProgressBar 색상 변경 -->
+                                                <Style TargetType="ProgressBar">
+                                                    <Setter Property="Foreground" Value="#E5D1FF" />
+                                                    <!-- 진행 부분 색상 -->
+                                                    <Setter Property="Background" Value="#9A8CCC" />
+                                                    <!-- 배경 색상 -->
+                                                </Style>
+                                            </ProgressBar.Resources>
+                                        </ProgressBar>
+
+                                        <!-- 퍼센트 텍스트 -->
+                                        <TextBlock HorizontalAlignment="Right" Foreground="#54479c" VerticalAlignment="Center" Margin="0 0 10 0" FontSize="14" FontWeight="SemiBold" Text="{Binding ManagerViewModel.Manager.WorkProgress, Mode=Oneway, UpdateSourceTrigger=PropertyChanged, StringFormat=' {0}%'}" />
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
                         </Border>
+
+                        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
                     </Grid>
 
-                    <!-- Progress Section -->
-                    <Border Grid.Row="1" Grid.ColumnSpan="3" CornerRadius="10" Background="#7163ba" Padding="0 0 0 10" Margin="0,20,0,83">
-                        <Grid>
-                            <StackPanel Orientation="Vertical">
-                                <!-- 제목 -->
-                                <TextBlock Margin="10" Text="검사 진행률" FontSize="17" Foreground="White" FontWeight="SemiBold" />
-
-                                <!-- 검사 정보 -->
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Margin="20 0 0 0" Text="{Binding ManagerViewModel.Manager.WorkAmount, Mode=Oneway, UpdateSourceTrigger=PropertyChanged, StringFormat='할당량: {0}'}" 
-                                               Foreground="White" FontSize="15"/>
-                                    <TextBlock Margin="20 0 0 0" Text="{Binding ManagerViewModel.Manager.TotalInspectNum, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat='검사 완료: {0}'}" 
-                                               Foreground="White" FontSize="15"/>
-                                    <TextBlock Margin="20 0 0 0" Text="{Binding ManagerViewModel.Manager.WorkProgress, Mode=Oneway, UpdateSourceTrigger=PropertyChanged, StringFormat='작업 진행률: {0}%'}"
-                                               Foreground="White" FontSize="15"/>
-                                </StackPanel>
-
-                                <!-- ProgressBar와 퍼센트 -->
-                                <Grid Margin="20 10 20 0" VerticalAlignment="Center">
-                                    <!-- ProgressBar -->
-                                    <ProgressBar Height="20" Value="{Binding ManagerViewModel.Manager.WorkProgress, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100">
-                                        <ProgressBar.Resources>
-                                            <!-- ProgressBar 색상 변경 -->
-                                            <Style TargetType="ProgressBar">
-                                                <Setter Property="Foreground" Value="#E5D1FF" />
-                                                <!-- 진행 부분 색상 -->
-                                                <Setter Property="Background" Value="#9A8CCC" />
-                                                <!-- 배경 색상 -->
-                                            </Style>
-                                        </ProgressBar.Resources>
-                                    </ProgressBar>
-
-                                    <!-- 퍼센트 텍스트 -->
-                                    <TextBlock HorizontalAlignment="Right" Foreground="#54479c" VerticalAlignment="Center" Margin="0 0 10 0" FontSize="14" FontWeight="SemiBold" Text="{Binding ManagerViewModel.Manager.WorkProgress, Mode=Oneway, UpdateSourceTrigger=PropertyChanged, StringFormat=' {0}%'}" />
-                                </Grid>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
                 </Grid>
-
             </Grid>
-        </Grid>
-    </Viewbox>
+        </Viewbox>
+    </Border>
 </UserControl>

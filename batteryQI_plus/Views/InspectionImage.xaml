@@ -2,7 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:uc="clr-namespace:batteryQI.Views.UserControls"
-        Height="750" Width="500">
+        Height="750" Width="500"
+        DataContext="{Binding InspectViewModel, Source={StaticResource Locator}}"
+        >
 
     <Border Background="#cfd5e5" CornerRadius="10" BorderThickness="2" BorderBrush="#ebedf3" Padding="20">
         <Border CornerRadius="30">

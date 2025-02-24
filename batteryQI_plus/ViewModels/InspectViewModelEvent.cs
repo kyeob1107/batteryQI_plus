@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace batteryQI.ViewModels
 {
-    internal partial class InspectViewModel : ViewModelBases
+    public partial class InspectViewModel : ViewModelBases
     {
         // InspectViewModel 이벤트 핸들러 정리 파일
         [RelayCommand]

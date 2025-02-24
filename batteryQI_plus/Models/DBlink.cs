@@ -155,12 +155,15 @@ namespace batteryQI.Models
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"데이터베이스 접속 오류 \r\n 에러메시지: {ex.Message}", 
+                if (connection == null)
+                    MessageBox.Show($"데이터베이스 접속 오류 \r\n 에러메시지: {ex.Message} 연결 안됨 에러위치: {ex.StackTrace}", 
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                else
+                    MessageBox.Show($"데이터베이스 접속 오류 \r\n 에러메시지: {ex.Message}",
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return resultList;
         }
-
         
 
         // DB select count(*) action

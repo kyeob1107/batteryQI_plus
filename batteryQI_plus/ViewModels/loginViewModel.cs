@@ -14,7 +14,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace batteryQI.ViewModels.Bases
 {
-    internal partial class LoginViewModel : ViewModelBases
+    public partial class LoginViewModel : ViewModelBases
     {
         private Manager _manager = Manager.Instance();
         public Manager Manager

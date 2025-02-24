@@ -22,9 +22,13 @@ namespace batteryQI.Views
         public MainWindow()
         {
             InitializeComponent();
-            var viewModel = new MainWindowViewModel();
-            viewModel.CloseAction = () => this.Close();
-            this.DataContext = viewModel;
+            //var viewModel = new MainWindowViewModel();
+            //viewModel.CloseAction = () => this.Close();
+            //this.DataContext = viewModel;
+            if (DataContext is MainWindowViewModel vm)
+            {
+                vm.CloseAction = () => this.Close(); // 창 닫기 기능을 ViewModel에 연결
+            }
         }
     }
 }

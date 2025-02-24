@@ -14,7 +14,7 @@ using System.Data.Common;
 
 namespace batteryQI.ViewModels
 {
-    internal partial class MainWindowViewModel : ViewModelBases
+    public partial class MainWindowViewModel : ViewModelBases
     {
         private object _currentPage;
         public object CurrentPage
