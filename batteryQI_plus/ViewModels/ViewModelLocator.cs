@@ -1,29 +1,26 @@
 ﻿using batteryQI.ViewModels.Bases;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace batteryQI.ViewModels
 {
     public class ViewModelLocator
     {
-        public ViewModelLocator()
-        {
-            //_loginViewModel = new LoginViewModel();
-            //_mainWindowViewModel = new MainWindowViewModel();
-            //_compositeViewModel = new CompositeViewModel();
-            //_inspectViewModel = new InspectViewModel();
-            //_managerViewModel = new ManagerViewModel();
-            //_tabControlViewModel = new TabControlViewModel();
-        }
+        public ViewModelLocator() { }
 
         private LoginViewModel? _loginViewModel; // 로그인 View
         public LoginViewModel LoginViewModel
         {
             get
             {
+                // 디자인 타임때 ViewModel 인스턴스 생성 자체를 차단. 
+                // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
+
                 if (_loginViewModel == null)
                     _loginViewModel = new LoginViewModel();
                 return _loginViewModel;
@@ -35,6 +32,7 @@ namespace batteryQI.ViewModels
         {
             get
             {
+                // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
                 if (_mainWindowViewModel == null)
                     _mainWindowViewModel = new MainWindowViewModel();
                 return _mainWindowViewModel;
@@ -46,6 +44,7 @@ namespace batteryQI.ViewModels
         {
             get
             {
+                // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
                 if (_compositeViewModel == null)
                     _compositeViewModel = new CompositeViewModel();
                 return _compositeViewModel;
@@ -57,6 +56,7 @@ namespace batteryQI.ViewModels
         {
             get
             {
+                // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
                 if (_inspectViewModel == null)
                     _inspectViewModel = new InspectViewModel();
                 return _inspectViewModel;
@@ -68,6 +68,7 @@ namespace batteryQI.ViewModels
         {
             get
             {
+                // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
                 if (_managerViewModel == null)
                     _managerViewModel = new ManagerViewModel();
                 return _managerViewModel;
@@ -79,6 +80,7 @@ namespace batteryQI.ViewModels
         {
             get
             {
+                // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
                 if (_tabControlViewModel == null)
                     _tabControlViewModel = new TabControlViewModel();
                 return _tabControlViewModel;
