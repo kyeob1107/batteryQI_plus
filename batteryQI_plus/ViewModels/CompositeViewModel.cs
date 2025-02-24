@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using batteryQI.ViewModels.Bases;
 
 namespace batteryQI.ViewModels
 {
     // 주석 달아주시죠.. 이거 만드신 분.. 
-    class CompositeViewModel
+    public class CompositeViewModel : ViewModelBases
     {
         public InspectViewModel InspectViewModel { get; set; }
         public ManagerViewModel ManagerViewModel { get; set; }

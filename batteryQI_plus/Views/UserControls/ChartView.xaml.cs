@@ -27,7 +27,7 @@ namespace batteryQI.Views.UserControls
         public ChartView()
         {
             InitializeComponent();
-            this.DataContext = new TabControlViewModel();
+            //this.DataContext = new TabControlViewModel();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace batteryQI.Views
         public InspectionImage()
         {
             InitializeComponent();
-            this.DataContext = new InspectViewModel();
+            //this.DataContext = new InspectViewModel();
         }
     }
 }

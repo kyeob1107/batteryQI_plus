@@ -31,7 +31,7 @@ namespace batteryQI.Models
         }
     }
 
-    public class DBlink : ObservableObject
+    public class DBlink : ObservableObject, IDisposable
     {
         private string _server = ""; // _server : ip 주소
         private string _port = ""; // _port : 포트번호
@@ -155,12 +155,15 @@ namespace batteryQI.Models
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"데이터베이스 접속 오류 \r\n 에러메시지: {ex.Message}", 
+                if (connection == null)
+                    MessageBox.Show($"데이터베이스 접속 오류 \r\n 에러메시지: {ex.Message} 연결 안됨 에러위치: {ex.StackTrace}", 
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                else
+                    MessageBox.Show($"데이터베이스 접속 오류 \r\n 에러메시지: {ex.Message}",
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return resultList;
         }
-
         
 
         // DB select count(*) action
@@ -233,9 +236,15 @@ namespace batteryQI.Models
             return result;
         }
 
-        public void Disconnect()
+        // 연결 해제 및 리소스 정리
+        public void Dispose() 
         {
-            connection.Close(); // 연결 해제
+            if (connection != null && connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close(); // 연결 해제
+                connection.Dispose();
+                connection = null;
+            }
         }
     }
 }

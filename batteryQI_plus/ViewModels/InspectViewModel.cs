@@ -19,7 +19,7 @@ using System.Data.Common;
 namespace batteryQI.ViewModels
 {
     // 이미지 검사 이벤트
-    internal partial class InspectViewModel : ViewModelBases
+    public partial class InspectViewModel : ViewModelBases
     {
         
         // --------------------------------------------

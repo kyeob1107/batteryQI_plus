@@ -7,7 +7,9 @@
         Title="BatteryQI"         
         WindowStartupLocation="CenterScreen" 
         WindowState="Maximized" 
-        Background="White">
+        Background="White" 
+        DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
+    >
 
     <Border Background="#cfd5e5" CornerRadius="10" BorderThickness="2" BorderBrush="#ebedf3"
     Padding="20">

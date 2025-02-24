@@ -14,7 +14,7 @@ using System.Data.Common;
 
 namespace batteryQI.ViewModels
 {
-    internal partial class MainWindowViewModel : ViewModelBases
+    public partial class MainWindowViewModel : ViewModelBases
     {
         private object _currentPage;
         public object CurrentPage
@@ -51,7 +51,7 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void ExitButton()
         {
-            _dblink.Disconnect(); // DB 연결 끊기
+            _dblink.Dispose(); // DB 연결 끊기
             CloseAction?.Invoke();
         }
     }

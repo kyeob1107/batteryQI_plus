@@ -23,7 +23,7 @@ namespace batteryQI.Views
         public LoginWindow()
         {
             InitializeComponent();
-            this.DataContext = new LoginViewModel();
+            //this.DataContext = new LoginViewModel();
         }
     }
 }

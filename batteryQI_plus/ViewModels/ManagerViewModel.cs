@@ -18,7 +18,7 @@ using System.Collections.ObjectModel;
 namespace batteryQI.ViewModels
 {
     // 관리자 페이지
-    internal partial class ManagerViewModel : ViewModelBases
+    public partial class ManagerViewModel : ViewModelBases
     {
         private Manager _manager = Manager.Instance();
         private string _manufacName = "";

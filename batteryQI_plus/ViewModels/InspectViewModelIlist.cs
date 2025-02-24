@@ -9,7 +9,7 @@ using batteryQI.ViewModels.Bases;
 
 namespace batteryQI.ViewModels
 {
-    internal partial class InspectViewModel : ViewModelBases
+    public partial class InspectViewModel : ViewModelBases
     {
         // combox 리스트
 

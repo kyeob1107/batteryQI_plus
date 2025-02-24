@@ -16,7 +16,7 @@ using System.IO;
 
 namespace batteryQI.Models
 {
-    internal class Battery : ObservableObject
+    public class Battery : ObservableObject
     {
         // 배터리 가용 변수 선언(변동사항 있음. Id나 date 데이터 등은 DB에 기입할 때 필요하지만 관리자가 건들이는 부분은 없음
         private string _usage = ""; // 사용처, 직접 기입

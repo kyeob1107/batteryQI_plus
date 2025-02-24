@@ -23,6 +23,15 @@ namespace batteryQI
             var loginWindow = new LoginWindow();
             loginWindow.Show();
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            // ViewModelLocator의 Cleanup 호출
+            var locator = (batteryQI.ViewModels.ViewModelLocator)Resources["Locator"];
+            locator.Cleanup();
+
+            base.OnExit(e);
+        }
     }
 
 }

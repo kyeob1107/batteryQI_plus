@@ -25,7 +25,7 @@ namespace batteryQI.Views.UserControls
         public ManagerView()
         {
             InitializeComponent();
-            this.DataContext = new ManagerViewModel();
+            //this.DataContext = new ManagerViewModel();
         }
 
         // 텍스트 입력 검사 이벤트 핸들러.새 작업량 설정에 정수만 입력 가능하도록 규제
