@@ -15,6 +15,8 @@ using System.Windows;
 using System.Data;
 using System.Collections.ObjectModel;
 using batteryQI.Views;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace batteryQI.ViewModels
 {
@@ -26,6 +28,8 @@ namespace batteryQI.ViewModels
         private IDictionary<string, string> _manufacDict = new Dictionary<string, string>();
         private ObservableCollection<KeyValuePair<string, string>> _manufacCollection = new ObservableCollection<KeyValuePair<string, string>>();
         private int _newAmount;
+        private bool? _isLinePower; // 생산라인 전원
+
         public IDictionary<string, string> ManufacDict
         {
             get => _manufacDict;
@@ -58,6 +62,14 @@ namespace batteryQI.ViewModels
 
             //getManafactureNameID();
             //_newAmount = _manager.WorkAmount;
+        }
+        public bool? IsLinePower
+        {
+            get => _isLinePower;
+            set
+            {
+                SetProperty(ref _isLinePower, LinePower());
+            }
         }
 
 
@@ -118,12 +130,6 @@ namespace batteryQI.ViewModels
                 System.Windows.MessageBox.Show("DB 연결 오류", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        [RelayCommand]
-        private void OpenEditSettingCommand()
-        {
-            EditSettingView window = new EditSettingView();
-            window.ShowDialog();
-        }
 
         //public string completeAmount()
         //{
@@ -158,5 +164,39 @@ namespace batteryQI.ViewModels
         //    return "Error";
         //}
         //}
+
+        [RelayCommand]
+        private void OpenEditSetting() // 설정 편집창 열기
+        {
+            EditSettingView window = new EditSettingView();
+            window.ShowDialog();
+        }
+
+        private bool? LinePower() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
+        {
+            if (_isLinePower == false)
+            {
+                if (System.Windows.Forms.MessageBox.Show($"생산라인n의 전원을 켜시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    _isLinePower = true;
+                }
+            }
+            else if (_isLinePower == true)
+            {
+                if (System.Windows.Forms.MessageBox.Show($"정말로 생산라인n의 전원을 끄시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    _isLinePower = false;
+                }
+            }
+            else
+            {
+                DialogResult dialogResult = System.Windows.Forms.MessageBox.Show($"생산라인n의 작동 여부가 저장되어있지 않습니다.\r\n현재 생산라인n이 작동 중입니까?", "Yes-No", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                    _isLinePower = true;
+                else
+                    _isLinePower = false;
+            }
+            return _isLinePower;
+        }
     }
 }

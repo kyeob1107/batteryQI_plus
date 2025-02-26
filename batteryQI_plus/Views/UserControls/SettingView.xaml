@@ -23,7 +23,7 @@
                             </Grid.RowDefinitions>
 
                             <Button Style="{StaticResource imageSectionButton}" Content="설정" FontSize="20" FontWeight="SemiBold" Panel.ZIndex="2"
-                                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="-2,20,80,-2" Padding="10,5" Width="150" Height="50"
+                                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,80,-2" Padding="10,5" Width="150" Height="50"
                                     Command="{Binding OpenEditSettingCommand}"/>
 
                             <TabControl Background="#6a5dae" Margin="15 20 15 15" BorderThickness="0">
@@ -48,7 +48,9 @@
                                             <!-- 첫 번째 행 내용 -->
                                             <Grid Grid.Row="0" Margin="40,0">
                                                 <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                                <ToggleButton Style="{StaticResource RoundedToggleButtonStyle}" Margin="0,20,920,30" Content="라인 전원" />
+                                                <ToggleButton Style="{StaticResource OnOffToggleButton}" Margin="0,20,920,30"
+                                                              IsChecked="{Binding IsLinePower, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Text="생산라인 전원" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,20,760,30"/>
 
                                             </Grid>
 
@@ -77,7 +79,10 @@
                                             <!-- 첫 번째 행 내용 -->
                                             <Grid Grid.Row="0" Margin="40,0">
                                                 <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                                <ToggleButton Style="{StaticResource RoundedToggleButtonStyle}" Margin="0,20,920,30" Content="라인 전원" />
+                                                <ToggleButton Style="{StaticResource OnOffToggleButton}" Margin="0,20,920,30"
+                                                              IsChecked="{Binding IsLinePower, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Text="생산라인 전원" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,20,760,30"/>
+
                                             </Grid>
 
                                             <!-- 두 번째 행 내용 -->
@@ -105,7 +110,10 @@
                                             <!-- 첫 번째 행 내용 -->
                                             <Grid Grid.Row="0" Margin="40,0">
                                                 <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                                <ToggleButton Style="{StaticResource RoundedToggleButtonStyle}" Margin="0,20,920,30" Content="라인 전원" />
+                                                <ToggleButton Style="{StaticResource OnOffToggleButton}" Margin="0,20,920,30"
+                                                              IsChecked="{Binding IsLinePower, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock Text="생산라인 전원" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,20,760,30"/>
+
                                             </Grid>
 
                                             <!-- 두 번째 행 내용 -->

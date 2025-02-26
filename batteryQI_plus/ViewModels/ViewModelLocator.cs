@@ -64,17 +64,17 @@ namespace batteryQI.ViewModels
         //    }
         //}
 
-        //private ManagerViewModel? _managerViewModel; // 관리자 View
-        //public ManagerViewModel ManagerViewModel
-        //{
-        //    get
-        //    {
-        //        // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
-        //        if (_managerViewModel == null)
-        //            _managerViewModel = new ManagerViewModel();
-        //        return _managerViewModel;
-        //    }
-        //}
+        private ManagerViewModel? _managerViewModel; // 설정 View
+        public ManagerViewModel ManagerViewModel
+        {
+            get
+            {
+                // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
+                if (_managerViewModel == null)
+                    _managerViewModel = new ManagerViewModel();
+                return _managerViewModel;
+            }
+        }
 
         private TabControlViewModel? _tabControlViewModel; // 차트 View
         public TabControlViewModel TabControlViewModel
