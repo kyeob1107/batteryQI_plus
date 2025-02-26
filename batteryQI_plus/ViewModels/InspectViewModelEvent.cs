@@ -121,25 +121,25 @@ namespace batteryQI.ViewModels
                 else
                     defectState = 0;
 
-                if (_dblink.Insert($"INSERT INTO batteryInfo (shootDate, usageName, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
-                    $"VALUES( '{_battery.ShootDate}', '{_battery.Usage}', '{_battery.BatteryType}', {ManufacDict[battery.ManufacName]}, '{_battery.BatteryShape}', 'CodingOn', NULL, {_manager.ManagerNum}, {defectState}, '{_battery.DefectName}');"))
-                {
-                    // 데이터 입력 갯수 갱신
-                    ManagerViewModel managerViewModel = new ManagerViewModel(); // MVVM패턴에 위배될듯 후에 수정
-                    _manager.TotalInspectNum = managerViewModel.completeAmount();
+                //if (_dblink.Insert($"INSERT INTO batteryInfo (shootDate, usageName, batteryType, manufacId, batteryShape, shootPlace, imagePath, managerNum, defectStat, defectName)" +
+                //    $"VALUES( '{_battery.ShootDate}', '{_battery.Usage}', '{_battery.BatteryType}', {ManufacDict[battery.ManufacName]}, '{_battery.BatteryShape}', 'CodingOn', NULL, {_manager.EmployeeNum}, {defectState}, '{_battery.DefectName}');"))
+                //{
+                //    // 데이터 입력 갯수 갱신
+                //    ManagerViewModel managerViewModel = new ManagerViewModel(); // MVVM패턴에 위배될듯 후에 수정
+                //    //_manager.TotalInspectNum = managerViewModel.completeAmount();
                     
-                    System.Windows.MessageBox.Show("완료!");
-                    // 데이터 초기화
-                    _battery.Usage = "";
-                    _battery.BatteryType = "";
-                    _battery.ManufacName = "";
-                    _battery.BatteryShape = "";
-                    _battery.DefectName = "";
-                    _battery.ImagePath = "";
-                    _battery.BatteryBitmapImage = null; // bitmap 이미지 초기화
-                }
-                else
-                    System.Windows.MessageBox.Show("실패");
+                //    System.Windows.MessageBox.Show("완료!");
+                //    // 데이터 초기화
+                //    _battery.Usage = "";
+                //    _battery.BatteryType = "";
+                //    _battery.ManufacName = "";
+                //    _battery.BatteryShape = "";
+                //    _battery.DefectName = "";
+                //    _battery.ImagePath = "";
+                //    _battery.BatteryBitmapImage = null; // bitmap 이미지 초기화
+                //}
+                //else
+                //    System.Windows.MessageBox.Show("실패");
             }
             window?.Close(); // 데이터 info 창 닫기
         }

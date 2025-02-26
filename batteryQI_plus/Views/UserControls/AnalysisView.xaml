@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="batteryQI.Views.UserControls.AnalysisView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:batteryQI.Extensions"
+             xmlns:vm="clr-namespace:batteryQI.ViewModels"
+             >
+    <UserControl.DataContext>
+        <Binding Path="TabControlViewModel" Source="{StaticResource Locator}" />
+    </UserControl.DataContext>
+
+    <Border Background="#F5F5F5" Padding="10">
+        <Grid>
+            <!-- Row Definitions for Layout -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- 상단 필터 및 버튼 -->
+                <RowDefinition Height="*"/>
+                <!-- 하단 탭 컨트롤 -->
+            </Grid.RowDefinitions>
+
+            <!-- 상단: 필터 및 버튼 -->
+            <Border Grid.Row="0" Background="#E6E6FA" CornerRadius="5" Padding="10" Margin="0 0 0 10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <!-- 필터 영역 -->
+                        <ColumnDefinition Width="*"/>
+                        <!-- 버튼 영역 -->
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 필터 -->
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="사용처:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox Width="150" SelectedItem="{Binding SelectedUsage}" ItemsSource="{Binding UsageList}" Margin="0,0,10,0"/>
+
+                        <TextBlock Text="배터리 타입:" VerticalAlignment="Center" Margin="20,0,5,0"/>
+                        <ComboBox Width="150" SelectedItem="{Binding SelectedBatteryType}" ItemsSource="{Binding BatteryTypeList}" Margin="0,0,10,0"/>
+
+                        <TextBlock Text="생산 라인:" VerticalAlignment="Center" Margin="20,0,5,0"/>
+                        <ComboBox Width="150" SelectedItem="{Binding SelectedProductionLine}" ItemsSource="{Binding ProductionLineList}" Margin="0,0,10,0"/>
+                    </StackPanel>
+
+                    <!-- 조회 버튼 -->
+                    <Button Grid.Column="1" Content="조회" Width="100" Height="30"
+                            Command="{Binding SearchCommand}" Margin="10,0,0,0"/>
+                </Grid>
+            </Border>
+
+            <!-- 하단: 탭 컨트롤 -->
+            <TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="1">
+                <!-- 타임차트 탭 -->
+                <TabItem Header="타임차트">
+                    <Border Background="#FFFFFF" Padding="10">
+                        <!-- 그래프 Placeholder -->
+                        <TextBlock Text="타임차트 그래프 영역 (바인딩 필요)" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </TabItem>
+
+                <!-- 불량비율 탭 -->
+                <TabItem Header="불량비율">
+                    <Border Background="#FFFFFF" Padding="10">
+                        <!-- 그래프 Placeholder -->
+                        <TextBlock Text="불량비율 그래프 영역 (바인딩 필요)" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </TabItem>
+
+                <!-- 유형별 수 탭 -->
+                <TabItem Header="유형별 수">
+                    <Border Background="#FFFFFF" Padding="10">
+                        <!-- 그래프 Placeholder -->
+                        <TextBlock Text="유형별 수 그래프 영역 (바인딩 필요)" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </TabItem>
+
+                <!-- 데이터 조회 탭 -->
+                <TabItem Header="데이터 조회">
+                    <Border Background="#FFFFFF" Padding="10">
+                        <!-- 데이터 테이블 Placeholder -->
+                        <DataGrid ItemsSource="{Binding DataTable}" AutoGenerateColumns="True"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"/>
+                    </Border>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Border>
+</UserControl>

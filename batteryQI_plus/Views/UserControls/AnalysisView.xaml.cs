@@ -22,9 +22,9 @@ namespace batteryQI.Views.UserControls
     /// <summary>
     /// Interaction logic for ChartPage.xaml
     /// </summary>
-    public partial class ChartView : UserControl
+    public partial class AnalysisView : UserControl
     {
-        public ChartView()
+        public AnalysisView()
         {
             InitializeComponent();
             //this.DataContext = new TabControlViewModel();

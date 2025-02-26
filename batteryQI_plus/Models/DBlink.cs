@@ -126,9 +126,9 @@ namespace batteryQI.Models
                 MySqlCommand cmd = new MySqlCommand(sql, this.connection);
                 cmd.ExecuteNonQuery();
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("데이터가 반영되지 않았습니다!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"데이터가 반영되지 않았습니다! \r\n {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         public List<Dictionary<string, object>> Select(string sql)

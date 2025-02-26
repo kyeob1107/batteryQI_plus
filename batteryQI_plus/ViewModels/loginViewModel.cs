@@ -16,16 +16,17 @@ namespace batteryQI.ViewModels.Bases
 {
     public partial class LoginViewModel : ViewModelBases
     {
-        private Manager _manager = Manager.Instance();
-        public Manager Manager
+        private Employee _employee = Employee.Instance();
+        public Employee Employee
         {
-            get => _manager;
-            set => SetProperty(ref _manager, value);
+            get => _employee;
+            set => SetProperty(ref _employee, value);
         }
         public LoginViewModel()
         {
-            // Manager 객체 생성
-            _manager = Manager.Instance();
+           //MessageBox.Show(DateTime.Now.ToString()); // 시간 확인용 나중에 확인할 때 제거 예정
+            //Manager 객체 생성
+           _employee = Employee.Instance();
             // 로그인 창 열면서 DB 연결
             _dblink = DBlink.Instance();
             _dblink.Connect();
@@ -38,15 +39,31 @@ namespace batteryQI.ViewModels.Bases
             // DB가 제대로 연결되어 있고 PassBox가 안 비어져 있으면 수행
             if (_dblink.ConnectOk() && obj is PasswordBox pw)
             {
-                List<Dictionary<string, object>> login = _dblink.Select($"SELECT * FROM manager WHERE managerId='{Manager.ManagerID}';");
-                if (login.Count != 0 && (pw.Password == login[0]["managerPw"].ToString()))
+                List<Dictionary<string, object>> login = _dblink.Select($"SELECT * FROM employees WHERE employeeId='{Employee.EmployeeID}';");
+                if (login.Count != 0 && (pw.Password == login[0]["employeePw"].ToString()))
                 {
                     MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    _manager.ManagerNum = (int)login[0]["managerNum"]; // 관리자 번호 저장
-                    _manager.ManagerID = login[0]["managerId"].ToString(); // 관리자 아이디 저장
-                    _manager.WorkAmount = (int)login[0]["workAmount"]; // DB에 저장된 작업량 가져옴
+                    _employee.EmployeeNum = (int)(sbyte)login[0]["employeeNum"]; // 관리자 번호 저장
+                    _employee.EmployeeID = login[0]["employeeId"].ToString(); // 관리자 아이디 저장
+                    //_employee.WorkAmount = (int)login[0]["workAmount"]; // DB에 저장된 작업량 가져옴
+                    _employee.EmployeeRole = (int)(sbyte)login[0]["employeeRole"]; // 권한 정보 저장
+                    _employee.LineId = (int)(sbyte)login[0]["lineId"]; // 할당된 생산 라인 저장
+                    _employee.LastLogoutDateTime = (DateTime)login[0]["lastLogoutDateTime"];
+                    
+                    // 권한에 따라 화면 구성 및 기능들 활성화 조절할 위치
+                    try
+                    {
+                        //_dblink.Update($"UPDATE employees SET loginStatus = 1 WHERE employeeId='{Employee.EmployeeID}';"); // 임시 보류
+                        // 임시 예상 로그인 팝업 삽입할 위치
+                        _dblink.Update($"UPDATE employees SET lastLoginDateTime = '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' WHERE employeeId='{Employee.EmployeeID}';"); 
+                    }
+                    catch 
+                    {
+                        MessageBox.Show("로그인 후 작업에서 실패했습니다");
+                    }
 
-                    var mainWindow = new MainWindow();
+
+        var mainWindow = new MainWindow();
                     mainWindow.Show();
 
                     // 현재 창 닫기

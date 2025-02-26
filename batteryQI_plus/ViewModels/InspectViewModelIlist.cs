@@ -21,7 +21,7 @@ namespace batteryQI.ViewModels
         private IList<string>? _defectList = new List<string>() { "Damage", "Pollution", "Damage and Pollution", "Etc.." };
 
         private Battery _battery = Battery.Instance();
-        private Manager _manager = Manager.Instance();
+        //private Employee _manager = Employee.Instance();
 
         private Visibility _errorInspectionVisibility = Visibility.Visible; // 첫 번째 UserControl (ErrorInspection) Visibility 제어
         private Visibility _errorReasonVisibility = Visibility.Collapsed; // 두 번째 UserControl (ErrorReason) Visibility 제어

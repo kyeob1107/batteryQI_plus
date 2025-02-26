@@ -39,7 +39,7 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void ChartButton()
         {
-            CurrentPage = new ChartView();
+            CurrentPage = new AnalysisView();
         }
         
         [RelayCommand]

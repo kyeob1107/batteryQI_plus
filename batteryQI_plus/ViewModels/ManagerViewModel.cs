@@ -20,7 +20,7 @@ namespace batteryQI.ViewModels
     // 관리자 페이지
     public partial class ManagerViewModel : ViewModelBases
     {
-        private Manager _manager = Manager.Instance();
+        //private Employee _manager = Employee.Instance();
         private string _manufacName = "";
         private IDictionary<string, string> _manufacDict = new Dictionary<string, string>();
         private ObservableCollection<KeyValuePair<string, string>> _manufacCollection = new ObservableCollection<KeyValuePair<string, string>>();
@@ -34,11 +34,11 @@ namespace batteryQI.ViewModels
             get => _manufacName;
             set => SetProperty(ref _manufacName, value);
         }
-        public Manager Manager
-        {
-            get => _manager;
-            set => SetProperty(ref _manager, value);
-        }
+        //public Employee Employee
+        //{
+        //    get => _employee;
+        //    set => SetProperty(ref _employee, value);
+        //}
         public ObservableCollection<KeyValuePair<string, string>> ManufacCollection
         {
             get => _manufacCollection;
@@ -51,12 +51,12 @@ namespace batteryQI.ViewModels
         }
         public ManagerViewModel()
         {
-            _manager = Manager.Instance();
+            //_manager = Models.Employee.Instance();
 
-            _manager.TotalInspectNum = completeAmount();
+            //_manager.TotalInspectNum = completeAmount();
 
-            getManafactureNameID();
-            _newAmount = _manager.WorkAmount;
+            //getManafactureNameID();
+            //_newAmount = _manager.WorkAmount;
         }
 
 
@@ -105,12 +105,12 @@ namespace batteryQI.ViewModels
             // 월 검사 할당량 수정 이벤트
             if (_dblink.ConnectOk())
             {
-                if (System.Windows.MessageBox.Show($"할당량을 {_newAmount}로 변경할까요?", "warning", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                {
-                    _manager.WorkAmount = _newAmount;
-                    _dblink.Update($"UPDATE manager SET workAmount={_manager.WorkAmount} WHERE managerId='{_manager.ManagerID}';");
-                    System.Windows.MessageBox.Show($"할당량을 {_manager.WorkAmount}로 수정 완료!");
-                }
+                //if (System.Windows.MessageBox.Show($"할당량을 {_newAmount}로 변경할까요?", "warning", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                //{
+                //    //_manager.WorkAmount = _newAmount;
+                //    _dblink.Update($"UPDATE manager SET workAmount={_manager.WorkAmount} WHERE managerId='{_manager.EmployeeID}';");
+                //    System.Windows.MessageBox.Show($"할당량을 {_manager.WorkAmount}로 수정 완료!");
+                //}
             }
             else
             {
@@ -118,38 +118,38 @@ namespace batteryQI.ViewModels
             }
         }
 
-        public string completeAmount()
-        {
-            try
-            {
-                // 분석 완료 개수 가져오기
-                string query = @$"
-                        SELECT COUNT(*) 
-                        FROM batteryInfo
-                        WHERE DATE_FORMAT(shootDate, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
-                        AND ManagerNum = {_manager.ManagerNum};
-                        ";
+        //public string completeAmount()
+        //{
+        //    try
+        //    {
+                //// 분석 완료 개수 가져오기
+                //string query = @$"
+                //        SELECT COUNT(*) 
+                //        FROM batteryInfo
+                //        WHERE DATE_FORMAT(shootDate, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+                //        AND ManagerNum = {_manager.EmployeeNum};
+                //        ";
 
                 // 데이터베이스 연결 및 쿼리 실행
-                var result = _dblink.Select(query);
+                //var result = _dblink.Select(query);
 
-                // 데이터가 있는 경우
-                if (result != null && result.Count > 0)
-                {
-                    // 첫 번째 결과를 문자열로 변환
-                    return result[0]["COUNT(*)"]?.ToString() ?? "0";
-                }
-                else
-                {
-                    return "0"; // 데이터가 없는 경우
-                }
-            }
-            catch (Exception ex)
-            {
-                // 오류 발생 시 처리
-                System.Windows.MessageBox.Show($"작업량 데이터 가져오기 실패", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return "Error";
-            }
-        }
+                //// 데이터가 있는 경우
+                //if (result != null && result.Count > 0)
+                //{
+                //    // 첫 번째 결과를 문자열로 변환
+                //    return result[0]["COUNT(*)"]?.ToString() ?? "0";
+                //}
+                //else
+                //{
+                //    return "0"; // 데이터가 없는 경우
+                //}
+            //}
+            //catch (Exception ex)
+            //{
+            //    // 오류 발생 시 처리
+            //    System.Windows.MessageBox.Show($"작업량 데이터 가져오기 실패", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    return "Error";
+            //}
+        //}
     }
 }
