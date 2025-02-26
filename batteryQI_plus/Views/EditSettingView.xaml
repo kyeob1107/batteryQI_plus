@@ -1,12 +1,16 @@
-﻿<UserControl x:Class="batteryQI_plus.Views.UserControls.EditSettingView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:batteryQI_plus.Views.UserControls"
-             DataContext="{Binding ManagerViewModel, Source={StaticResource Locator}}"
-             mc:Ignorable="d" 
-             Height="750" Width="500">
+﻿<Window x:Class="batteryQI_plus.Views.EditSettingView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:batteryQI_plus.Views"
+        mc:Ignorable="d"
+        Title="EditSettingWindow"
+        Height="750" Width="500">
+
+    <Window.DataContext>
+        <Binding Path="ManagerViewModel" Source="{StaticResource Locator}" />
+    </Window.DataContext>
 
     <Border Background="#cfd5e5" CornerRadius="10" BorderThickness="2" BorderBrush="#ebedf3" Padding="10">
         <Grid>
@@ -17,7 +21,7 @@
             </Grid.RowDefinitions>
 
             <Border Grid.Row="0" CornerRadius="10" Margin="150 0">
-                <TextBlock Text="설정 편집" HorizontalAlignment="Center" FontSize="28" Margin="20 15" FontWeight="SemiBold"/>
+                <TextBlock Style="{StaticResource titleText}" Text="설정 편집" HorizontalAlignment="Center" FontSize="30" Margin="20 15" FontWeight="SemiBold"/>
             </Border>
 
             <Border Grid.Row="1" CornerRadius="10" Margin="20 0 20 10">
@@ -170,4 +174,4 @@
             </Grid>
         </Grid>
     </Border>
-</UserControl>
+</Window>

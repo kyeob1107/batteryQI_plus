@@ -10,15 +10,14 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace batteryQI_plus.Views.UserControls
+namespace batteryQI_plus.Views
 {
     /// <summary>
     /// Interaction logic for EditSettingView.xaml
     /// </summary>
-    public partial class EditSettingView : UserControl
+    public partial class EditSettingView : Window
     {
         public EditSettingView()
         {
