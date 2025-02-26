@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace batteryQI_plus.Views
+namespace batteryQI.Views
 {
     /// <summary>
     /// Interaction logic for EditSettingView.xaml

@@ -1,5 +1,5 @@
 ﻿using batteryQI.ViewModels.Bases;
-using batteryQI_plus.ViewModels;
+using batteryQI.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

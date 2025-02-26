@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using batteryQI.ViewModels.Bases;
 using batteryQI.Models;
-using batteryQI_plus.Models;
+using batteryQI.Models;
 using System.Windows;
 using System.Windows.Shapes;
 
-namespace batteryQI_plus.ViewModels
+namespace batteryQI.ViewModels
 {
     public class DashboardViewModel : ViewModelBases
     {

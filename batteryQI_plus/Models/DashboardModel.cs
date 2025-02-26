@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using batteryQI.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace batteryQI_plus.Models
+namespace batteryQI.Models
 {
     public static class DateTimeExtensions
     {

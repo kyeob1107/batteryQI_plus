@@ -14,6 +14,7 @@ using batteryQI.ViewModels.Bases;
 using System.Windows;
 using System.Data;
 using System.Collections.ObjectModel;
+using batteryQI.Views;
 
 namespace batteryQI.ViewModels
 {
@@ -117,39 +118,45 @@ namespace batteryQI.ViewModels
                 System.Windows.MessageBox.Show("DB 연결 오류", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        [RelayCommand]
+        private void OpenEditSettingCommand()
+        {
+            EditSettingView window = new EditSettingView();
+            window.ShowDialog();
+        }
 
         //public string completeAmount()
         //{
         //    try
         //    {
-                //// 분석 완료 개수 가져오기
-                //string query = @$"
-                //        SELECT COUNT(*) 
-                //        FROM batteryInfo
-                //        WHERE DATE_FORMAT(shootDate, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
-                //        AND ManagerNum = {_manager.EmployeeNum};
-                //        ";
+        //// 분석 완료 개수 가져오기
+        //string query = @$"
+        //        SELECT COUNT(*) 
+        //        FROM batteryInfo
+        //        WHERE DATE_FORMAT(shootDate, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+        //        AND ManagerNum = {_manager.EmployeeNum};
+        //        ";
 
-                // 데이터베이스 연결 및 쿼리 실행
-                //var result = _dblink.Select(query);
+        // 데이터베이스 연결 및 쿼리 실행
+        //var result = _dblink.Select(query);
 
-                //// 데이터가 있는 경우
-                //if (result != null && result.Count > 0)
-                //{
-                //    // 첫 번째 결과를 문자열로 변환
-                //    return result[0]["COUNT(*)"]?.ToString() ?? "0";
-                //}
-                //else
-                //{
-                //    return "0"; // 데이터가 없는 경우
-                //}
-            //}
-            //catch (Exception ex)
-            //{
-            //    // 오류 발생 시 처리
-            //    System.Windows.MessageBox.Show($"작업량 데이터 가져오기 실패", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    return "Error";
-            //}
+        //// 데이터가 있는 경우
+        //if (result != null && result.Count > 0)
+        //{
+        //    // 첫 번째 결과를 문자열로 변환
+        //    return result[0]["COUNT(*)"]?.ToString() ?? "0";
+        //}
+        //else
+        //{
+        //    return "0"; // 데이터가 없는 경우
+        //}
+        //}
+        //catch (Exception ex)
+        //{
+        //    // 오류 발생 시 처리
+        //    System.Windows.MessageBox.Show($"작업량 데이터 가져오기 실패", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    return "Error";
+        //}
         //}
     }
 }
