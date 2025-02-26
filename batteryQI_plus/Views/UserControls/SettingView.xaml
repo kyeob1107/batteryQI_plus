@@ -16,110 +16,112 @@
                 <Grid x:Name="mainSection" Margin="5 20 25 10" Panel.ZIndex="1">
 
                     <Border Background="#6a5dae" CornerRadius="20" BorderBrush="Gray" BorderThickness="2" Padding="10">
+                        <Grid>
+                            <!-- 버튼이 들어갈 영역 (높이 자동 조정) -->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!-- 버튼 영역 -->
+                                <RowDefinition Height="*"/>
+                                <!-- TabControl 영역 -->
+                            </Grid.RowDefinitions>
 
-                        <TabControl Background="#6a5dae" Margin="15 20 15 15" BorderThickness="0">
-                            <TabControl.Resources>
-                                <Style TargetType="TabItem">
-                                    <Setter Property="Padding" Value="20,12"/>
-                                    <Setter Property="FontSize" Value="18"/>
+                            <Button Content="설정 버튼" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="-2,20,80,-2" Padding="10,5" Width="150" Height="50"/>
+                            <TabControl Background="#6a5dae" Margin="15 20 15 15" BorderThickness="0">
+                                <TabControl.Resources>
+                                    <Style TargetType="TabItem">
+                                        <Setter Property="Padding" Value="20,12"/>
+                                        <Setter Property="FontSize" Value="18"/>
 
-                                </Style>
-                            </TabControl.Resources>
+                                    </Style>
+                                </TabControl.Resources>
 
 
-                            <TabItem Header="생산라인1" Width="150" Margin="50,-2,-50,-2">
-                                <Border Background="LightGray" CornerRadius="50" BorderBrush="Gray" BorderThickness="2" Padding="10">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="100"/>
-                                            <RowDefinition Height="200"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
+                                <TabItem Header="생산라인1" Width="150" Margin="50,-2,-50,-2">
+                                    <Border Background="LightGray" CornerRadius="50" BorderBrush="Gray" BorderThickness="2" Padding="10">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="100"/>
+                                                <RowDefinition Height="200"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
 
-                                        <!-- 첫 번째 행 내용 -->
-                                        <Grid Grid.Row="0" Background="LightGray" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <ToggleButton Content="라인 전원" Margin="0,20,920,30"/>
+                                            <!-- 첫 번째 행 내용 -->
+                                            <Grid Grid.Row="0" Background="LightGray" Margin="40,0">
+                                                <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                                <ToggleButton Content="라인 전원" Margin="0,20,920,30"/>
+                                            </Grid>
+
+                                            <!-- 두 번째 행 내용 -->
+                                            <Grid Grid.Row="1" Background="LightGray" Margin="40,0">
+                                                <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                                <TextBlock Text="배터리 정보&#10;&#10;배터리 사용처: Industrial&#10;&#10;배터리 타입: Pack&#10;&#10;배터리 형태: Pouch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </Grid>
+
+                                            <!-- 세 번째 행 내용 -->
+                                            <Grid Grid.Row="2" Background="LightGray" Margin="40,0">
+                                                <TextBlock Text="발주처: 삼성&#10;&#10;주문량: 2000&#10;&#10;마감 기간: 2025-02-20 ~ 2025-02-26" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </Grid>
                                         </Grid>
+                                    </Border>
+                                </TabItem>
+                                <TabItem Header="생산라인2" Width="150" Margin="50,-2,-50,-2">
+                                    <Border Background="LightGray" CornerRadius="50" BorderBrush="Gray" BorderThickness="2" Padding="10">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="100"/>
+                                                <RowDefinition Height="200"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
 
-                                        <!-- 두 번째 행 내용 -->
-                                        <Grid Grid.Row="1" Background="LightGray" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <TextBlock Text="배터리 정보&#10;&#10;배터리 사용처: Industrial&#10;&#10;배터리 타입: Pack&#10;&#10;배터리 형태: Pouch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <!-- 첫 번째 행 내용 -->
+                                            <Grid Grid.Row="0" Background="LightGray" Margin="40,0">
+                                                <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                                <ToggleButton Content="라인 전원" Margin="0,20,920,30"/>
+                                            </Grid>
+
+                                            <!-- 두 번째 행 내용 -->
+                                            <Grid Grid.Row="1" Background="LightGray" Margin="40,0">
+                                                <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                                <TextBlock Text="배터리 정보&#10;&#10;배터리 사용처: Industrial&#10;&#10;배터리 타입: Pack&#10;&#10;배터리 형태: Pouch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </Grid>
+
+                                            <!-- 세 번째 행 내용 -->
+                                            <Grid Grid.Row="2" Background="LightGray" Margin="40,0">
+                                                <TextBlock Text="발주처: 삼성&#10;&#10;주문량: 2000&#10;&#10;마감 기간: 2025-02-20 ~ 2025-02-26" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </Grid>
                                         </Grid>
+                                    </Border>
+                                </TabItem>
+                                <TabItem Header="생산라인3" Width="150" Margin="50,-2,-50,-2">
+                                    <Border Background="LightGray" CornerRadius="50" BorderBrush="Gray" BorderThickness="2" Padding="10">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="100"/>
+                                                <RowDefinition Height="200"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
 
-                                        <!-- 세 번째 행 내용 -->
-                                        <Grid Grid.Row="2" Background="LightGray" Margin="40,0">
-                                            <TextBlock Text="발주처: 삼성&#10;&#10;주문량: 2000&#10;&#10;마감 기간: 2025-02-20 ~ 2025-02-26" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <!-- 첫 번째 행 내용 -->
+                                            <Grid Grid.Row="0" Background="LightGray" Margin="40,0">
+                                                <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                                <ToggleButton Content="라인 전원" Margin="0,20,920,30"/>
+                                            </Grid>
+
+                                            <!-- 두 번째 행 내용 -->
+                                            <Grid Grid.Row="1" Background="LightGray" Margin="40,0">
+                                                <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                                <TextBlock Text="배터리 정보&#10;&#10;배터리 사용처: Industrial&#10;&#10;배터리 타입: Pack&#10;&#10;배터리 형태: Pouch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </Grid>
+
+                                            <!-- 세 번째 행 내용 -->
+                                            <Grid Grid.Row="2" Background="LightGray" Margin="40,0">
+                                                <TextBlock Text="발주처: 삼성&#10;&#10;주문량: 2000&#10;&#10;마감 기간: 2025-02-20 ~ 2025-02-26" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </Border>
-                            </TabItem>
-                            <TabItem Header="생산라인2" Width="150" Margin="50,-2,-50,-2">
-                                <Border Background="LightGray" CornerRadius="50" BorderBrush="Gray" BorderThickness="2" Padding="10">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="100"/>
-                                            <RowDefinition Height="200"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
-
-                                        <!-- 첫 번째 행 내용 -->
-                                        <Grid Grid.Row="0" Background="LightGray" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <ToggleButton Content="라인 전원" Margin="0,20,920,30"/>
-                                        </Grid>
-
-                                        <!-- 두 번째 행 내용 -->
-                                        <Grid Grid.Row="1" Background="LightGray" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <TextBlock Text="배터리 정보&#10;&#10;배터리 사용처: Industrial&#10;&#10;배터리 타입: Pack&#10;&#10;배터리 형태: Pouch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </Grid>
-
-                                        <!-- 세 번째 행 내용 -->
-                                        <Grid Grid.Row="2" Background="LightGray" Margin="40,0">
-                                            <TextBlock Text="발주처: 삼성&#10;&#10;주문량: 2000&#10;&#10;마감 기간: 2025-02-20 ~ 2025-02-26" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </TabItem>
-                            <TabItem Header="생산라인3" Width="150" Margin="50,-2,-50,-2">
-                                <Border Background="LightGray" CornerRadius="50" BorderBrush="Gray" BorderThickness="2" Padding="10">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="100"/>
-                                            <RowDefinition Height="200"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
-
-                                        <!-- 첫 번째 행 내용 -->
-                                        <Grid Grid.Row="0" Background="LightGray" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <ToggleButton Content="라인 전원" Margin="0,20,920,30"/>
-                                        </Grid>
-
-                                        <!-- 두 번째 행 내용 -->
-                                        <Grid Grid.Row="1" Background="LightGray" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <TextBlock Text="배터리 정보&#10;&#10;배터리 사용처: Industrial&#10;&#10;배터리 타입: Pack&#10;&#10;배터리 형태: Pouch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </Grid>
-
-                                        <!-- 세 번째 행 내용 -->
-                                        <Grid Grid.Row="2" Background="LightGray" Margin="40,0">
-                                            <TextBlock Text="발주처: 삼성&#10;&#10;주문량: 2000&#10;&#10;마감 기간: 2025-02-20 ~ 2025-02-26" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </TabItem>
-
-                            <TabItem Header="종합 설정" Width="150" Margin="545,-2,-545,-2" >
-                                <Border Background="LightGray" CornerRadius="50" BorderBrush="Gray" BorderThickness="2" Padding="10">
-                                    <Grid>
-                                        <TextBlock Text="Advanced Settings" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                </Border>
-                            </TabItem>
-                        </TabControl>
+                                    </Border>
+                                </TabItem>
+                            </TabControl>
+                        </Grid>
                     </Border>
                 </Grid>
             </Grid>
