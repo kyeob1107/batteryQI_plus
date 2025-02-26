@@ -32,7 +32,7 @@
                     <TextBlock Text="LOGIN" Margin="5" FontSize="15" FontWeight="SemiBold"/>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
                         <TextBlock Text="ID" Margin="5" FontSize="15" FontWeight="SemiBold" Width="30" TextAlignment="Left"/>
-                        <TextBox Text="{Binding Manager.ManagerID, UpdateSourceTrigger=PropertyChanged}" x:Name="UsernameBox" Width="200" Margin="5 0 0 0" Height="25" FontSize="16"/>
+                        <TextBox Text="{Binding Employee.EmployeeID, UpdateSourceTrigger=PropertyChanged}" x:Name="UsernameBox" Width="200" Margin="5 0 0 0" Height="25" FontSize="16"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5">

@@ -19,14 +19,14 @@ using System.Drawing;
 
 namespace batteryQI.ViewModels
 {
-    public class ChartViewModel
+    public class AnalysisViewModel
     {
         protected DBlink _dblink = DBlink.Instance(); //DB연결 사용
         public string[] Labels { get; protected set; }
         public double[] Values { get; protected set; }
         public DateTime[] TimeStamps { get; protected set; } 
 
-        public ChartViewModel() 
+        public AnalysisViewModel() 
         {
             // CountQuery 메소드 호출 및 결과 저장
             var chartData = _dblink.CountQuery("batteryInfo", "defectName");
@@ -36,7 +36,7 @@ namespace batteryQI.ViewModels
             //Labels = Array.ConvertAll<object, string>(chartData.defectGroups.ToArray(), x => ((object)x)?.ToString() ?? string.Empty); //cs8602경고에 대한 해결책2
         }
 
-        public ChartViewModel(string table, string groupingCriteria, string XAxis = "label")
+        public AnalysisViewModel(string table, string groupingCriteria, string XAxis = "label")
         {
 
             // CountQuery 메소드 호출 및 결과 저장
@@ -78,7 +78,7 @@ namespace batteryQI.ViewModels
     }
 
     // 불량 유형 파이차트 관리
-    public class DefectTypePieViewModel : ChartViewModel
+    public class DefectTypePieViewModel : AnalysisViewModel
     {
 
         public DefectTypePieViewModel() { }
@@ -136,7 +136,7 @@ namespace batteryQI.ViewModels
     }
 
     // 시간대별 불량수 바차트 관리
-    public class HourlyDefectChartViewModel : ChartViewModel
+    public class HourlyDefectChartViewModel : AnalysisViewModel
     {
 
         public HourlyDefectChartViewModel() { }
@@ -220,7 +220,7 @@ namespace batteryQI.ViewModels
     }
 
     // 기준별 불량종류 갯수 그룹 바차트
-    public class DefectTypeChartByCategoryViewModel : ChartViewModel
+    public class DefectTypeChartByCategoryViewModel : AnalysisViewModel
     {
         private List<(string BatteryType, string DefectName, int Count)> chartData_group = new List<(string, string, int)>();
 

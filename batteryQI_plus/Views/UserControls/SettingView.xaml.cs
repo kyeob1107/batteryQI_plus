@@ -20,9 +20,9 @@ namespace batteryQI.Views.UserControls
     /// <summary>
     /// Interaction logic for ManagerPage.xaml
     /// </summary>
-    public partial class ManagerView : UserControl
+    public partial class SettingView : UserControl
     {
-        public ManagerView()
+        public SettingView()
         {
             InitializeComponent();
             //this.DataContext = new ManagerViewModel();

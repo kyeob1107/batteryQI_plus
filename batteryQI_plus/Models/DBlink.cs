@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -66,7 +67,10 @@ namespace batteryQI.Models
         }
         public void Connect()
         {
-            this.setDBLink();
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) // 디자인 타임(모드) 동안 DB 연결이 수행되는것을 방지
+                return;
+
+                        this.setDBLink();
             string myConnection = "Server="+_server + 
                                     ";Port=" + _port + 
                                     ";Database=" + _dbName + 
@@ -122,13 +126,16 @@ namespace batteryQI.Models
                 MySqlCommand cmd = new MySqlCommand(sql, this.connection);
                 cmd.ExecuteNonQuery();
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("데이터가 반영되지 않았습니다!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"데이터가 반영되지 않았습니다! \r\n {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         public List<Dictionary<string, object>> Select(string sql)
         {
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) // 디자인 타임(모드) 동안 DB 연결이 수행되는것을 방지
+                return new List<Dictionary<string, object>>();
+
             // 간단한 Select문 메소드, 불러오는 데이터가 크면 그냥 직접 Select을 하는 것을 추천
             // 결과 저장 List
             List<Dictionary<string, object>> resultList = new List<Dictionary<string, object>>();
