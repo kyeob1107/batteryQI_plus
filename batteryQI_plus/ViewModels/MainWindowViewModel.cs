@@ -45,7 +45,7 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void ManagerButton()
         {
-            CurrentPage = new ManagerView();
+            CurrentPage = new SettingView();
         }
 
         [RelayCommand]
