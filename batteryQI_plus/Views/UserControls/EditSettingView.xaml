@@ -1,0 +1,127 @@
+﻿<UserControl x:Class="batteryQI_plus.Views.UserControls.EditSettingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:batteryQI_plus.Views.UserControls"
+             DataContext="{Binding ManagerViewModel, Source={StaticResource Locator}}"
+             mc:Ignorable="d" 
+             Height="750" Width="500">
+
+    <Border Background="#cfd5e5" CornerRadius="10" BorderThickness="2" BorderBrush="#ebedf3" Padding="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="8*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" CornerRadius="10" Margin="150 0">
+                <TextBlock Text="설정 편집" HorizontalAlignment="Center" FontSize="28" Margin="20 15" FontWeight="SemiBold"/>
+            </Border>
+
+            <Border Grid.Row="1" CornerRadius="10" Margin="20 0 20 10">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="White" Offset="0"/>
+                        <GradientStop Color="White" Offset="1.2"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border BorderBrush="Gray" BorderThickness="1,0,0,0" Margin="0,90,0,20" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" VerticalAlignment="Stretch"/>
+                    <Border BorderBrush="Gray" BorderThickness="0,3,0,0" Margin="25,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"/>
+
+                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="20 20 40 20" Height="30" Width="140"/>
+                    <ComboBox Grid.Row="0" Grid.Column="1" Margin="30 20 20 20" Height="30" Width="150"/>
+
+                    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="생산라인" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="29,20,250,20"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" Margin="256,20,29,20" Height="30" Width="150">
+                            <ComboBoxItem>
+                                <TextBlock Text="생산라인1" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="생산라인2" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="생산라인3" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="배터리 사용처" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="29,20,250,20"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="256,20,29,20" Height="30" Width="150">
+                            <ComboBoxItem>
+                                <TextBlock Text="Industrial" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="Household" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="배터리 타입" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="29,20,250,20"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" Margin="256,20,29,20" Height="30" Width="150">
+                            <ComboBoxItem>
+                                <TextBlock Text="Cell" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="Module" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="Pack" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="배터리 형태" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="29,20,250,20"/>
+                        <ComboBox Grid.Row="3" Grid.Column="1" Margin="256,20,29,20" Height="30" Width="150">
+                            <ComboBoxItem>
+                                <TextBlock Text="Cylinder" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="Pouch" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="발주처" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="29,20,250,20"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" Background="LightGray" Text="삼성" FontSize="20"  VerticalAlignment="Center" TextAlignment="Left" Margin="256,0,30,0"/>
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="할당량" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="29,20,250,20"/>
+                        <TextBlock Grid.Row="5" Grid.Column="1" Background="LightGray" Text="2000" FontSize="20"  VerticalAlignment="Center" TextAlignment="Left" Margin="256,0,30,0"/>
+
+                        <TextBlock Grid.Row="6" Grid.Column="0" Text="마감기한" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="29,20,250,20"/>
+                        <TextBlock Grid.Row="6" Grid.Column="1" Background="LightGray" Text="2025-02-26" FontSize="20" VerticalAlignment="Center" TextAlignment="Left" Margin="256,0,30,0"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Style="{StaticResource imageSectionButton}" Grid.Column="0" Content="취소" FontSize="20" FontWeight="SemiBold" Height="50" Width="150" Margin="10 0 60 0" />
+                <Button Style="{StaticResource imageSectionButton}" Grid.Column="1" Content="확인" FontSize="20" FontWeight="SemiBold" Height="50" Width="150" Margin="60 0 10 0" />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>
