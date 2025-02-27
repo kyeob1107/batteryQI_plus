@@ -41,7 +41,7 @@ namespace batteryQI_plus.Models
         private string _dbPw = ""; // _dbpw : 접속패스워드
 
         static DBlink staticDBlink; // DB 연결 객체 생성
-        MySqlConnection connection; // DB connection 객체
+        public MySqlConnection connection { get; private set; } // DB connection 객체
 
         private DBlink() { } // 생성자 접근 제어 변경
         public static DBlink Instance()

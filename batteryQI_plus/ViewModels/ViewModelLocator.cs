@@ -76,17 +76,17 @@ namespace batteryQI_plus.ViewModels
             }
         }
 
-        private TabControlViewModel? _tabControlViewModel; // 차트 View
-        public TabControlViewModel TabControlViewModel
-        {
-            get
-            {
-                // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
-                if (_tabControlViewModel == null)
-                    _tabControlViewModel = new TabControlViewModel();
-                return _tabControlViewModel;
-            }
-        }
+        //private TabControlViewModel? _tabControlViewModel; // 차트 View
+        //public TabControlViewModel TabControlViewModel
+        //{
+        //    get
+        //    {
+        //        // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
+        //        if (_tabControlViewModel == null)
+        //            _tabControlViewModel = new TabControlViewModel();
+        //        return _tabControlViewModel;
+        //    }
+        //}
 
         private DashboardViewModel? _dashboardViewModel; // 대시보드 View
         public DashboardViewModel DashboardViewModel
@@ -99,11 +99,25 @@ namespace batteryQI_plus.ViewModels
             }
         }
 
+        private AnalysisViewModel? _analysisViewModel; // 분석 View
+        public AnalysisViewModel AnalysisViewModel
+        {
+            get
+            {
+                // 디자인 타임때 ViewModel 인스턴스 생성 자체를 차단. 
+                // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
+
+                if (_analysisViewModel == null)
+                    _analysisViewModel = new AnalysisViewModel();
+                return _analysisViewModel;
+            }
+        }
+
         public void Cleanup()
         {
             if (_loginViewModel != null)
             {
-                _loginViewModel.Dispose();
+                //_loginViewModel.Dispose();
                 _loginViewModel = null;
             }
 
@@ -132,17 +146,24 @@ namespace batteryQI_plus.ViewModels
             //    _managerViewModel = null;
             //}
 
-            if (_tabControlViewModel != null)
-            {
-                _tabControlViewModel.Dispose();
-                _tabControlViewModel = null;
-            }
+            //if (_tabControlViewModel != null)
+            //{
+            //    _tabControlViewModel.Dispose();
+            //    _tabControlViewModel = null;
+            //}
 
-            if (_dashboardViewModel != null)
-            {
-                _dashboardViewModel.Dispose();
-                _dashboardViewModel = null;
-            }
+            //if (_dashboardViewModel != null)
+            //{
+            //    _dashboardViewModel.Dispose();
+            //    _dashboardViewModel = null;
+            //}
+
+            // 왜인진 모르겠지만 이거 살려두면 _dblink인스턴스 날라가서 지움(확인 필요할듯)
+            //if (_analysisViewModel != null)
+            //{
+            //    _analysisViewModel.Dispose();
+            //    _analysisViewModel = null;
+            //}
         }
     }
 }

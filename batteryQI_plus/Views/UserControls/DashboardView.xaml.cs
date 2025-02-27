@@ -27,6 +27,16 @@ namespace batteryQI_plus.Views.UserControls
         {
             InitializeComponent();
             //this.DataContext = new CompositeViewModel(); // ViewModel 연결
+            Unloaded += DashboardView_Unloaded; // 타이머 리소스 해제
+        }
+
+        // 페이지 언로드 될 때 타이머 리소스 해제
+        private void DashboardView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is DashboardViewModel viewModel)
+            {
+                viewModel.Dispose();
+            }
         }
 
     }

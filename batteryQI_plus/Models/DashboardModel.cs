@@ -72,33 +72,52 @@ namespace batteryQI_plus.Models
             //_lineId = empl.LineId;
             _startDatetime = empl.LastLogoutDateTime.FloorToNearestMinutes(10);
             _endDatetime = DateTime.Now.FloorToNearestMinutes(10);
+            //MessageBox.Show(_startDatetime.ToString());
+            //MessageBox.Show(_endDatetime.ToString());
+            Console.WriteLine(_startDatetime.ToString()+"~"+_endDatetime.ToString());
 
             // 일단 임시로 해둔 것
             #region 검사 수 & 불량 수
             string unitTestQuery1 = $@"SELECT 
-                                            COUNT(lineId) AS cnt
-                                        FROM 
-	                                        inspectionResults
-                                        WHERE 
-	                                        lineId = {line} 
-	                                        AND (inspectionDatetime BETWEEN '{_startDatetime}' AND '{_endDatetime}')
-                                        GROUP BY lineId";
+                                                COUNT(DISTINCT batteryId) AS cnt
+                                            FROM 
+                                             inspectionResults
+                                            WHERE 
+                                             lineId = {line} 
+                                             AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}');";
             string unitTestQuery2 = $@"SELECT 
-	                                         COUNT(lineId) AS cnt
-                                        FROM 
-	                                        inspectionResults
-                                        WHERE 
-	                                        lineId = {line} 
-	                                        AND (inspectionDatetime BETWEEN '{_startDatetime}' AND '{_endDatetime}')
-	                                        AND (fastPollutionCheck = 1 OR fastDamageCheck = 1)
-                                        GROUP BY lineId;";
+                                                COUNT(DISTINCT batteryId) AS cnt
+                                            FROM 
+                                             inspectionResults
+                                            WHERE 
+                                             lineId = {line} 
+                                             AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
+                                             AND (fastPollutionCheck = 1 OR fastDamageCheck = 1);";
+            // 디버깅용 쿼리
+            //string unitTestQuery1 = $@"SELECT 
+            //                                 DISTINCT batteryId, lineId, inspectionDatetime, fastPollutionCheck, fastDamageCheck
+            //                                FROM 
+            //                                 inspectionResults
+            //                                WHERE 
+            //                                 lineId = {line} 
+            //                                 AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}');";
+            //Console.WriteLine(unitTestQuery1);
+
+            //string unitTestQuery2 = $@"SELECT 
+            //                                 DISTINCT batteryId, lineId, inspectionDatetime, fastPollutionCheck, fastDamageCheck
+            //                                FROM 
+            //                                 inspectionResults
+            //                                WHERE 
+            //                                 lineId = {line} 
+            //                                 AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
+            //                                 AND (fastPollutionCheck = 1 OR fastDamageCheck = 1);";
             #endregion
             List<Dictionary<string, object>> result1 = db.Select(unitTestQuery1);
             List<Dictionary<string, object>> result2 = db.Select(unitTestQuery2);
             //MessageBox.Show(_startDatetime.ToString() + "," + _endDatetime.ToString());
             #region 디버깅 용
-            // 디버깅 용
-            // 결과를 문자열로 변환
+            ////디버깅 용
+            //// 결과를 문자열로 변환
             //string message = "Query Result:\n";
             //foreach (var row in result1)
             //{
@@ -110,7 +129,8 @@ namespace batteryQI_plus.Models
             //}
 
             //// 메시지 박스에 출력
-            //MessageBox.Show(message, "Query Result");
+            ////MessageBox.Show(message, "Query Result");
+            //Console.WriteLine(message);
 
             //string message2 = "Query Result:\n";
             //foreach (var row in result2)
@@ -123,9 +143,10 @@ namespace batteryQI_plus.Models
             //}
 
             //// 메시지 박스에 출력
-            //MessageBox.Show(message2, "Query Result");
+            ////MessageBox.Show(message2, "Query Result");
+            //Console.WriteLine(message2);
+ 
             #endregion
-
             _inspectionCount = Convert.ToInt32(result1[0]["cnt"]);
             _defectCount = Convert.ToInt32(result2[0]["cnt"]);
             _normalCount = _inspectionCount - _defectCount;

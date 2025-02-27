@@ -24,7 +24,7 @@ namespace batteryQI_plus.ViewModels.Bases
         }
 
         // Dispose 메서드 구현
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (_dblink != null)
             {
