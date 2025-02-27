@@ -21,7 +21,7 @@ using System.Windows.Input;
 namespace batteryQI_plus.ViewModels
 {
     // 관리자 페이지
-    public partial class ManagerViewModel : ViewModelBases
+    public partial class SettingViewModel : ViewModelBases
     {
         //private Employee _manager = Employee.Instance();
         private string _manufacName = "";
@@ -54,7 +54,7 @@ namespace batteryQI_plus.ViewModels
             get => _newAmount;
             set => SetProperty(ref _newAmount, value);
         }
-        public ManagerViewModel()
+        public SettingViewModel()
         {
             //_manager = Models.Employee.Instance();
 

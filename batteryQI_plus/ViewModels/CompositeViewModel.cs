@@ -11,12 +11,12 @@ namespace batteryQI_plus.ViewModels
     public class CompositeViewModel : ViewModelBases
     {
         public InspectViewModel InspectViewModel { get; set; }
-        public ManagerViewModel ManagerViewModel { get; set; }
+        public SettingViewModel ManagerViewModel { get; set; }
 
         public CompositeViewModel()
         {
             InspectViewModel = new InspectViewModel();
-            ManagerViewModel = new ManagerViewModel();
+            ManagerViewModel = new SettingViewModel();
         }
     }
 }
