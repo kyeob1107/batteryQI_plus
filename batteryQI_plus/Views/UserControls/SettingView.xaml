@@ -7,7 +7,7 @@
              d:DesignHeight="720" d:DesignWidth="1280"
              >
     <UserControl.DataContext>
-        <Binding Path="ManagerViewModel" Source="{StaticResource Locator}" />
+        <Binding Path="EmployeeViewModel" Source="{StaticResource Locator}" />
     </UserControl.DataContext>
 
     <Border Background="White">

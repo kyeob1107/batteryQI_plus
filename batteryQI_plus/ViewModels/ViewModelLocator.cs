@@ -64,15 +64,15 @@ namespace batteryQI_plus.ViewModels
         //    }
         //}
 
-        private SettingViewModel? _managerViewModel; // 설정 View
-        public SettingViewModel ManagerViewModel
+        private SettingViewModel? _employeeViewModel; // 설정 View
+        public SettingViewModel EmployeeViewModel
         {
             get
             {
                 // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
-                if (_managerViewModel == null)
-                    _managerViewModel = new SettingViewModel();
-                return _managerViewModel;
+                if (_employeeViewModel == null)
+                    _employeeViewModel = new SettingViewModel();
+                return _employeeViewModel;
             }
         }
 

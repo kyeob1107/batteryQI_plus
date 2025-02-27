@@ -9,7 +9,7 @@
         Height="750" Width="500">
 
     <Window.DataContext>
-        <Binding Path="ManagerViewModel" Source="{StaticResource Locator}" />
+        <Binding Path="EmployeeViewModel" Source="{StaticResource Locator}" />
     </Window.DataContext>
 
     <Border Background="#cfd5e5" CornerRadius="10" BorderThickness="2" BorderBrush="#ebedf3" Padding="10">
