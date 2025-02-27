@@ -44,8 +44,8 @@
 
                     <Border BorderBrush="Gray" BorderThickness="0,3,0,0" Margin="25,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"/>
 
-                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="20 20 40 20" Height="30" Width="140"
-                              Text="직원" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" IsEditable="true" IsReadOnly="true" IsDropDownOpen="False" StaysOpenOnEdit="False">
+                    <ComboBox Name="Employees" Grid.Row="0" Grid.Column="0" Margin="20 0 40 0" Height="32" Width="140"
+                              Text="직원" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" IsEditable="true" IsReadOnly="true" IsDropDownOpen="False" StaysOpenOnEdit="False">
                         <ComboBoxItem>
                             <TextBlock Text="sf_zone" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
                         </ComboBoxItem>
@@ -69,7 +69,7 @@
                         </ComboBoxItem>
                     </ComboBox>
 
-                    <ComboBox Grid.Row="0" Grid.Column="1" Margin="30 20 20 20" Height="30" Width="150">
+                    <ComboBox Name="LineInCharge" Grid.Row="0" Grid.Column="1" Margin="30 20 20 20" Height="30" Width="150">
                         <ComboBoxItem>
                             <TextBlock Text="관리자 직책" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
                         </ComboBoxItem>
@@ -101,7 +101,7 @@
 
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="생산라인" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <ComboBox Grid.Row="0" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
+                        <ComboBox Name="ProductionLines" Grid.Row="0" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
                             <ComboBoxItem IsSelected="True">
                                 <TextBlock Text="생산라인1" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
                             </ComboBoxItem>
@@ -113,7 +113,7 @@
                             </ComboBoxItem>
                         </ComboBox>
 
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="배터리 사용처" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
+                        <TextBlock Name="BatteryUsages" Grid.Row="1" Grid.Column="0" Text="배터리 사용처" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
                         <ComboBox Grid.Row="1" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
                             <ComboBoxItem IsSelected="True">
                                 <TextBlock Text="Industrial" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
@@ -123,7 +123,7 @@
                             </ComboBoxItem>
                         </ComboBox>
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="배터리 타입" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
+                        <TextBlock Name="BatteryTypes" Grid.Row="2" Grid.Column="0" Text="배터리 타입" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
                         <ComboBox Grid.Row="2" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
                             <ComboBoxItem IsSelected="True">
                                 <TextBlock Text="Cell" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
@@ -137,7 +137,7 @@
                         </ComboBox>
 
                         <TextBlock Grid.Row="3" Grid.Column="0" Text="배터리 형태" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <ComboBox Grid.Row="3" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
+                        <ComboBox Name="BatteryShapes" Grid.Row="3" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
                             <ComboBoxItem IsSelected="True">
                                 <TextBlock Text="Cylinder" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
                             </ComboBoxItem>
@@ -147,7 +147,7 @@
                         </ComboBox>
 
                         <TextBlock Grid.Row="4" Grid.Column="0" Text="발주처" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <ComboBox Grid.Row="4" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
+                        <ComboBox Name="Buyers" Grid.Row="4" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
                             <ComboBoxItem IsSelected="True">
                                 <TextBlock Text="삼성" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
                             </ComboBoxItem>
@@ -157,12 +157,12 @@
                         </ComboBox>
 
                         <TextBlock Grid.Row="5" Grid.Column="0" Text="할당량" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <TextBox Grid.Row="5" Grid.Column="1" Background="#FFE5E5E5" Text="2000" FontSize="20" BorderThickness="1" VerticalAlignment="Center" TextAlignment="Left" Width="150" Margin="30 0 20 0"/>
+                        <TextBox Name="Quota" Grid.Row="5" Grid.Column="1" Background="#FFE5E5E5" Text="2000" FontSize="20" BorderThickness="1" VerticalAlignment="Center" TextAlignment="Left" Width="150" Margin="30 0 20 0"/>
 
                         <TextBlock Grid.Row="6" Grid.Column="0" Text="마감기한:" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <DatePicker Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Text="2025-02-11" FontSize="15" VerticalAlignment="Center" Width="120" Margin="-260 0 0 0"/>
+                        <DatePicker Name="DeadlineStart" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Text="2025-02-11" FontSize="15" VerticalAlignment="Center" Width="120" Margin="-260 0 0 0"/>
                         <TextBlock Grid.Row="6" Grid.Column="1" Text="~" FontSize="20" VerticalAlignment="Center" TextAlignment="Center" Width="30" Margin="-110,0,0,0"/>
-                        <DatePicker Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Text="2025-02-26" FontSize="15" VerticalAlignment="Center" Width="120" Margin="40,0,0,0"/>
+                        <DatePicker Name="DeadlineEnd" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Text="2025-02-26" FontSize="15" VerticalAlignment="Center" Width="120" Margin="40,0,0,0"/>
 
                     </Grid>
                 </Grid>
@@ -174,8 +174,9 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Style="{StaticResource imageSectionButton}" Grid.Column="0" Content="취소" FontSize="20" FontWeight="SemiBold" Height="50" Width="150" Margin="0, 0, 45, 0" />
-                <Button Style="{StaticResource imageSectionButton}" Grid.Column="1" Content="확인" FontSize="20" FontWeight="SemiBold" Height="50" Width="150" Margin="45, 0, 0, 0" />
+                <Button Style="{StaticResource imageSectionButton}" Grid.Column="0" Content="취소" FontSize="22" FontWeight="SemiBold" Height="50" Width="150" Margin="0, 0, 47, 0" Click="CloseButtonClick" />
+                <Button Style="{StaticResource imageSectionButton}" Grid.Column="1" Content="확인" FontSize="22" FontWeight="SemiBold" Height="50" Width="150" Margin="47, 0, 0, 0" 
+                        Command="{Binding CheckButtonClickCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
             </Grid>
         </Grid>
     </Border>

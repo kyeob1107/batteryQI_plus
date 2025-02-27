@@ -63,7 +63,7 @@ namespace batteryQI.ViewModels
             //getManafactureNameID();
             //_newAmount = _manager.WorkAmount;
         }
-        public bool? IsLinePower
+        public bool? IsLinePower // 생산라인 전원 프로퍼티
         {
             get => _isLinePower;
             set
@@ -71,6 +71,7 @@ namespace batteryQI.ViewModels
                 SetProperty(ref _isLinePower, LinePower());
             }
         }
+        public Action? CloseAction { get; set; } // 페이지 닫기 프로퍼티
 
 
         private void getManafactureNameID() // DB에서 제조사 리스트 가져오기
@@ -168,8 +169,8 @@ namespace batteryQI.ViewModels
         [RelayCommand]
         private void OpenEditSetting() // 설정 편집창 열기
         {
-            EditSettingView window = new EditSettingView();
-            window.ShowDialog();
+            EditSettingView editSettingPage = new EditSettingView();
+            editSettingPage.ShowDialog();
         }
 
         private bool? LinePower() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
@@ -197,6 +198,16 @@ namespace batteryQI.ViewModels
                     _isLinePower = false;
             }
             return _isLinePower;
+        }
+
+        [RelayCommand]
+        private void CheckButtonClick(object sender)
+        {
+            if (System.Windows.Forms.MessageBox.Show($"변경된 설정을 저장하시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                // 선택한 설정 옵션들을 실제 프로퍼티, DB에 반영
+            }
+            CloseAction?.Invoke();
         }
     }
 }
