@@ -1,5 +1,5 @@
-﻿using batteryQI.ViewModels.Bases;
-using batteryQI.ViewModels;
+﻿using batteryQI_plus.ViewModels.Bases;
+using batteryQI_plus.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace batteryQI.ViewModels
+namespace batteryQI_plus.ViewModels
 {
     public class ViewModelLocator
     {

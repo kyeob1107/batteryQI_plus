@@ -1,10 +1,10 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
-using batteryQI.Models;
-using batteryQI.Views;
+using batteryQI_plus.Models;
+using batteryQI_plus.Views;
 
-namespace batteryQI
+namespace batteryQI_plus
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -28,7 +28,7 @@ namespace batteryQI
         protected override void OnExit(ExitEventArgs e)
         {
             // ViewModelLocator의 Cleanup 호출
-            var locator = (batteryQI.ViewModels.ViewModelLocator)Resources["Locator"];
+            var locator = (batteryQI_plus.ViewModels.ViewModelLocator)Resources["Locator"];
             locator.Cleanup();
 
             base.OnExit(e);

@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows;
-using batteryQI.Models;
-using batteryQI.ViewModels.Bases;
+using batteryQI_plus.Models;
+using batteryQI_plus.ViewModels.Bases;
 using CommunityToolkit.Mvvm.Input;
-using batteryQI.Views.UserControls;
-using batteryQI.Views;
+using batteryQI_plus.Views.UserControls;
+using batteryQI_plus.Views;
 using System.Data.Common;
 
-namespace batteryQI.ViewModels
+namespace batteryQI_plus.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBases
     {

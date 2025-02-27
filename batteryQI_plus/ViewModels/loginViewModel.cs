@@ -6,13 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using batteryQI.Models;
-using batteryQI.Views;
+using batteryQI_plus.Models;
+using batteryQI_plus.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 
-namespace batteryQI.ViewModels.Bases
+namespace batteryQI_plus.ViewModels.Bases
 {
     public partial class LoginViewModel : ViewModelBases
     {

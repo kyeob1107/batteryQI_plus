@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace batteryQI.Models
+namespace batteryQI_plus.Models
 {
     public class AnalysisModel
     {

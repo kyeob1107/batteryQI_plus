@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using batteryQI.Models;
+using batteryQI_plus.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace batteryQI.Models
+namespace batteryQI_plus.Models
 {
     public static class DateTimeExtensions
     {

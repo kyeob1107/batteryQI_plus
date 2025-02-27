@@ -8,11 +8,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using batteryQI.Views.UserControls;
-using batteryQI.ViewModels;
+using batteryQI_plus.Views.UserControls;
+using batteryQI_plus.ViewModels;
 using Microsoft.Win32;
 
-namespace batteryQI.Views
+namespace batteryQI_plus.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

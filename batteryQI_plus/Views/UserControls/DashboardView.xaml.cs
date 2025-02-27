@@ -12,11 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using batteryQI.ViewModels;
-using batteryQI.Views;
+using batteryQI_plus.ViewModels;
+using batteryQI_plus.Views;
 using Microsoft.Win32;
 
-namespace batteryQI.Views.UserControls
+namespace batteryQI_plus.Views.UserControls
 {
     /// <summary>
     /// Interaction logic for DashboardView.xaml

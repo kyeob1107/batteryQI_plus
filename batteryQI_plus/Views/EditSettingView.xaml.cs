@@ -1,4 +1,4 @@
-﻿using batteryQI.ViewModels;
+﻿using batteryQI_plus.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace batteryQI.Views
+namespace batteryQI_plus.Views
 {
     /// <summary>
     /// Interaction logic for EditSettingView.xaml

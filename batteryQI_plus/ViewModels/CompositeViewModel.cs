@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using batteryQI.ViewModels.Bases;
+using batteryQI_plus.ViewModels.Bases;
 
-namespace batteryQI.ViewModels
+namespace batteryQI_plus.ViewModels
 {
     // 주석 달아주시죠.. 이거 만드신 분.. 
     public class CompositeViewModel : ViewModelBases

@@ -15,9 +15,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ScottPlot.WPF;
 using ScottPlot;
-using batteryQI.ViewModels;
+using batteryQI_plus.ViewModels;
 
-namespace batteryQI.Views.UserControls
+namespace batteryQI_plus.Views.UserControls
 {
     /// <summary>
     /// Interaction logic for ChartPage.xaml

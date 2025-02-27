@@ -7,18 +7,18 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Controls;
 using System.Data.Common;
-using batteryQI.Models;
+using batteryQI_plus.Models;
 using System.Windows.Forms;
 using Mysqlx.Crud;
-using batteryQI.ViewModels.Bases;
+using batteryQI_plus.ViewModels.Bases;
 using System.Windows;
 using System.Data;
 using System.Collections.ObjectModel;
-using batteryQI.Views;
+using batteryQI_plus.Views;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
-namespace batteryQI.ViewModels
+namespace batteryQI_plus.ViewModels
 {
     // 관리자 페이지
     public partial class ManagerViewModel : ViewModelBases

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace batteryQI.Models
+namespace batteryQI_plus.Models
 {
     // 싱글톤 패턴
     public class Employee : ObservableObject

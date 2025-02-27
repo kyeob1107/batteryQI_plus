@@ -14,7 +14,7 @@ using System.Drawing;
 using System.IO;
 //using Microsoft.ML.O
 
-namespace batteryQI.Models
+namespace batteryQI_plus.Models
 {
     public class Battery : ObservableObject
     {

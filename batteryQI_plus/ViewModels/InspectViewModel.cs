@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using batteryQI.Views;
+using batteryQI_plus.Views;
 using System.Windows.Media.Imaging;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Forms;
-using batteryQI.Models;
-using batteryQI.Views.UserControls;
+using batteryQI_plus.Models;
+using batteryQI_plus.Views.UserControls;
 using System.Windows.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using batteryQI.ViewModels.Bases;
+using batteryQI_plus.ViewModels.Bases;
 using System.Data.Common;
 
-namespace batteryQI.ViewModels
+namespace batteryQI_plus.ViewModels
 {
     // 이미지 검사 이벤트
     public partial class InspectViewModel : ViewModelBases

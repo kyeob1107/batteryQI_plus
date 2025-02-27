@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using batteryQI.ViewModels.Bases;
-using batteryQI.Models;
-using batteryQI.Models;
+using batteryQI_plus.ViewModels.Bases;
+using batteryQI_plus.Models;
 using System.Windows;
 using System.Windows.Shapes;
 
-namespace batteryQI.ViewModels
+namespace batteryQI_plus.ViewModels
 {
     public class DashboardViewModel : ViewModelBases
     {

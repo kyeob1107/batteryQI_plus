@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows;
-using batteryQI.ViewModels.Bases;
-using batteryQI.Views;
+using batteryQI_plus.ViewModels.Bases;
+using batteryQI_plus.Views;
 using CommunityToolkit.Mvvm.Input;
 
-namespace batteryQI.ViewModels
+namespace batteryQI_plus.ViewModels
 {
     public partial class InspectViewModel : ViewModelBases
     {

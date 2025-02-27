@@ -17,7 +17,7 @@ using MySqlX.XDevAPI;
 using MySqlX.XDevAPI.Common;
 
 
-namespace batteryQI.Models
+namespace batteryQI_plus.Models
 {
     // DB select count결과 저장용도 - 추후 따로 cs분리해서 넣을까 고민중
     public class CountResult

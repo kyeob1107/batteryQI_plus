@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using batteryQI.ViewModels;
+using batteryQI_plus.ViewModels;
 using System.Windows;
 using ScottPlot;
 
-namespace batteryQI.Extensions
+namespace batteryQI_plus.Extensions
 {
     public static class PlotExtensions
     {

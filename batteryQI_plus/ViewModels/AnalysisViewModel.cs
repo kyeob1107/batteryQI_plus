@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using batteryQI.ViewModels.Bases;
-using batteryQI.Models;
+using batteryQI_plus.ViewModels.Bases;
+using batteryQI_plus.Models;
 using ScottPlot;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 using System.Diagnostics;
@@ -17,7 +17,7 @@ using ScottPlot.Renderable;
 using ScottPlot.Drawing.Colormaps;
 using System.Drawing;
 
-namespace batteryQI.ViewModels
+namespace batteryQI_plus.ViewModels
 {
     public class AnalysisViewModel
     {

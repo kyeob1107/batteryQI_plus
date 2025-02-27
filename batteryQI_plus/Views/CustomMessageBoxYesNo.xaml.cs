@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace batteryQI.Views
+namespace batteryQI_plus.Views
 {
     /// <summary>
     /// Interaction logic for CustomMessageBoxYesNo.xaml
