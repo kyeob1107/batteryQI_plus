@@ -180,18 +180,18 @@ namespace batteryQI_plus.ViewModels
             var values2 = new ChartValues<double>(Enumerable.Repeat(0.0, numOfLinePlusOne));
             var dates = new List<DateTime>
         {
-            DateTime.Now.AddHours(-6),
-            DateTime.Now.AddHours(-5),
-            DateTime.Now.AddHours(-4),
-            DateTime.Now.AddHours(-3),
-            DateTime.Now.AddHours(-2),
-            DateTime.Now.AddHours(-1),
+            DateTime.Now.AddMinutes(-60),
+            DateTime.Now.AddMinutes(-50),
+            DateTime.Now.AddMinutes(-40),
+            DateTime.Now.AddMinutes(-30),
+            DateTime.Now.AddMinutes(-20),
+            DateTime.Now.AddMinutes(-10),
             DateTime.Now
         };
             // 실시간 차트 부분
             checkTimeRangeMinites = 60; // 범위 : 60분
             numOfData = checkTimeRangeMinites / unitTestTimeMinites;
-            dataListLiveChart = new List<List<double>>(numOfLinePlusOne - 1);
+            dataListLiveChart = new List<List<double>>(numOfLinePlusOne - 1); // LiveChart y축 저장용
             SeriesCollectionLiveChart = new SeriesCollection();
 
             for (int i = 0; i < numOfLinePlusOne-1; i++)
@@ -222,7 +222,7 @@ namespace batteryQI_plus.ViewModels
             //    }
             //};
 
-            DateTimeLabels = dates.ConvertAll(d => d.ToString("yyyy-MM-dd HH:mm:ss"));
+            DateTimeLabels = dates.ConvertAll(d => d.ToString("yyyy-MM-dd HH:mm:ss")); // 이거 안쓰는듯?  
 
             DateTimeFormatter = value => dates[((int)value)].ToString("yyyy-MM-dd HH:mm:ss");
             YFormatter = value => value.ToString("N");

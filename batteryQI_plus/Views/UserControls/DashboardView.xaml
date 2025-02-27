@@ -113,7 +113,7 @@
                 <lvc:CartesianChart Series="{Binding SeriesCollectionLiveChart}" 
                     LegendLocation="Right">
                     <lvc:CartesianChart.AxisX>
-                        <lvc:Axis Title="시간" LabelFormatter="{Binding XFormatter}"/>
+                        <lvc:Axis Title="시간" LabelFormatter="{Binding DateTimeFormatter}"/>
                     </lvc:CartesianChart.AxisX>
                     <lvc:CartesianChart.AxisY>
                         <lvc:Axis Title="불량률 (%)" LabelFormatter="{Binding YFormatter}"/>

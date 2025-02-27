@@ -26,6 +26,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.Runtime.Serialization;
 using System.ComponentModel;
+using LiveCharts.Helpers;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -123,8 +124,8 @@ namespace batteryQI_plus.ViewModels
             BatteryId = "";
 
             // 타임차트
-            //var result = _dblink.Select($"SELECT COUNT(DISTINCT lineId) AS Count FROM batteryQIPlus.productionLines;");
-            //numOfLine = Convert.ToInt32(result[0]["Count"]) - 1;
+            var result = _dblink.Select($"SELECT COUNT(DISTINCT lineId) AS Count FROM batteryQIPlus.productionLines;");
+            numOfLine = Convert.ToInt32(result[0]["Count"]) - 1;
             //for (int line = 0; line < numOfLine; line++)
             //{
             //    _timeCharts.Add(new AnalysisModel
@@ -133,6 +134,54 @@ namespace batteryQI_plus.ViewModels
             //        DefectRate.Add(),
             //    });
             //}
+            //SeriesCollectionTimeChart = new SeriesCollection();
+            var dates = new List<DateTime>
+            {
+                DateTime.Now.AddMinutes(-60),
+                DateTime.Now.AddMinutes(-50),
+                DateTime.Now.AddMinutes(-40),
+                DateTime.Now.AddMinutes(-30),
+                DateTime.Now.AddMinutes(-20),
+                DateTime.Now.AddMinutes(-10),
+                DateTime.Now
+            };
+            SeriesCollectionTimeChart = new SeriesCollection();
+            //for (int i = 0; i < numOfLine; i++)
+            //{
+            //    var innerList = new List<double>();
+            //    SeriesCollectionTimeChart.Add(
+            //    new LineSeries
+            //    {
+            //        Title = $"Line{i + 1}",
+            //        //Values = innerList.AsChartValues(),
+            //        Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 10.0, 60.0, 12.0 },
+            //        Fill = System.Windows.Media.Brushes.Transparent
+            //    });
+            //}
+            SeriesCollectionTimeChart.Add(new LineSeries
+                {
+                    Title = $"Line1",
+                    //Values = innerList.AsChartValues(),
+                    Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 10.0, 60.0, 12.0 },
+                    Fill = System.Windows.Media.Brushes.Transparent
+                });
+            SeriesCollectionTimeChart.Add(new LineSeries
+            {
+                Title = $"Line2",
+                //Values = innerList.AsChartValues(),
+                Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 10.0, 30.0, 12.0 },
+                Fill = System.Windows.Media.Brushes.Transparent
+            });
+            SeriesCollectionTimeChart.Add(new LineSeries
+            {
+                Title = $"Line3",
+                //Values = innerList.AsChartValues(),
+                Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 25.0, 10.0, 12.0 },
+                Fill = System.Windows.Media.Brushes.Transparent
+            });
+
+            DateTimeFormatter = value => dates[((int)value)].ToString("yyyy-MM-dd HH:mm:ss");
+            YFormatter = value => value.ToString("N");
 
             // 파이차트
             // 값 가져오는 할당해서 만드는 함수화 하는게 보기 편할듯
@@ -152,10 +201,10 @@ namespace batteryQI_plus.ViewModels
                                     Status;";
             var result_Pie = _dblink.Select(query_Pie);
 
-            PieSeriesCollection = new SeriesCollection();
+            SeriesCollectionPie = new SeriesCollection();
             foreach(var item in result_Pie)
             {
-                PieSeriesCollection.Add(new PieSeries
+                SeriesCollectionPie.Add(new PieSeries
                 {
                     Title = (string)item["Status"],
                     Values = new ChartValues<double> { Convert.ToDouble(item["batteryCount"]) },
@@ -320,8 +369,17 @@ namespace batteryQI_plus.ViewModels
         // 시간별 라인차트
         int numOfLine; // 전체 다 쓰일지도
         private List<AnalysisModel> _timeCharts = new List<AnalysisModel>();
+        private SeriesCollection _seriesCollectionTimeChart;
+        public SeriesCollection SeriesCollectionTimeChart
+        {
+            get { return _seriesCollectionTimeChart; }
+            set { SetProperty(ref _seriesCollectionTimeChart, value); }
+        }
+        public Func<double, string> DateTimeFormatter { get; set; }
+        public Func<double, string> YFormatter { get; set; }
+
         // 파이차트
-        public SeriesCollection PieSeriesCollection { get; set; }
+        public SeriesCollection SeriesCollectionPie { get; set; }
 
         public Func<ChartPoint, string> PointLabel { get; set; }
 

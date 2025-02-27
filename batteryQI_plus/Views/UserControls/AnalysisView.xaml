@@ -180,8 +180,14 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                 <!-- 타임차트 탭 -->
                 <TabItem Header="타임차트">
                     <Border Background="#FFFFFF" Padding="10">
-                        <!-- 그래프 Placeholder -->
-                        <TextBlock Text="타임차트 그래프 영역 (바인딩 필요)" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <lvc:CartesianChart Series="{Binding SeriesCollectionTimeChart}" LegendLocation="Right">
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Title="시간" LabelFormatter="{Binding DateTimeFormatter}"/>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="불량률 (%)" LabelFormatter="{Binding YFormatter}"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
                     </Border>
                 </TabItem>
 
@@ -193,7 +199,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                         <lvc:PieChart LegendLocation="Right" 
                                       Hoverable="False" 
                                       DataTooltip="{x:Null}"
-                                      Series="{Binding PieSeriesCollection}">
+                                      Series="{Binding SeriesCollectionPie}">
                             <lvc:PieChart.DataClickCommand>
                                 <Binding Path="DataClickCommand" />
                             </lvc:PieChart.DataClickCommand>
