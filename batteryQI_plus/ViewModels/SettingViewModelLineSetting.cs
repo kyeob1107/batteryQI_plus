@@ -14,7 +14,7 @@ namespace batteryQI_plus.ViewModels
 {
     public partial class SettingViewModel : ViewModelBases // View에 출력할 생산라인 설정 프로퍼티 선언용
     {
-        //private bool _editSettingAuthority; // 설정 편집창을 열 수 있는 권한 -> 설정 편집창 버튼 클릭 커멘드 내부 처리로 대체
+        private bool _isEditSettingRole; // 설정 편집창을 열 수 있는 권한 설정
         private ObservableCollection<Dictionary<string, string>> _lineSettingCollection 
             = new ObservableCollection<Dictionary<string, string>>(); // Setting View 각 생산라인별 설정 저장
         // EditSetting 선택된 값 프로퍼티
@@ -26,16 +26,16 @@ namespace batteryQI_plus.ViewModels
                 new ("batteryType", "")
             };
 
-    public ObservableCollection<Dictionary<string, string>> LineSettingCollection
+        public bool IsEditSettingRole
+        {
+            get => _isEditSettingRole;
+            set => SetProperty(ref _isEditSettingRole, value);
+        }
+        public ObservableCollection<Dictionary<string, string>> LineSettingCollection
         {
             get => _lineSettingCollection;
             set => SetProperty(ref _lineSettingCollection, value);
         }
-        //public bool EditSettingAuthority
-        //{
-        //    get => _editSettingAuthority;
-        //    set => SetProperty(ref _editSettingAuthority, AuthorityCheck(Employee.EmployeeRole)); // 로그인한 직원의 역할에 따라 설정 편집 권한 결정
-        //}
         public ObservableCollection<KeyValuePair<string, string>> SelectedLineSetting
         {
             get => _selectedLineSetting;
@@ -65,13 +65,5 @@ namespace batteryQI_plus.ViewModels
                 );
             }
         }
-
-        //private bool AuthorityCheck(int Role) // 설정 편집 권한 여부 확인 메소드
-        //{
-        //    if (Role >= 10)
-        //        return true;
-        //    else
-        //        return false;
-        //}
     }
 }

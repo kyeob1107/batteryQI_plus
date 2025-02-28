@@ -20,9 +20,8 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" CornerRadius="10" Margin="150 0">
-                <TextBlock Style="{StaticResource titleText}" Text="설정 편집" HorizontalAlignment="Center" FontSize="30" Margin="20 15" FontWeight="SemiBold"/>
-            </Border>
+            <TextBlock Style="{StaticResource titleText}" Text="설정 편집" HorizontalAlignment="Center" FontSize="30" Margin="0 15" FontWeight="SemiBold"/>
+            
 
             <Border Grid.Row="1" CornerRadius="10" Margin="20 0 20 10">
                 <Border.Background>
@@ -153,6 +152,9 @@
                             </ComboBoxItem>
                             <ComboBoxItem>
                                 <TextBlock Text="테슬라" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="Self" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
                             </ComboBoxItem>
                         </ComboBox>
 
