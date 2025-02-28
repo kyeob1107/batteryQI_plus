@@ -23,7 +23,7 @@ namespace batteryQI_plus.ViewModels
     // 관리자 페이지
     public partial class SettingViewModel : ViewModelBases
     {
-        //private Employee _manager = Employee.Instance();
+        private Employee _employee;
         private string _manufacName = "";
         private IDictionary<string, string> _manufacDict = new Dictionary<string, string>();
         private ObservableCollection<KeyValuePair<string, string>> _manufacCollection = new ObservableCollection<KeyValuePair<string, string>>();
@@ -39,11 +39,11 @@ namespace batteryQI_plus.ViewModels
             get => _manufacName;
             set => SetProperty(ref _manufacName, value);
         }
-        //public Employee Employee
-        //{
-        //    get => _employee;
-        //    set => SetProperty(ref _employee, value);
-        //}
+        public Employee Employee
+        {
+            get => _employee;
+            set => SetProperty(ref _employee, value);
+        }
         public ObservableCollection<KeyValuePair<string, string>> ManufacCollection
         {
             get => _manufacCollection;
@@ -62,6 +62,8 @@ namespace batteryQI_plus.ViewModels
 
             //getManafactureNameID();
             //_newAmount = _manager.WorkAmount;
+            _employee = Employee.Instance();
+            getLineSetting();
         }
         public bool? IsLinePower // 생산라인 전원 프로퍼티
         {
@@ -72,7 +74,6 @@ namespace batteryQI_plus.ViewModels
             }
         }
         public Action? CloseAction { get; set; } // 페이지 닫기 프로퍼티
-
 
         private void getManafactureNameID() // DB에서 제조사 리스트 가져오기
         {
@@ -169,6 +170,11 @@ namespace batteryQI_plus.ViewModels
         [RelayCommand]
         private void OpenEditSetting() // 설정 편집창 열기
         {
+            if (_employee.EmployeeRole < 10)
+            {
+                System.Windows.Forms.MessageBox.Show($"설정 편집 권한이 없습니다.", "OK", MessageBoxButtons.OK);
+                return;
+            }
             EditSettingView editSettingPage = new EditSettingView();
             editSettingPage.ShowDialog();
         }
@@ -177,21 +183,21 @@ namespace batteryQI_plus.ViewModels
         {
             if (_isLinePower == false)
             {
-                if (System.Windows.Forms.MessageBox.Show($"생산라인n의 전원을 켜시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (System.Windows.Forms.MessageBox.Show($"생산라인의 전원을 켜시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     _isLinePower = true;
                 }
             }
             else if (_isLinePower == true)
             {
-                if (System.Windows.Forms.MessageBox.Show($"정말로 생산라인n의 전원을 끄시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (System.Windows.Forms.MessageBox.Show($"정말로 생산라인의 전원을 끄시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     _isLinePower = false;
                 }
             }
             else
             {
-                DialogResult dialogResult = System.Windows.Forms.MessageBox.Show($"생산라인n의 작동 여부가 저장되어있지 않습니다.\r\n현재 생산라인n이 작동 중입니까?", "Yes-No", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = System.Windows.Forms.MessageBox.Show($"생산라인의 작동 여부가 저장되어있지 않습니다.\r\n현재 생산라인이 작동 중입니까?", "Yes-No", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                     _isLinePower = true;
                 else

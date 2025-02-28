@@ -7,7 +7,7 @@
              d:DesignHeight="720" d:DesignWidth="1280"
              >
     <UserControl.DataContext>
-        <Binding Path="EmployeeViewModel" Source="{StaticResource Locator}" />
+        <Binding Path="SettingViewModel" Source="{StaticResource Locator}" />
     </UserControl.DataContext>
 
     <Border Background="White">
@@ -22,112 +22,94 @@
                         </Grid.RowDefinitions>
 
                         <Button Style="{StaticResource SettingButton}" Content="설정" FontSize="20" FontWeight="SemiBold" Panel.ZIndex="2"
-                                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,80,-2" Padding="10,5" Width="150" Height="50"
+                                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,22,80,2" Padding="10,5" Width="150" Height="50"
                                     Command="{Binding OpenEditSettingCommand}"/>
 
-                        <TabControl Background="#6a5dae" Margin="15 20 15 15" BorderThickness="0">
+                        <TabControl ItemsSource="{Binding LineSettingCollection}" Background="#6a5dae" Margin="15 20 15 15" BorderThickness="0">
                             <TabControl.Resources>
                                 <Style TargetType="TabItem">
                                     <Setter Property="Padding" Value="20,12"/>
                                     <Setter Property="FontSize" Value="18"/>
-
+                                    <Setter Property="Width" Value="150"/>
                                 </Style>
                             </TabControl.Resources>
+                            <TabControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock TextAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="생산라인{0}">
+                                                <Binding Path="[lineId]" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </TabControl.ItemTemplate>
+                            <TabControl.ContentTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Border Background="WhiteSmoke" CornerRadius="50" BorderBrush="LightGray" BorderThickness="2" Padding="10" Height="580">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="100"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
 
+                                                <!-- 첫 번째 행 내용 -->
+                                                <Grid Grid.Row="0" Margin="40,0">
+                                                    <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                                    <ToggleButton Style="{StaticResource OnOffToggleButton}" Margin="0,20,0,30" Width="170" Height="50" HorizontalAlignment="Left"
+                                                                    IsChecked="{Binding DataContext.IsLinePower, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    <TextBlock Text="생산라인 전원" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="190,20,0,30"/>
+                                                </Grid>
 
-                            <TabItem Header="생산라인1" Width="150" Margin="50,-2,-50,-2">
-                                <Border Background="WhiteSmoke" CornerRadius="50" BorderBrush="LightGray" BorderThickness="2" Padding="10" Height="580">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="100"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
+                                                <!-- 두 번째 행 내용 -->
+                                                <Grid Grid.Row="1" Margin="40,0">
+                                                    <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="40"/>
+                                                            <RowDefinition Height="*"/>
+                                                        </Grid.RowDefinitions>
+                                                        <TextBlock Grid.Row="0" Margin="5" Text="배터리 정보" FontWeight="Bold" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                                        <TextBlock Grid.Row="1" Margin="5" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="배터리 사용처: {0}&#10;&#10;배터리 타입: {1}&#10;&#10;배터리 형태: {2}">
+                                                                    <Binding Path="[usageName]" />
+                                                                    <Binding Path="[batteryType]" />
+                                                                    <Binding Path="[batteryShape]" />
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </Grid>
+                                                </Grid>
 
-                                        <!-- 첫 번째 행 내용 -->
-                                        <Grid Grid.Row="0" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <ToggleButton Style="{StaticResource OnOffToggleButton}" Margin="0,20,0,30" Width="170" Height="50" HorizontalAlignment="Left"
-                                                              IsChecked="{Binding IsLinePower, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            <TextBlock Text="생산라인 전원" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="190,20,0,30"/>
-
-                                        </Grid>
-
-                                        <!-- 두 번째 행 내용 -->
-                                        <Grid Grid.Row="1" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <TextBlock Text="배터리 정보&#10;&#10;배터리 사용처: Industrial&#10;&#10;배터리 타입: Pack&#10;&#10;배터리 형태: Pouch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </Grid>
-
-                                        <!-- 세 번째 행 내용 -->
-                                        <Grid Grid.Row="2" Margin="40,0">
-                                            <TextBlock Text="발주처 정보&#10;&#10;발주처: 삼성&#10;&#10;주문량: 2000&#10;&#10;마감 기간: 2025-02-20 ~ 2025-02-26" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </TabItem>
-                            <TabItem Header="생산라인2" Width="150" Margin="50,-2,-50,-2">
-                                <Border Background="WhiteSmoke" CornerRadius="50" BorderBrush="LightGray" BorderThickness="2" Padding="10" Height="580">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="100"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
-
-                                        <!-- 첫 번째 행 내용 -->
-                                        <Grid Grid.Row="0" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <ToggleButton Style="{StaticResource OnOffToggleButton}" Margin="0,20,0,30" Width="170" Height="50" HorizontalAlignment="Left"
-                                                              IsChecked="{Binding IsLinePower, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            <TextBlock Text="생산라인 전원" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="190,20,0,30"/>
-
-                                        </Grid>
-
-                                        <!-- 두 번째 행 내용 -->
-                                        <Grid Grid.Row="1" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <TextBlock Text="배터리 정보&#10;&#10;배터리 사용처: Industrial&#10;&#10;배터리 타입: Pack&#10;&#10;배터리 형태: Pouch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </Grid>
-
-                                        <!-- 세 번째 행 내용 -->
-                                        <Grid Grid.Row="2" Margin="40,0">
-                                            <TextBlock Text="발주처 정보&#10;&#10;발주처: 삼성&#10;&#10;주문량: 2000&#10;&#10;마감 기간: 2025-02-20 ~ 2025-02-26" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </TabItem>
-                            <TabItem Header="생산라인3" Width="150" Margin="50,-2,-50,-2">
-                                <Border Background="WhiteSmoke" CornerRadius="50" BorderBrush="LightGray" BorderThickness="2" Padding="10" Height="580">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="100"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
-
-                                        <!-- 첫 번째 행 내용 -->
-                                        <Grid Grid.Row="0" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <ToggleButton Style="{StaticResource OnOffToggleButton}" Margin="0,20,0,30" Width="170" Height="50" HorizontalAlignment="Left"
-                                                              IsChecked="{Binding IsLinePower, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                            <TextBlock Text="생산라인 전원" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="190,20,0,30"/>
-
-                                        </Grid>
-
-                                        <!-- 두 번째 행 내용 -->
-                                        <Grid Grid.Row="1" Margin="40,0">
-                                            <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                                            <TextBlock Text="배터리 정보&#10;&#10;배터리 사용처: Industrial&#10;&#10;배터리 타입: Pack&#10;&#10;배터리 형태: Pouch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </Grid>
-
-                                        <!-- 세 번째 행 내용 -->
-                                        <Grid Grid.Row="2" Margin="40,0">
-                                            <TextBlock Text="발주처 정보&#10;&#10;발주처: 삼성&#10;&#10;주문량: 2000&#10;&#10;마감 기간: 2025-02-20 ~ 2025-02-26" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </TabItem>
+                                                <!-- 세 번째 행 내용 -->
+                                                <Grid Grid.Row="2" Margin="40,0">
+                                                    <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="40"/>
+                                                            <RowDefinition Height="*"/>
+                                                        </Grid.RowDefinitions>
+                                                        <TextBlock Grid.Row="0" Margin="5" Text="발주처 정보" FontWeight="Bold" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                                        <TextBlock Grid.Row="1" Margin="5" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="발주처: {0}&#10;&#10;할당량: {1}&#10;&#10;마감 기간: {2} ~ {3}">
+                                                                    <Binding Path="[buyerName]" />
+                                                                    <Binding Path="[quota]" />
+                                                                    <Binding Path="[deadlineStart]" />
+                                                                    <Binding Path="[deadlineEnd]" />
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TabControl.ContentTemplate>
                         </TabControl>
                     </Grid>
                 </Border>

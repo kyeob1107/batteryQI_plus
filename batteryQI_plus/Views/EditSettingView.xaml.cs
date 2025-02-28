@@ -24,9 +24,9 @@ namespace batteryQI_plus.Views
         {
             InitializeComponent();
 
-            if (DataContext is MainWindowViewModel vm)
+            if (DataContext is SettingViewModel sw)
             {
-                vm.CloseAction = () => this.Close(); // 창 닫기 기능을 ViewModel에 연결
+                sw.CloseAction = () => this.Close(); // 창 닫기 기능을 ViewModel에 연결
             }
         }
 

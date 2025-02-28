@@ -9,7 +9,7 @@
         Height="750" Width="500">
 
     <Window.DataContext>
-        <Binding Path="EmployeeViewModel" Source="{StaticResource Locator}" />
+        <Binding Path="SettingViewModel" Source="{StaticResource Locator}" />
     </Window.DataContext>
 
     <Border Background="#cfd5e5" CornerRadius="10" BorderThickness="2" BorderBrush="#ebedf3" Padding="10">
@@ -33,16 +33,16 @@
                 </Border.Background>
 
                 <Grid>
-                    <Grid.RowDefinitions>
+                    <!--<Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                    </Grid.RowDefinitions>-->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border BorderBrush="Gray" BorderThickness="0,3,0,0" Margin="25,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"/>
+                    <!--<Border BorderBrush="Gray" BorderThickness="0,3,0,0" Margin="25,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"/>
 
                     <ComboBox Name="Employees" Grid.Row="0" Grid.Column="0" Margin="20 0 40 0" Height="32" Width="140"
                               Text="직원" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" IsEditable="true" IsReadOnly="true" IsDropDownOpen="False" StaysOpenOnEdit="False">
@@ -82,7 +82,7 @@
                         <ComboBoxItem>
                             <TextBlock Text="생산라인3" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
                         </ComboBoxItem>
-                    </ComboBox>
+                    </ComboBox>-->
 
                     <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                         <Grid.RowDefinitions>
@@ -160,9 +160,9 @@
                         <TextBox Name="Quota" Grid.Row="5" Grid.Column="1" Background="#FFE5E5E5" Text="2000" FontSize="20" BorderThickness="1" VerticalAlignment="Center" TextAlignment="Left" Width="150" Margin="30 0 20 0"/>
 
                         <TextBlock Grid.Row="6" Grid.Column="0" Text="마감기한:" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <DatePicker Name="DeadlineStart" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Text="2025-02-11" FontSize="15" VerticalAlignment="Center" Width="120" Margin="-260 0 0 0"/>
+                        <DatePicker Name="DeadlineStart" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Text="null" FontSize="15" VerticalAlignment="Center" Width="120" Margin="-260 0 0 0"/>
                         <TextBlock Grid.Row="6" Grid.Column="1" Text="~" FontSize="20" VerticalAlignment="Center" TextAlignment="Center" Width="30" Margin="-110,0,0,0"/>
-                        <DatePicker Name="DeadlineEnd" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Text="2025-02-26" FontSize="15" VerticalAlignment="Center" Width="120" Margin="40,0,0,0"/>
+                        <DatePicker Name="DeadlineEnd" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Text="null" FontSize="15" VerticalAlignment="Center" Width="120" Margin="40,0,0,0"/>
 
                     </Grid>
                 </Grid>
