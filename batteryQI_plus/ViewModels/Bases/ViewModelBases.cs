@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using batteryQI.Models;
-using batteryQI.Views;
-using System.Windows.Controls;
-using System.Data.Common;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using batteryQI_plus.Models;
 
-namespace batteryQI.ViewModels.Bases
+namespace batteryQI_plus.ViewModels.Bases
 {
     public partial class ViewModelBases : ObservableObject, IDisposable
     {
@@ -24,7 +14,7 @@ namespace batteryQI.ViewModels.Bases
         }
 
         // Dispose 메서드 구현
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (_dblink != null)
             {

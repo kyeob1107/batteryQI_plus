@@ -12,11 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using batteryQI.ViewModels;
-using batteryQI.Views;
+using batteryQI_plus.ViewModels;
+using batteryQI_plus.Views;
 using Microsoft.Win32;
 
-namespace batteryQI.Views.UserControls
+namespace batteryQI_plus.Views.UserControls
 {
     /// <summary>
     /// Interaction logic for DashboardView.xaml
@@ -27,6 +27,16 @@ namespace batteryQI.Views.UserControls
         {
             InitializeComponent();
             //this.DataContext = new CompositeViewModel(); // ViewModel 연결
+            Unloaded += DashboardView_Unloaded; // 타이머 리소스 해제
+        }
+
+        // 페이지 언로드 될 때 타이머 리소스 해제
+        private void DashboardView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is DashboardViewModel viewModel)
+            {
+                viewModel.Dispose();
+            }
         }
 
     }

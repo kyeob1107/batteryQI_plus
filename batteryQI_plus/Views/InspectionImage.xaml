@@ -1,7 +1,7 @@
-﻿<Window x:Class="batteryQI.Views.InspectionImage"
+﻿<Window x:Class="batteryQI_plus.Views.InspectionImage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:uc="clr-namespace:batteryQI.Views.UserControls"
+        xmlns:uc="clr-namespace:batteryQI_plus.Views.UserControls"
         Height="750" Width="500"
         DataContext="{Binding InspectViewModel, Source={StaticResource Locator}}"
         >

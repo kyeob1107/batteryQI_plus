@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows;
-using batteryQI.Models;
-using batteryQI.ViewModels.Bases;
+﻿using batteryQI_plus.ViewModels.Bases;
 using CommunityToolkit.Mvvm.Input;
-using batteryQI.Views.UserControls;
-using batteryQI.Views;
-using System.Data.Common;
+using batteryQI_plus.Views.UserControls;
 
-namespace batteryQI.ViewModels
+namespace batteryQI_plus.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBases
     {

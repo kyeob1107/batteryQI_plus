@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
+﻿using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Google.Protobuf;
 using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI;
-using MySqlX.XDevAPI.Common;
 
 
-namespace batteryQI.Models
+namespace batteryQI_plus.Models
 {
     // DB select count결과 저장용도 - 추후 따로 cs분리해서 넣을까 고민중
     public class CountResult
@@ -41,7 +29,7 @@ namespace batteryQI.Models
         private string _dbPw = ""; // _dbpw : 접속패스워드
 
         static DBlink staticDBlink; // DB 연결 객체 생성
-        MySqlConnection connection; // DB connection 객체
+        public MySqlConnection connection { get; private set; } // DB connection 객체
 
         private DBlink() { } // 생성자 접근 제어 변경
         public static DBlink Instance()

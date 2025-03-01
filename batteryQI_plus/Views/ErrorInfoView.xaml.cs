@@ -11,9 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using batteryQI.ViewModels;
+using batteryQI_plus.ViewModels;
 
-namespace batteryQI.Views
+namespace batteryQI_plus.Views
 {
     /// <summary>
     /// Interaction logic for ErrorInfoView.xaml
