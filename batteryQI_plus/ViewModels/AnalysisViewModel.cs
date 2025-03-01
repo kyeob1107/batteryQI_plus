@@ -69,41 +69,53 @@ namespace batteryQI_plus.ViewModels
             EndTime = "23:59:59";
 
             // Initialize UsageItems with sample data
-            UsageItems = new ObservableCollection<SelectableItem>
+            UsageItems = new ObservableCollection<SelectableItem>();
+            var UsageFilterlist = SelectFilterValue("usageName");
+            for (int i = 0; i < UsageFilterlist.Count; i++) 
             {
-                new SelectableItem { Name = "체크리스트1", IsSelected = false },
-                new SelectableItem { Name = "체크리스트2", IsSelected = false },
-                new SelectableItem { Name = "체크리스트3", IsSelected = false },
-                new SelectableItem { Name = "체크리스트4", IsSelected = false },
-                new SelectableItem { Name = "체크리스트5", IsSelected = false }
-            };
+                UsageItems.Add(
+                    new SelectableItem 
+                    { 
+                        Name = (string)UsageFilterlist[i]["usageName"], IsSelected = false 
+                    });
+            }
 
-            BuyerItems = new ObservableCollection<SelectableItem>
+            //buy는 일단 통일성있게 해주려고 id로 해주고 buyer테이블 참고해서 이름으로 표시하거나 하는 과정 추가해주기
+            BuyerItems = new ObservableCollection<SelectableItem>();
+            var BuyerFilterlist = SelectFilterValue("buyerName", "batteryInfo bi INNER JOIN buyers b ON bi.buyerId = b.buyerId;");
+            for (int i = 0; i < BuyerFilterlist.Count; i++)
             {
-                new SelectableItem { Name = "체크리스트1", IsSelected = false },
-                new SelectableItem { Name = "체크리스트2", IsSelected = false },
-                new SelectableItem { Name = "체크리스트3", IsSelected = false },
-                new SelectableItem { Name = "체크리스트4", IsSelected = false },
-                new SelectableItem { Name = "체크리스트5", IsSelected = false }
-            };
+                BuyerItems.Add(
+                    new SelectableItem
+                    {
+                        Name = (string)BuyerFilterlist[i]["buyerName"],
+                        IsSelected = false
+                    });
+            }
 
-            BatteryTypeItems = new ObservableCollection<SelectableItem>
+            BatteryTypeItems = new ObservableCollection<SelectableItem>();
+            var BatteryTypeFilterlist = SelectFilterValue("batteryType");
+            for (int i = 0; i < BatteryTypeFilterlist.Count; i++)
             {
-                new SelectableItem { Name = "체크리스트1", IsSelected = false },
-                new SelectableItem { Name = "체크리스트2", IsSelected = false },
-                new SelectableItem { Name = "체크리스트3", IsSelected = false },
-                new SelectableItem { Name = "체크리스트4", IsSelected = false },
-                new SelectableItem { Name = "체크리스트5", IsSelected = false }
-            };
+                BatteryTypeItems.Add(
+                    new SelectableItem
+                    {
+                        Name = (string)BatteryTypeFilterlist[i]["batteryType"],
+                        IsSelected = false
+                    });
+            }
 
-            BatteryShapeItems = new ObservableCollection<SelectableItem>
+            BatteryShapeItems = new ObservableCollection<SelectableItem>();
+            var BatteryShapeFilterlist = SelectFilterValue("batteryShape");
+            for (int i = 0; i < BatteryShapeFilterlist.Count; i++)
             {
-                new SelectableItem { Name = "체크리스트1", IsSelected = false },
-                new SelectableItem { Name = "체크리스트2", IsSelected = false },
-                new SelectableItem { Name = "체크리스트3", IsSelected = false },
-                new SelectableItem { Name = "체크리스트4", IsSelected = false },
-                new SelectableItem { Name = "체크리스트5", IsSelected = false }
-            };
+                BatteryShapeItems.Add(
+                    new SelectableItem
+                    {
+                        Name = (string)BatteryShapeFilterlist[i]["batteryShape"],
+                        IsSelected = false
+                    });
+            }
 
             StatusItems = new ObservableCollection<SelectableItem>
             {
@@ -112,20 +124,23 @@ namespace batteryQI_plus.ViewModels
                 new SelectableItem { Name = "파손", IsSelected = false }
             };
 
-            ProductionLineItems = new ObservableCollection<SelectableItem>
+            ProductionLineItems = new ObservableCollection<SelectableItem>();
+            var ProductionLineFilterlist = SelectFilterValue("lineId");
+            for (int i = 0; i < ProductionLineFilterlist.Count; i++)
             {
-                new SelectableItem { Name = "체크리스트1", IsSelected = false },
-                new SelectableItem { Name = "체크리스트2", IsSelected = false },
-                new SelectableItem { Name = "체크리스트3", IsSelected = false },
-                new SelectableItem { Name = "체크리스트4", IsSelected = false },
-                new SelectableItem { Name = "체크리스트5", IsSelected = false }
-            };
+                ProductionLineItems.Add(
+                    new SelectableItem
+                    {
+                        Name = "Line" + ProductionLineFilterlist[i]["lineId"].ToString(),
+                        IsSelected = false
+                    });
+            }
 
             BatteryId = "";
 
             // 타임차트
-            var result = _dblink.Select($"SELECT COUNT(DISTINCT lineId) AS Count FROM batteryQIPlus.productionLines;");
-            numOfLine = Convert.ToInt32(result[0]["Count"]) - 1;
+            var queryTimeChart = _dblink.Select($"SELECT COUNT(DISTINCT lineId) AS Count FROM batteryQIPlus.productionLines;");
+            numOfLine = Convert.ToInt32(queryTimeChart[0]["Count"]) - 1;
             //for (int line = 0; line < numOfLine; line++)
             //{
             //    _timeCharts.Add(new AnalysisModel
@@ -344,6 +359,13 @@ namespace batteryQI_plus.ViewModels
         {
             get => _productionLineItems;
             set => SetProperty(ref _productionLineItems, value);
+        }
+
+        private List<Dictionary<string,object>> SelectFilterValue(string category, string table = "batteryInfo")
+        {
+            string query = $"SELECT DISTINCT {category} FROM {table};";
+            var FilterValueList = _dblink.Select(query);
+            return FilterValueList;
         }
 
         private string _batteryId;
