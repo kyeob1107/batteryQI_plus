@@ -139,8 +139,8 @@ namespace batteryQI_plus.ViewModels
             BatteryId = "";
 
             // 타임차트
-            var queryTimeChart = _dblink.Select($"SELECT COUNT(DISTINCT lineId) AS Count FROM batteryQIPlus.productionLines;");
-            numOfLine = Convert.ToInt32(queryTimeChart[0]["Count"]) - 1;
+            var lineCountquery = _dblink.Select($"SELECT COUNT(DISTINCT lineId) AS Count FROM productionLines;");
+            numOfLine = Convert.ToInt32(lineCountquery[0]["Count"]) - 1;
             //for (int line = 0; line < numOfLine; line++)
             //{
             //    _timeCharts.Add(new AnalysisModel

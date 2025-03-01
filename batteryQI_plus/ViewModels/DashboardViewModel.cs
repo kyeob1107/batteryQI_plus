@@ -15,6 +15,7 @@ using LiveCharts.Wpf;
 using System.Drawing;
 using LiveCharts.Helpers;
 using System.Windows.Documents;
+using System.Collections.ObjectModel;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -69,20 +70,20 @@ namespace batteryQI_plus.ViewModels
 
         // 단위시간 검사 모니터링용
         int numOfLinePlusOne; // 쿼리보내서 line 몇개 있는지 count 수
-        private List<DashboardModel> _unitTest = new List<DashboardModel>();
-        private List<string> _logContent = new List<string> ();
+        private ObservableCollection<DashboardModel> _unitTest = new ObservableCollection<DashboardModel>();
+        private ObservableCollection<string> _logContent = new ObservableCollection<string> ();
         
         // 단위시간 검사 합계용
-        private List<DashboardModel> _totalUnitTest = new List<DashboardModel>();
-        private List<string> _totalLogContent = new List<string>();
+        private ObservableCollection<DashboardModel> _totalUnitTest = new ObservableCollection<DashboardModel>();
+        private ObservableCollection<string> _totalLogContent = new ObservableCollection<string>();
 
-        public List<DashboardModel> UnitTest 
+        public ObservableCollection<DashboardModel> UnitTest 
         {  
             get { return _unitTest; } 
             set { SetProperty(ref _unitTest, value); }
         }
 
-        public List<string> LogContent
+        public ObservableCollection<string> LogContent
         {
             get { return _logContent; }
             set { SetProperty(ref _logContent, value); }
@@ -90,32 +91,45 @@ namespace batteryQI_plus.ViewModels
 
         private void UpdateLogContent()
         {
+            //for (int line = 1; line < numOfLinePlusOne; line++)
+            //{
+
+            //    this.LogContent[0] += $"<Line{line} | "
+            //                        + $"{_unitTest[line].StartDatetime} ~ {_unitTest[line].EndDatetime}>"
+            //                        + "\r\n"
+            //                        + $"검사수: {_unitTest[line].InspectionCount}개 | 정상: {_unitTest[line].NormalCount}개 | "
+            //                        + $"불량: {_unitTest[line].DefectCount}개 (불량률: {_unitTest[line].DefectRate}%) "
+            //                        + "\r\n";
+
+            //    this.LogContent[line] += $"<Line{line} | "
+            //                        + $"{_unitTest[line].StartDatetime} ~ {_unitTest[line].EndDatetime}>"
+            //                        + "\r\n"
+            //                        + $"검사수: {_unitTest[line].InspectionCount}개 | 정상: {_unitTest[line].NormalCount}개 | "
+            //                        + $"불량: {_unitTest[line].DefectCount}개 (불량률: {_unitTest[line].DefectRate}%) "
+            //                        + "\r\n";
+            //}
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             for (int line = 1; line < numOfLinePlusOne; line++)
             {
-
-                this.LogContent[0] += $"<Line{line} | "
+                string newLogEntry = $"[{timestamp}] <Line{line} | "
                                     + $"{_unitTest[line].StartDatetime} ~ {_unitTest[line].EndDatetime}>"
                                     + "\r\n"
                                     + $"검사수: {_unitTest[line].InspectionCount}개 | 정상: {_unitTest[line].NormalCount}개 | "
                                     + $"불량: {_unitTest[line].DefectCount}개 (불량률: {_unitTest[line].DefectRate}%) "
-                                    + "\r\n";
+                                    + "\r\n\r\n";
 
-                this.LogContent[line] += $"<Line{line} | "
-                                    + $"{_unitTest[line].StartDatetime} ~ {_unitTest[line].EndDatetime}>"
-                                    + "\r\n"
-                                    + $"검사수: {_unitTest[line].InspectionCount}개 | 정상: {_unitTest[line].NormalCount}개 | "
-                                    + $"불량: {_unitTest[line].DefectCount}개 (불량률: {_unitTest[line].DefectRate}%) "
-                                    + "\r\n";
+                this.LogContent[0] += newLogEntry;
+                this.LogContent[line] += newLogEntry;
             }
         }
 
-        public List<DashboardModel> TotalUnitTest
+        public ObservableCollection<DashboardModel> TotalUnitTest
         {
             get { return _totalUnitTest; }
             set { SetProperty(ref _totalUnitTest, value); }
         }
 
-        public List<string> TotalLogContent
+        public ObservableCollection<string> TotalLogContent
         {
             get { return _totalLogContent; }
             set { SetProperty(ref _totalLogContent, value); }
@@ -127,22 +141,18 @@ namespace batteryQI_plus.ViewModels
             this.TotalLogContent[0] = "";
 
             // 전체에 그냥 합한 값으로 나오는 것도 추가할지 고민
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             for (int line = 1; line < numOfLinePlusOne; line++)
             {
 
-                this.TotalLogContent[0] += $"<Line{line} | "
+                string newLogEntry = $"[{timestamp}] <Line{line} | "
                                     + $"{_totalUnitTest[line].StartDatetime} ~ {_totalUnitTest[line].EndDatetime}>"
                                     + "\r\n"
                                     + $"검사수: {_totalUnitTest[line].InspectionCount}개 | 정상: {_totalUnitTest[line].NormalCount}개 | "
                                     + $"불량: {_totalUnitTest[line].DefectCount}개 (불량률: {_totalUnitTest[line].DefectRate}%) "
                                     + "\r\n";
-
-                this.TotalLogContent[line] = $"<Line{line} | "
-                                    + $"{_totalUnitTest[line].StartDatetime} ~ {_totalUnitTest[line].EndDatetime}>"
-                                    + "\r\n"
-                                    + $"검사수: {_totalUnitTest[line].InspectionCount}개 | 정상: {_totalUnitTest[line].NormalCount}개 | "
-                                    + $"불량: {_totalUnitTest[line].DefectCount}개 (불량률: {_totalUnitTest[line].DefectRate}%) "
-                                    + "\r\n";
+                this.TotalLogContent[0] += newLogEntry;
+                this.TotalLogContent[line] = newLogEntry;
             }
         }
 
@@ -207,20 +217,6 @@ namespace batteryQI_plus.ViewModels
                     Fill = System.Windows.Media.Brushes.Transparent
                 });
             }
-
-
-            //{
-            //    new LineSeries
-            //    {
-            //        Title = "Line1",
-            //        Values = values
-            //    },
-            //    new LineSeries
-            //    {
-            //        Title = "Line2",
-            //        Values = values2
-            //    }
-            //};
 
             DateTimeLabels = dates.ConvertAll(d => d.ToString("yyyy-MM-dd HH:mm:ss")); // 이거 안쓰는듯?  
 
@@ -314,8 +310,8 @@ namespace batteryQI_plus.ViewModels
             Timer?.Stop();
             Timer = null;
 
-            // 기본 클래스의 Dispose 호출 (이것이 DBlink를 정리합니다)
-            base.Dispose();
+            //// 기본 클래스의 Dispose 호출 (이것이 DBlink를 정리합니다)
+            //base.Dispose();
         }
 
         int checkTimeRangeMinites; // 차트에 그릴 시간 범위('분'단위 값)
