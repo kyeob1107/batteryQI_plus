@@ -1,32 +1,13 @@
-﻿using System;
-using System.Windows;
-using System.Collections.Generic;
+﻿using System.Windows;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using batteryQI_plus.ViewModels.Bases;
-using batteryQI_plus.Models;
-using ScottPlot;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
-using System.Diagnostics;
-using ScottPlot.Ticks;
-using System.Collections;
-using MySqlX.XDevAPI.Common;
-using System.Configuration;
-using ScottPlot.Renderable;
-using ScottPlot.Drawing.Colormaps;
-using System.Drawing;
-using batteryQI_plus.ViewModels;
 using batteryQI_plus.Models;
 using CommunityToolkit.Mvvm.Input;
 using LiveCharts;
 using LiveCharts.Wpf;
 using MySql.Data.MySqlClient;
 using System.Data;
-using System.Runtime.Serialization;
 using System.ComponentModel;
-using LiveCharts.Helpers;
 
 namespace batteryQI_plus.ViewModels
 {

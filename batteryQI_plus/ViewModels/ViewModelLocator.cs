@@ -1,12 +1,4 @@
 ﻿using batteryQI_plus.ViewModels.Bases;
-using batteryQI_plus.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace batteryQI_plus.ViewModels
 {

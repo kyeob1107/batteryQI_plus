@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows;
-using batteryQI_plus.Models;
-using batteryQI_plus.ViewModels.Bases;
+﻿using batteryQI_plus.ViewModels.Bases;
 using CommunityToolkit.Mvvm.Input;
 using batteryQI_plus.Views.UserControls;
-using batteryQI_plus.Views;
-using System.Data.Common;
 
 namespace batteryQI_plus.ViewModels
 {

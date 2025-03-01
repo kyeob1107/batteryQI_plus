@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using batteryQI_plus.ViewModels.Bases;
+﻿using batteryQI_plus.ViewModels.Bases;
 using batteryQI_plus.Models;
 using System.Windows;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
-using batteryQI_plus.Views.UserControls;
 using LiveCharts;
 using LiveCharts.Wpf;
-using System.Drawing;
 using LiveCharts.Helpers;
-using System.Windows.Documents;
 using System.Collections.ObjectModel;
 
 namespace batteryQI_plus.ViewModels
