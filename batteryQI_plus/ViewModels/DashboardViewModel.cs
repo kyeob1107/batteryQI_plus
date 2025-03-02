@@ -215,7 +215,7 @@ namespace batteryQI_plus.ViewModels
             YFormatter = value => value.ToString("N");
         }
         
-        private void UpdateMonitoringLog()
+        private void UpdateMonitoringLog(int timeFloorUnit)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -223,7 +223,7 @@ namespace batteryQI_plus.ViewModels
                 {
                     //_unitTest[line] = new DashboardModel(_dblink, _employee, line); // 나중에 이부분 함수로 깔끔하게 다듬기
                     _unitTest[line].StartDatetime = _unitTest[line].EndDatetime;
-                    _unitTest[line].EndDatetime = DateTime.Now.FloorToNearestMinutes(10);
+                    _unitTest[line].EndDatetime = DateTime.Now.FloorToNearestMinutes(timeFloorUnit);
                     // 일단 임시로 해둔 것
                     #region 검사 수 & 불량 수
                     string unitTestQuery1 = $@"SELECT 
@@ -274,7 +274,7 @@ namespace batteryQI_plus.ViewModels
             {
                 MessageBox.Show("타이머 Tick 작동\r\n" + $"{DateTime.Now}");
                 // 화면에 보이는 값들 갱신
-                UpdateMonitoringLog();
+                UpdateMonitoringLog(10);
                 UpdateProgressNTotalUnitTest();
                 UpdateLiveChart();
             });
@@ -289,7 +289,7 @@ namespace batteryQI_plus.ViewModels
             Application.Current.Dispatcher.Invoke(() =>
             {
                 MessageBox.Show("버튼 작동\r\n" + $"{DateTime.Now}");
-                UpdateMonitoringLog();
+                UpdateMonitoringLog(1);
                 UpdateProgressNTotalUnitTest();
                 UpdateLiveChart();
             });
