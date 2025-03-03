@@ -25,5 +25,15 @@ namespace batteryQI_plus.Views
             InitializeComponent();
             //this.DataContext = new LoginViewModel();
         }
+
+        // UsernameBox에서 Enter키를 누르면 PasswordBox로 포커스 이동
+        private void UsernameBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                PasswordBox.Focus();
+                e.Handled = true;
+            }
+        }
     }
 }

@@ -28,11 +28,12 @@
                 <Image Grid.Row="1" Source="/Images/logo.jpg" Width="200"/>
 
                 <!-- 로그인 UI -->
-                <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"
+                            FocusManager.FocusedElement="{Binding ElementName=UsernameBox}">
                     <TextBlock Text="LOGIN" Margin="5" FontSize="15" FontWeight="SemiBold"/>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
                         <TextBlock Text="ID" Margin="5" FontSize="15" FontWeight="SemiBold" Width="30" TextAlignment="Left"/>
-                        <TextBox Text="{Binding Employee.EmployeeID, UpdateSourceTrigger=PropertyChanged}" x:Name="UsernameBox" Width="200" Margin="5 0 0 0" Height="25" FontSize="16"/>
+                        <TextBox Text="{Binding Employee.EmployeeID, UpdateSourceTrigger=PropertyChanged}" x:Name="UsernameBox" Width="200" Margin="5 0 0 0" Height="25" FontSize="16" KeyDown="UsernameBox_KeyDown"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
@@ -40,7 +41,7 @@
                         <PasswordBox x:Name="PasswordBox" Width="200" Margin="5 0 0 0" Height="25" FontSize="16"/>
                     </StackPanel>
 
-                    <Button Content="Login" Width="80" Height="35" Margin="0 30" FontSize="15" Command = "{Binding LoginCommand}" CommandParameter="{Binding ElementName=PasswordBox}" Style="{StaticResource commonButton}"/>
+                    <Button x:Name="LoginButton" Content="Login" Width="80" Height="35" Margin="0 30" FontSize="15" Command = "{Binding LoginCommand}" CommandParameter="{Binding ElementName=PasswordBox}" Style="{StaticResource commonButton}"/>
                 </StackPanel>
             </Grid>
         </Border>
