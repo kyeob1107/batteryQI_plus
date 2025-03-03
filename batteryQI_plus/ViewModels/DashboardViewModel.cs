@@ -233,20 +233,26 @@ namespace batteryQI_plus.ViewModels
                     //                        WHERE 
                     //                         lineId = {line} 
                     //                         AND (inspectionDatetime BETWEEN '{_unitTest[line].StartDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_unitTest[line].EndDatetime.ToString("yyyy-MM-dd HH:mm:ss")}');";
-                    string unitTestQuery2 = $@"SELECT Status, COUNT(batteryId) AS cnt
-	                                           FROM 
-	                                           (
-	                                            SELECT batteryId,
-		                                               CASE
-			                                                WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) = 0 THEN 'normal'
-			                                                ELSE 'defect'
-		                                               END AS Status
-	                                            FROM batteryQIPlus.inspectionResults ir
-	                                            WHERE lineId = {line}
-		                                                AND (inspectionDatetime BETWEEN '{_unitTest[line].StartDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_unitTest[line].EndDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
-	                                                GROUP BY batteryId) AS subquery
-                                                GROUP BY Status
-                                                ORDER BY CASE WHEN Status = 'normal' THEN 0 ELSE 1 END;";
+                    string unitTestQuery2 = $@"WITH StatusList AS (
+                                                    SELECT 'normal' AS Status
+                                                    UNION ALL
+                                                    SELECT 'defect'
+                                                )
+                                                SELECT s.Status, COALESCE(COUNT(subquery.batteryId), 0) AS cnt
+                                                FROM StatusList s
+                                                LEFT JOIN (
+                                                    SELECT batteryId,
+                                                        CASE
+                                                            WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck) = 0 THEN 'normal'
+                                                            ELSE 'defect'
+                                                        END AS Status
+                                                    FROM batteryQIPlus.inspectionResults ir
+                                                    WHERE lineId = {line}
+                                                        AND (inspectionDatetime BETWEEN '{_unitTest[line].StartDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_unitTest[line].EndDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
+                                                    GROUP BY batteryId
+                                                ) AS subquery ON s.Status = subquery.Status
+                                                GROUP BY s.Status
+                                                ORDER BY CASE WHEN s.Status = 'normal' THEN 0 ELSE 1 END;";
                     #endregion
                     //List<Dictionary<string, object>> result1 = _dblink.Select(unitTestQuery1);
                     List<Dictionary<string, object>> result2 = _dblink.Select(unitTestQuery2);
