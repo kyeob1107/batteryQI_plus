@@ -106,7 +106,7 @@ namespace batteryQI_plus.ViewModels
                                     + $"{_unitTest[line].StartDatetime} ~ {_unitTest[line].EndDatetime}>"
                                     + "\r\n"
                                     + $"검사수: {_unitTest[line].InspectionCount}개 | 정상: {_unitTest[line].NormalCount}개 | "
-                                    + $"불량: {_unitTest[line].DefectCount}개 (불량률: {_unitTest[line].DefectRate}%) "
+                                    + $"불량: {_unitTest[line].DefectCount}개 (불량률: {_unitTest[line].DefectRate.ToString("F2")}%) "
                                     + "\r\n\r\n";
 
                 this.LogContent[0] += newLogEntry;
@@ -140,7 +140,7 @@ namespace batteryQI_plus.ViewModels
                                     + $"{_totalUnitTest[line].StartDatetime} ~ {_totalUnitTest[line].EndDatetime}>"
                                     + "\r\n"
                                     + $"검사수: {_totalUnitTest[line].InspectionCount}개 | 정상: {_totalUnitTest[line].NormalCount}개 | "
-                                    + $"불량: {_totalUnitTest[line].DefectCount}개 (불량률: {_totalUnitTest[line].DefectRate}%) "
+                                    + $"불량: {_totalUnitTest[line].DefectCount}개 (불량률: {_totalUnitTest[line].DefectRate.ToString("F2")}%) "
                                     + "\r\n";
                 this.TotalLogContent[0] += newLogEntry;
                 this.TotalLogContent[line] = newLogEntry;
@@ -226,26 +226,32 @@ namespace batteryQI_plus.ViewModels
                     _unitTest[line].EndDatetime = DateTime.Now.FloorToNearestMinutes(timeFloorUnit);
                     // 일단 임시로 해둔 것
                     #region 검사 수 & 불량 수
-                    string unitTestQuery1 = $@"SELECT 
-                                                COUNT(DISTINCT batteryId) AS cnt
-                                            FROM 
-	                                            inspectionResults
-                                            WHERE 
-	                                            lineId = {line} 
-	                                            AND (inspectionDatetime BETWEEN '{_unitTest[line].StartDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_unitTest[line].EndDatetime.ToString("yyyy-MM-dd HH:mm:ss")}');";
-                    string unitTestQuery2 = $@"SELECT 
-                                                COUNT(DISTINCT batteryId) AS cnt
-                                            FROM 
-	                                            inspectionResults
-                                            WHERE 
-	                                            lineId = {line} 
-	                                            AND (inspectionDatetime BETWEEN '{_unitTest[line].StartDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_unitTest[line].EndDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
-	                                            AND (fastPollutionCheck = 1 OR fastDamageCheck = 1);";
+                    //string unitTestQuery1 = $@"SELECT 
+                    //                            COUNT(DISTINCT batteryId) AS cnt
+                    //                        FROM 
+                    //                         inspectionResults
+                    //                        WHERE 
+                    //                         lineId = {line} 
+                    //                         AND (inspectionDatetime BETWEEN '{_unitTest[line].StartDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_unitTest[line].EndDatetime.ToString("yyyy-MM-dd HH:mm:ss")}');";
+                    string unitTestQuery2 = $@"SELECT Status, COUNT(batteryId) AS cnt
+	                                           FROM 
+	                                           (
+	                                            SELECT batteryId,
+		                                               CASE
+			                                                WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) = 0 THEN 'normal'
+			                                                ELSE 'defect'
+		                                               END AS Status
+	                                            FROM batteryQIPlus.inspectionResults ir
+	                                            WHERE lineId = {line}
+		                                                AND (inspectionDatetime BETWEEN '{_unitTest[line].StartDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_unitTest[line].EndDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
+	                                                GROUP BY batteryId) AS subquery
+                                                GROUP BY Status
+                                                ORDER BY CASE WHEN Status = 'normal' THEN 0 ELSE 1 END;";
                     #endregion
-                    List<Dictionary<string, object>> result1 = _dblink.Select(unitTestQuery1);
+                    //List<Dictionary<string, object>> result1 = _dblink.Select(unitTestQuery1);
                     List<Dictionary<string, object>> result2 = _dblink.Select(unitTestQuery2);
-                    _unitTest[line].InspectionCount = (result1.Count > 0) ? Convert.ToInt32(result1[0]["cnt"]) : 0;
-                    _unitTest[line].DefectCount = (result2.Count > 0) ? Convert.ToInt32(result2[0]["cnt"]) : 0;
+                    _unitTest[line].InspectionCount = (result2.Count > 0) ? Convert.ToInt32(result2[0]["cnt"]) : 0;
+                    _unitTest[line].DefectCount = (result2.Count > 0) ? Convert.ToInt32(result2[1]["cnt"]) : 0;
                     _unitTest[line].NormalCount = _unitTest[line].InspectionCount - _unitTest[line].DefectCount;
                 }
                 UpdateLogContent();
