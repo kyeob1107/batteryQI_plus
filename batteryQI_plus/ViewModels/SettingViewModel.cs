@@ -17,10 +17,11 @@ using System.Collections.ObjectModel;
 using batteryQI_plus.Views;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Globalization;
 
 namespace batteryQI_plus.ViewModels
 {
-    // 관리자 페이지
+    // 설정 조회, 설정 편집 페이지
     public partial class SettingViewModel : ViewModelBases
     {
         private Employee _employee;
@@ -48,12 +49,12 @@ namespace batteryQI_plus.ViewModels
         }
         public Action? CloseAction { get; set; } // 페이지 닫기 프로퍼티
 
-
-        [RelayCommand]
-        private void OpenEditSetting() // 설정 편집창 열기
+        [RelayCommand] private void OpenEditSetting() // 설정 편집창 열기
         {
+            getSettingItemList(); // 설정 편집창의 설정 옵션 목록 초기화
             EditSettingView editSettingPage = new EditSettingView();
             editSettingPage.ShowDialog();
+
         }
 
         private bool? LinePower() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
@@ -83,14 +84,32 @@ namespace batteryQI_plus.ViewModels
             return _isLinePower;
         }
 
-        [RelayCommand]
-        private void CheckButtonClick(object sender)
+        [RelayCommand] private void CheckButtonClick(object sender) // 변경된 설정 저장 메소드
         {
             if (System.Windows.Forms.MessageBox.Show($"변경된 설정을 저장하시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 // 선택한 설정 옵션들을 실제 프로퍼티, DB에 반영
+                for (int i = 0; i < LineSettingCollection.Count; i++)
+                {
+                    if (LineSettingCollection[i]["lineId"] == _selectedLineSetting["lineId"])
+                    {
+                        // View의 DatePicker의 SelectedDate 값이 미국식 날짜 format인 "MM/dd/yyyy hh:mm:ss tt"로만 반환되는 문제.
+                        // string -> DateTime -> string 변환으로 원하는 "yyyy-MM-dd" format으로 변환.
+                        // CultureInfo.InvariantCulture: 날짜 변환 중 문화권 형식에 의존하지 않도록 강제하는 옵션
+                        _selectedLineSetting["deadlineStart"] = _selectedLineSetting["deadlineStart"] != "" ? DateTime.Parse(_selectedLineSetting["deadlineStart"], CultureInfo.InvariantCulture)
+                            .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : "";
+                        _selectedLineSetting["deadlineEnd"] = _selectedLineSetting["deadlineEnd"] != "" ? DateTime.Parse(_selectedLineSetting["deadlineEnd"], CultureInfo.InvariantCulture)
+                            .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : "";
+
+                        int tempSelectedTabIndex = SelectedTabIndex;
+                        LineSettingCollection[i] = new Dictionary<string, string>(_selectedLineSetting); // Update values without replacing object
+                        SelectedTabIndex = tempSelectedTabIndex;
+
+                        break;
+                    }
+                }
+                CloseAction?.Invoke();
             }
-            CloseAction?.Invoke();
         }
     }
 
