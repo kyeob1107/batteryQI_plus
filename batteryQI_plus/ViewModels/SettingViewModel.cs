@@ -102,12 +102,17 @@ namespace batteryQI_plus.ViewModels
                             .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : "";
 
                         // 변경된 설정 DB 업데이트
-                        int tempSelectedTabIndex = SelectedTabIndex;
-                        LineSettingCollection[i] = new ProductionLine(_selectedLineSetting); // Update values without replacing object
-                        SelectedTabIndex = tempSelectedTabIndex;
 
-                        // 업데이트된 DB Setting 데이터를 가져와 Setting View UI 업데이트
 
+                        // 업데이트된 Setting 데이터를 가져와 Setting View UI 업데이트(현재는 C# 내부에서 업데이트, 시간 여유 있으면 DB에서 가져오는 걸로 변경)
+                        int tempSelectedTabIndex = SelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치 저장
+                        SelectedTabIndex = -1; // 설정 Tab 선택 초기화.
+                        foreach (var setting in _selectedLineSetting) // 얕은 복사
+                        {
+                            LineSettingCollection[i][setting.Key] = setting.Value;
+                        }
+                        //LineSettingCollection[i] = new ProductionLine(_selectedLineSetting); // 깊은 복사
+                        SelectedTabIndex = tempSelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치로 재이동. 재이동을 통해 Tab의 새로고침 유도
 
                         break;
                     }

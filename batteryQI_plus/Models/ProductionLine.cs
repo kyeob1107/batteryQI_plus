@@ -12,16 +12,26 @@ namespace batteryQI_plus.Models
     public class ProductionLine : ObservableObject, IReadOnlyDictionary<string, string> 
     {
         // 내부 필드와 프로퍼티
-        private string _lineId;
-        private string _usageName;
-        private string _batteryType;
-        private string _batteryShape;
-        private string _buyerName;
-        private string _quota;
-        private string _deadlineStart;
-        private string _deadlineEnd;
+        private string _lineId = "";
+        private string _usageName = "";
+        private string _batteryType = "";
+        private string _batteryShape = "";
+        private string _buyerName = "";
+        private string _quota = "";
+        private string _deadlineStart = "";
+        private string _deadlineEnd = "";
 
-        public ProductionLine() { } // 기본 생성자
+        public ProductionLine() // 기본 생성자
+        {
+            _lineId = "";
+            _usageName = "";
+            _batteryType = "";
+            _batteryShape = "";
+            _buyerName = "";
+            _quota = "";
+            _deadlineStart = "";
+            _deadlineEnd = "";
+        } 
         public ProductionLine(ProductionLine other) // 깊은 복사를 수행하는 생성자
         {
             if (other == null) throw new ArgumentNullException(nameof(other));
