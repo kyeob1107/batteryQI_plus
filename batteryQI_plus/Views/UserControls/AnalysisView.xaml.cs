@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using ScottPlot.WPF;
 using ScottPlot;
 using batteryQI_plus.ViewModels;
+using LiveCharts.Wpf;
+using LiveCharts;
 
 namespace batteryQI_plus.Views.UserControls
 {
@@ -28,6 +30,18 @@ namespace batteryQI_plus.Views.UserControls
         {
             InitializeComponent();
             //this.DataContext = new TabControlViewModel();
+        }
+
+        private void Chart_OnDataClick(object sender, ChartPoint chartpoint)
+        {
+            var chart = (LiveCharts.Wpf.PieChart)chartpoint.ChartView;
+
+            //clear selected slice.
+            foreach (PieSeries series in chart.Series)
+                series.PushOut = 0;
+
+            var selectedSeries = (PieSeries)chartpoint.SeriesView;
+            selectedSeries.PushOut = 8;
         }
     }
 }

@@ -66,7 +66,7 @@ namespace batteryQI_plus.Models
             _endDatetime = DateTime.Now.FloorToNearestMinutes(10);
             //MessageBox.Show(_startDatetime.ToString());
             //MessageBox.Show(_endDatetime.ToString());
-            Console.WriteLine(_startDatetime.ToString()+"~"+_endDatetime.ToString());
+            //Console.WriteLine(_startDatetime.ToString()+"~"+_endDatetime.ToString());
 
             // 일단 임시로 해둔 것
             #region 검사 수 & 불량 수

@@ -197,12 +197,13 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                         <!-- 그래프 Placeholder -->
                         <!--<TextBlock Text="불량비율 그래프 영역 (바인딩 필요)" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
                         <lvc:PieChart LegendLocation="Right" 
-                                      Hoverable="False" 
+                                      Hoverable="True" 
                                       DataTooltip="{x:Null}"
-                                      Series="{Binding SeriesCollectionPie}">
-                            <lvc:PieChart.DataClickCommand>
-                                <Binding Path="DataClickCommand" />
-                            </lvc:PieChart.DataClickCommand>
+                                      Series="{Binding SeriesCollectionPie}"
+                                      DataClick="Chart_OnDataClick">
+                            <!--<lvc:PieChart.DataClickCommand>
+                                <Binding Path="Chart_OnDataClickCommand" />
+                            </lvc:PieChart.DataClickCommand>-->
                         </lvc:PieChart>
                     </Border>
                 </TabItem>

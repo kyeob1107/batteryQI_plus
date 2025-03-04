@@ -10,6 +10,9 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.ComponentModel;
 using ZstdSharp.Unsafe;
+using System.Windows.Shapes;
+using Google.Protobuf.WellKnownTypes;
+using Newtonsoft.Json.Linq;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -41,6 +44,94 @@ namespace batteryQI_plus.ViewModels
         {
             get => _endTime;
             set => SetProperty(ref _endTime, value);
+        }
+
+        private ObservableCollection<AnalysisModel> _timeChart = new ObservableCollection<AnalysisModel>();
+        public ObservableCollection<AnalysisModel> TimeChart
+        {
+            get { return _timeChart; }
+            set { SetProperty(ref _timeChart, value); }
+        }
+
+        private void InitializeMultipleTimeCharts(int numOfLine)
+        {
+            for (int line = 0; line < numOfLine; line++)
+            {
+                Console.WriteLine($"라인{line+1}입니다");
+                //string query_timeChart = $@"SELECT time_interval, COUNT(batteryId)
+                //                        FROM (
+                //                         SELECT 
+                //                                CONCAT(DATE_FORMAT(inspectionDatetime, '%Y-%m-%d %H:'), 
+                //                                  LPAD(CEIL(MINUTE(inspectionDatetime) / 10) * 10, 2, '0')) AS time_interval,
+                //                                batteryId, 
+                //                          CASE
+                //                          WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) = 0 THEN 'normal'
+                //                          ELSE 'defect'
+                //                         END AS Status
+                //                            FROM batteryQIPlus.inspectionResults
+                //                            WHERE lineid = {line}
+                //                            GROUP BY time_interval, batteryId
+                //                            ) AS subquery
+                //                        WHERE Status = 'defect'
+                //                        GROUP BY time_interval;";
+
+                // 임시용
+                string startDateForQuery = "2025-03-03 09:00";
+                string endDateForQuery = "2025-03-03 23:50";
+                string query_timeChart = @$"WITH RECURSIVE TimeIntervals AS (
+                                                SELECT CAST('{startDateForQuery}' AS DATETIME) AS time_interval
+                                                UNION ALL
+                                                SELECT time_interval + INTERVAL 30 MINUTE
+                                                FROM TimeIntervals
+                                                WHERE time_interval < '{endDateForQuery}'
+                                            )
+                                            SELECT 
+                                                t.time_interval,
+                                                COALESCE(SUM(CASE WHEN subquery.Status = 'normal' THEN 1 ELSE 0 END), 0) AS normal_cnt,
+                                                COALESCE(SUM(CASE WHEN subquery.Status = 'defect' THEN 1 ELSE 0 END), 0) AS defect_cnt
+                                            FROM 
+                                                TimeIntervals t
+                                            LEFT JOIN (
+                                                SELECT 
+                                                    CONCAT(DATE_FORMAT(inspectionDatetime, '%Y-%m-%d %H:'), 
+                                                            LPAD(FLOOR(MINUTE(inspectionDatetime) / 30) * 30, 2, '0')) AS time_interval,
+                                                    batteryId, 
+                                                    CASE
+                                                        WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck) = 0 THEN 'normal'
+                                                        ELSE 'defect'
+                                                    END AS Status
+                                                FROM batteryQIPlus.inspectionResults
+                                                WHERE lineid = {line+1}
+                                                GROUP BY time_interval, batteryId
+                                            ) AS subquery ON t.time_interval = subquery.time_interval
+                                            GROUP BY t.time_interval
+                                            ORDER BY t.time_interval;";
+                //string query_timeChart = @$"SELECT 
+                //                                time_interval,
+                //                                COALESCE(SUM(CASE WHEN subquery.Status = 'normal' THEN 1 ELSE 0 END), 0) AS normal_cnt,
+                //                                COALESCE(SUM(CASE WHEN subquery.Status = 'defect' THEN 1 ELSE 0 END), 0) AS defect_cnt
+                //                            FROM 
+                //                                (
+                //                                SELECT 
+                //                                    CONCAT(DATE_FORMAT(inspectionDatetime, '%Y-%m-%d %H:'), 
+                //                                            LPAD(FLOOR(MINUTE(inspectionDatetime) / 30) * 30, 2, '0')) AS time_interval,
+                //                                    batteryId, 
+                //                                    CASE
+                //                                        WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck) = 0 THEN 'normal'
+                //                                        ELSE 'defect'
+                //                                    END AS Status
+                //                                FROM batteryQIPlus.inspectionResults
+                //                                WHERE lineid = {line}
+                //                                GROUP BY time_interval, batteryId
+                //                            ) AS subquery
+                //                            GROUP BY time_interval
+                //                            ORDER BY time_interval;";
+
+                var queryResult = _dblink.Select(query_timeChart);
+                //foreach (string key in queryResult[0].Keys) { Console.WriteLine(key); }
+                AnalysisModel model = new AnalysisModel("timeChart", queryResult);
+                _timeChart.Add(model);
+            }
         }
 
         public AnalysisViewModel()
@@ -122,6 +213,7 @@ namespace batteryQI_plus.ViewModels
             BatteryId = "";
 
             // 타임차트
+
             var lineCountquery = _dblink.Select($"SELECT COUNT(DISTINCT lineId) AS Count FROM productionLines;");
             numOfLine = Convert.ToInt32(lineCountquery[0]["Count"]) - 1;
             //for (int line = 0; line < numOfLine; line++)
@@ -133,70 +225,87 @@ namespace batteryQI_plus.ViewModels
             //    });
             //}
             //SeriesCollectionTimeChart = new SeriesCollection();
-            var dates = new List<DateTime>
-            {
-                DateTime.Now.AddMinutes(-60),
-                DateTime.Now.AddMinutes(-50),
-                DateTime.Now.AddMinutes(-40),
-                DateTime.Now.AddMinutes(-30),
-                DateTime.Now.AddMinutes(-20),
-                DateTime.Now.AddMinutes(-10),
-                DateTime.Now
-            };
+            
+            InitializeMultipleTimeCharts(numOfLine);
+
+            var dates = _timeChart[0].TimeList; // new List<DateTime>();
+
+
+
+
             SeriesCollectionTimeChart = new SeriesCollection();
-            //for (int i = 0; i < numOfLine; i++)
-            //{
-            //    var innerList = new List<double>();
-            //    SeriesCollectionTimeChart.Add(
-            //    new LineSeries
+            for (int i = 0; i < numOfLine; i++)
+            {
+                var innerList = new List<double>();
+                SeriesCollectionTimeChart.Add(
+                new LineSeries
+                {
+                    Title = $"Line{i + 1}",
+                    //Values = innerList.AsChartValues(),
+                    Values = new ChartValues<double>(_timeChart[i].CountValue),
+                    Fill = System.Windows.Media.Brushes.Transparent
+                });
+            }
+            //SeriesCollectionTimeChart.Add(new LineSeries
             //    {
-            //        Title = $"Line{i + 1}",
+            //        Title = $"Line1",
             //        //Values = innerList.AsChartValues(),
             //        Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 10.0, 60.0, 12.0 },
             //        Fill = System.Windows.Media.Brushes.Transparent
             //    });
-            //}
-            SeriesCollectionTimeChart.Add(new LineSeries
-                {
-                    Title = $"Line1",
-                    //Values = innerList.AsChartValues(),
-                    Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 10.0, 60.0, 12.0 },
-                    Fill = System.Windows.Media.Brushes.Transparent
-                });
-            SeriesCollectionTimeChart.Add(new LineSeries
-            {
-                Title = $"Line2",
-                //Values = innerList.AsChartValues(),
-                Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 10.0, 30.0, 12.0 },
-                Fill = System.Windows.Media.Brushes.Transparent
-            });
-            SeriesCollectionTimeChart.Add(new LineSeries
-            {
-                Title = $"Line3",
-                //Values = innerList.AsChartValues(),
-                Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 25.0, 10.0, 12.0 },
-                Fill = System.Windows.Media.Brushes.Transparent
-            });
+            //SeriesCollectionTimeChart.Add(new LineSeries
+            //{
+            //    Title = $"Line2",
+            //    //Values = innerList.AsChartValues(),
+            //    Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 10.0, 30.0, 12.0 },
+            //    Fill = System.Windows.Media.Brushes.Transparent
+            //});
+            //SeriesCollectionTimeChart.Add(new LineSeries
+            //{
+            //    Title = $"Line3",
+            //    //Values = innerList.AsChartValues(),
+            //    Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 25.0, 10.0, 12.0 },
+            //    Fill = System.Windows.Media.Brushes.Transparent
+            //});
 
             DateTimeFormatter = value => dates[((int)value)].ToString("yyyy-MM-dd HH:mm:ss");
+            //DateTimeFormatter = value =>
+            //{
+            //    try
+            //    {
+            //        if (!(value is int))
+            //            throw new InvalidCastException($"Value is not an integer: {value},{value.GetType()}");
+
+            //        int index = (int)value;
+
+            //        if (index < 0 || index >= dates.Count)
+            //            throw new IndexOutOfRangeException($"Index {index} is out of range for dates array.");
+
+            //        return dates[index].ToString("yyyy-MM-dd HH:mm:ss");
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine($"Error occurred. Value: {value}, Exception: {ex}");
+            //        throw;
+            //    }
+            //};
             YFormatter = value => value.ToString("N");
 
             // 파이차트
             // 값 가져오는 할당해서 만드는 함수화 하는게 보기 편할듯
             // 쿼리 엄밀하게 배터리 수가 아니라 그냥 이미지 수로 때려박는거라 정확하지 않음 다시짜줘야함
             // 할려면 미리 배터리별로 groupby해서 check결과 합해서 0인지 확인하는 방식으로 서브쿼리로 짜줘야할듯
-            string query_Pie = @$"SELECT 
-                                    CASE 
-                                        WHEN fastPollutionCheck = 0 AND fastDamageCheck = 0 THEN '오염'
-                                        WHEN fastPollutionCheck = 0 AND fastDamageCheck = 1 THEN '손상'
-                                        WHEN fastPollutionCheck = 1 AND fastDamageCheck = 1 THEN '오염과 손상'
-                                        ELSE '정상'
-                                    END AS Status,
-                                    COUNT(DISTINCT batteryId) AS batteryCount
-                                FROM 
-                                    inspectionResults
-                                GROUP BY 
-                                    Status;";
+            string query_Pie = @$"SELECT Status, COUNT(batteryId) AS batteryCount
+	                            FROM (SELECT batteryId,
+			                            CASE
+				                            WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) = 0 THEN 'normal'
+				                            WHEN SUM(fastPollutionCheck) <> 0 AND SUM(fastDamageCheck ) = 0 THEN 'pollution'
+				                            WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) <> 0 THEN 'damage'
+				                            ELSE 'pollution & damage'
+			                            END AS Status
+		                            FROM inspectionResults
+		                            GROUP BY batteryId) AS subquery
+	                            GROUP BY Status;";
             var result_Pie = _dblink.Select(query_Pie);
 
             SeriesCollectionPie = new SeriesCollection();
@@ -414,6 +523,11 @@ namespace batteryQI_plus.ViewModels
             }
         }
 
+        private void ApplyFilter()
+        {
+
+        }
+
         [RelayCommand]
         private void Search()
         {
@@ -441,17 +555,17 @@ namespace batteryQI_plus.ViewModels
         public Func<ChartPoint, string> PointLabel { get; set; }
 
         // 이거 이렇게 하니까 작동안하는듯
-        [RelayCommand]
-        private void Chart_OnDataClick(ChartPoint chartpoint)
-        {
-            var chart = (LiveCharts.Wpf.PieChart)chartpoint.ChartView;
+        //[RelayCommand]
+        //private void Chart_OnDataClick(ChartPoint chartpoint)
+        //{
+        //    var chart = (LiveCharts.Wpf.PieChart)chartpoint.ChartView;
 
-            foreach (PieSeries series in chart.Series)
-                series.PushOut = 0;
+        //    foreach (PieSeries series in chart.Series)
+        //        series.PushOut = 0;
 
-            var selectedSeries = (PieSeries)chartpoint.SeriesView;
-            selectedSeries.PushOut = 8;
-        }
+        //    var selectedSeries = (PieSeries)chartpoint.SeriesView;
+        //    selectedSeries.PushOut = 8;
+        //}
 
         // column차트
         private SeriesCollection _seriesCollectionColumn;

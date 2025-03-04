@@ -343,7 +343,7 @@ namespace batteryQI_plus.ViewModels
         {
             for (int i = 0; i < numOfLinePlusOne-1; i++)
             {
-                Console.WriteLine();
+                //Console.WriteLine();
                 //int line = i + 1; 
                 if (dataListLiveChart[i].Count >= numOfData)
                 {
