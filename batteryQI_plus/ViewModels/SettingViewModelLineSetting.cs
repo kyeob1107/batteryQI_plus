@@ -15,20 +15,11 @@ namespace batteryQI_plus.ViewModels
 {
     public partial class SettingViewModel : ViewModelBases // View에 출력할 생산라인 설정 프로퍼티 선언용
     {
-        // 생산라인 설정 템플릿
-        private static readonly Dictionary<string, string> _settingTemplate
-            = new Dictionary<string, string>
-            {
-                { "lineId", "" }, // 생산라인 Id
-                { "usageName", "" }, { "batteryType", "" }, { "batteryShape", "" }, // 생산라인 담당 배터리 정보
-                { "buyerName", ""}, { "quota", "" }, { "deadlineStart", ""}, { "deadlineEnd", "" }, // 생산라인 담당 발주처 정보
-            };
-
         // Setting View 필드
         private bool _isEditSettingRole; // 설정 편집창을 열 수 있는 권한 설정
         private int _selectedTabIndex;
-        private ObservableCollection<Dictionary<string, string>> _lineSettingCollection 
-            = new ObservableCollection<Dictionary<string, string>>(); // Setting View 각 생산라인별 설정 저장
+        private ObservableCollection<ProductionLine> _lineSettingCollection 
+            = new ObservableCollection<ProductionLine>(); // Setting View 각 생산라인별 설정 저장
 
         // EditSetting View 필드
         private IList<string> _lineIdList; // 설정 옵션 컨트롤 목록(combobox, textbox, Datepicker) items 필드
@@ -39,7 +30,7 @@ namespace batteryQI_plus.ViewModels
         private IList<string> _quotaList;
         private IList<string> _deadlineStartList;
         private IList<string> _deadlineEndList;
-        private Dictionary<string, string> _selectedLineSetting = new Dictionary<string, string>(_settingTemplate); // 선택된 설정 옵션 필드
+        private ProductionLine _selectedLineSetting = new ProductionLine(); // 선택된 설정 옵션 필드
             
 
         // Setting View 프로퍼티
@@ -53,7 +44,7 @@ namespace batteryQI_plus.ViewModels
             get => _selectedTabIndex;
             set => SetProperty(ref _selectedTabIndex, value);
         }
-        public ObservableCollection<Dictionary<string, string>> LineSettingCollection
+        public ObservableCollection<ProductionLine> LineSettingCollection
         {
             get => _lineSettingCollection;
             set => SetProperty(ref _lineSettingCollection, value);
@@ -100,7 +91,7 @@ namespace batteryQI_plus.ViewModels
             get => _deadlineEndList;
             set => SetProperty(ref _deadlineEndList, value);
         }
-        public Dictionary<string, string> SelectedLineSetting
+        public ProductionLine SelectedLineSetting
         {
             get => _selectedLineSetting;
             set => SetProperty(ref _selectedLineSetting, value);
@@ -123,11 +114,11 @@ namespace batteryQI_plus.ViewModels
                 string? deadlineStart = row.TryGetValue("deadlineStart", out var deadlineStartObj) && deadlineStartObj != null ? deadlineStartObj.ToString() : "";
                 string? deadlineEnd = row.TryGetValue("deadlineEnd", out var deadlineEndObj) && deadlineEndObj != null ? deadlineEndObj.ToString() : "";
 
-                _lineSettingCollection.Add(new Dictionary<string, string>(_settingTemplate)
+                _lineSettingCollection.Add(new ProductionLine()
                 {
-                    ["lineId"] = lineId,
-                    ["usageName"] = usageName, ["batteryType"] = batteryType, ["batteryShape"] = batteryShape,
-                    ["buyerName"] = buyerName, ["quota"] = quota, ["deadlineStart"] = deadlineStart, ["deadlineEnd"] = deadlineEnd
+                    LineId = lineId,
+                    UsageName = usageName, BatteryType = batteryType, BatteryShape = batteryShape,
+                    BuyerName = buyerName, Quota = quota, DeadlineStart = deadlineStart, DeadlineEnd = deadlineEnd
                 });
             }
         }

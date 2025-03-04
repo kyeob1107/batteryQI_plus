@@ -103,7 +103,7 @@ namespace batteryQI_plus.ViewModels
 
                         // 변경된 설정 DB 업데이트
                         int tempSelectedTabIndex = SelectedTabIndex;
-                        LineSettingCollection[i] = new Dictionary<string, string>(_selectedLineSetting); // Update values without replacing object
+                        LineSettingCollection[i] = new ProductionLine(_selectedLineSetting); // Update values without replacing object
                         SelectedTabIndex = tempSelectedTabIndex;
 
                         // 업데이트된 DB Setting 데이터를 가져와 Setting View UI 업데이트

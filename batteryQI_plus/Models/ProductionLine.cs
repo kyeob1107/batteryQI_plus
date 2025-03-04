@@ -21,6 +21,21 @@ namespace batteryQI_plus.Models
         private string _deadlineStart;
         private string _deadlineEnd;
 
+        public ProductionLine() { } // 기본 생성자
+        public ProductionLine(ProductionLine other) // 깊은 복사를 수행하는 생성자
+        {
+            if (other == null) throw new ArgumentNullException(nameof(other));
+
+            _lineId = other._lineId;
+            _usageName = other._usageName;
+            _batteryType = other._batteryType;
+            _batteryShape = other._batteryShape;
+            _buyerName = other._buyerName;
+            _quota = other._quota;
+            _deadlineStart = other._deadlineStart;
+            _deadlineEnd = other._deadlineEnd;
+        }
+
         public string LineId
         {
             get => _lineId;
@@ -75,14 +90,54 @@ namespace batteryQI_plus.Models
             {
                 switch (key)
                 {
-                    case "lineId": return LineId;
-                    case "usageName": return UsageName;
-                    case "batteryType": return BatteryType;
-                    case "batteryShape": return BatteryShape;
-                    case "buyerName": return BuyerName;
-                    case "quota": return Quota;
-                    case "deadlineStart": return DeadlineStart;
-                    case "deadlineEnd": return DeadlineEnd;
+                    case "lineId": case "LineId":
+                        return LineId;
+                    case "usageName": case "UsageName":
+                        return UsageName;
+                    case "batteryType": case "BatteryType":
+                        return BatteryType;
+                    case "batteryShape": case "BatteryShape":
+                        return BatteryShape;
+                    case "buyerName": case "BuyerName":
+                        return BuyerName;
+                    case "quota": case "Quota":
+                        return Quota;
+                    case "deadlineStart": case "DeadlineStart":
+                        return DeadlineStart;
+                    case "deadlineEnd": case "DeadlineEnd":
+                        return DeadlineEnd;
+                    default:
+                        throw new KeyNotFoundException($"키 '{key}'가 ProductionLine에 존재하지 않습니다.");
+                }
+            }
+            set
+            {
+                switch (key)
+                {
+                    case "lineId": case "LineId":
+                        LineId = value;
+                        break;
+                    case "usageName": case "UsageName":
+                        UsageName = value;
+                        break;
+                    case "batteryType": case "BatteryType":
+                        BatteryType = value;
+                        break;
+                    case "batteryShape": case "BatteryShape":
+                        BatteryShape = value;
+                        break;
+                    case "buyerName": case "BuyerName":
+                        BuyerName = value;
+                        break;
+                    case "quota": case "Quota":
+                        Quota = value;
+                        break;
+                    case "deadlineStart": case "DeadlineStart":
+                        DeadlineStart = value;
+                        break;
+                    case "deadlineEnd": case "DeadlineEnd":
+                        DeadlineEnd = value;
+                        break;
                     default:
                         throw new KeyNotFoundException($"키 '{key}'가 ProductionLine에 존재하지 않습니다.");
                 }
