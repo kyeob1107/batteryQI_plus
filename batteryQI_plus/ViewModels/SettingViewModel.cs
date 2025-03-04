@@ -101,9 +101,13 @@ namespace batteryQI_plus.ViewModels
                         _selectedLineSetting["deadlineEnd"] = _selectedLineSetting["deadlineEnd"] != "" ? DateTime.Parse(_selectedLineSetting["deadlineEnd"], CultureInfo.InvariantCulture)
                             .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : "";
 
+                        // 변경된 설정 DB 업데이트
                         int tempSelectedTabIndex = SelectedTabIndex;
                         LineSettingCollection[i] = new Dictionary<string, string>(_selectedLineSetting); // Update values without replacing object
                         SelectedTabIndex = tempSelectedTabIndex;
+
+                        // 업데이트된 DB Setting 데이터를 가져와 Setting View UI 업데이트
+
 
                         break;
                     }

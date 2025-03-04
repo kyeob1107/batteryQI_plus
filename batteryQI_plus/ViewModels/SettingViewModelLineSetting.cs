@@ -110,7 +110,8 @@ namespace batteryQI_plus.ViewModels
         {
             _lineSettingCollection.Clear();
             List<Dictionary<string, object>> lineSettingCollection = 
-                _dblink.Select("SELECT pl.lineId, pl.usageName, pl.batteryType, pl.batteryShape, b.buyerName, pl.quota, pl.deadlineStart, pl.deadlineEnd FROM productionLines pl LEFT JOIN buyers b ON pl.buyerId = b.buyerId WHERE lineId<> 0; "); // 0번 행(관리자 직책)은 실질적인 생산라인이 아니기 때문에 제외 
+                _dblink.Select("SELECT pl.lineId, pl.usageName, pl.batteryType, pl.batteryShape, b.buyerName, pl.quota, pl.deadlineStart, pl.deadlineEnd " +
+                "FROM productionLines pl LEFT JOIN buyers b ON pl.buyerId = b.buyerId WHERE lineId<> 0; "); // 0번 행(관리자 직책)은 실질적인 생산라인이 아니기 때문에 제외 
             foreach (var row in lineSettingCollection) // 생산라인 행별로 설정 저장. TryGetValue 사용시 불필요한 인덱싱과 예외 발생 가능성을 줄여 더 빠르다고함
             {
                 string? lineId = row.TryGetValue("lineId", out var lineIdObj) && lineIdObj != null ? lineIdObj.ToString() : "";
