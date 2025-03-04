@@ -29,8 +29,9 @@
                                     HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,14,60,0" Padding="10,5" Width="150" Height="55"
                                     Command="{Binding OpenEditSettingCommand}" IsEnabled="{Binding IsEditSettingRole}"/>
 
-                        <TabControl ItemsSource="{Binding LineSettingCollection}"
-                                    d:ItemsSource="{StaticResource DummyTabItems}"
+                        <TabControl d:ItemsSource="{StaticResource DummyTabItems}"
+                                    ItemsSource="{Binding LineSettingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
                                     Background="#6a5dae" Margin="15 20 15 15" BorderThickness="0">
                             <TabControl.Resources>
                                 <Style TargetType="TabItem">

@@ -21,7 +21,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock Style="{StaticResource titleText}" Text="설정 편집" HorizontalAlignment="Center" FontSize="30" Margin="0 15" FontWeight="SemiBold"/>
-            
+
 
             <Border Grid.Row="1" CornerRadius="10" Margin="20 0 20 10">
                 <Border.Background>
@@ -100,72 +100,46 @@
 
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="생산라인" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <ComboBox Name="ProductionLines" Grid.Row="0" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
-                            <ComboBoxItem IsSelected="True">
-                                <TextBlock Text="생산라인1" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="생산라인2" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="생산라인3" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                        </ComboBox>
+                        <ComboBox Name="LineIdBox" Grid.Row="0" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150"
+                                  ItemsSource="{Binding Path=LineIdList}" FontSize="18" VerticalAlignment="Center"
+                                  SelectedItem="{Binding SelectedLineSetting[lineId]}"/>
 
-                        <TextBlock Name="BatteryUsages" Grid.Row="1" Grid.Column="0" Text="배터리 사용처" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
-                            <ComboBoxItem IsSelected="True">
-                                <TextBlock Text="Industrial" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="Household" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                        </ComboBox>
+                        <Border BorderBrush="Gray" BorderThickness="0,3,0,0" Margin="25,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"/>
 
-                        <TextBlock Name="BatteryTypes" Grid.Row="2" Grid.Column="0" Text="배터리 타입" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <ComboBox Grid.Row="2" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
-                            <ComboBoxItem IsSelected="True">
-                                <TextBlock Text="Cell" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="Module" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="Pack" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                        </ComboBox>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="배터리 사용처" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
+                        <ComboBox Name="UsageNameBox" Grid.Row="1" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150"
+                                  ItemsSource="{Binding Path=UsageNameList}" FontSize="18" VerticalAlignment="Center"
+                                  SelectedItem="{Binding SelectedLineSetting[usageName]}"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="배터리 타입" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
+                        <ComboBox Name="BatteryTypeBox" Grid.Row="2" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150"
+                                  ItemsSource="{Binding Path=BatteryTypeList}" FontSize="18" VerticalAlignment="Center"
+                                  SelectedItem="{Binding SelectedLineSetting[batteryType]}"/>
 
                         <TextBlock Grid.Row="3" Grid.Column="0" Text="배터리 형태" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <ComboBox Name="BatteryShapes" Grid.Row="3" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
-                            <ComboBoxItem IsSelected="True">
-                                <TextBlock Text="Cylinder" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="Pouch" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                        </ComboBox>
+                        <ComboBox Name="BatteryShapeBox" Grid.Row="3" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150"
+                                  ItemsSource="{Binding Path=BatteryShapeList}" FontSize="18" VerticalAlignment="Center"
+                                  SelectedItem="{Binding SelectedLineSetting[batteryShape]}"/>
 
                         <TextBlock Grid.Row="4" Grid.Column="0" Text="발주처" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <ComboBox Name="Buyers" Grid.Row="4" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150">
-                            <ComboBoxItem IsSelected="True">
-                                <TextBlock Text="삼성" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="테슬라" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <TextBlock Text="Self" FontSize="18" VerticalAlignment="Center" TextAlignment="Left"/>
-                            </ComboBoxItem>
-                        </ComboBox>
+                        <ComboBox Name="BuyerNameBox" Grid.Row="4" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150"
+                                  ItemsSource="{Binding Path=BuyerNameList}" FontSize="18" VerticalAlignment="Center"
+                                  SelectedItem="{Binding SelectedLineSetting[buyerName]}"/>
 
                         <TextBlock Grid.Row="5" Grid.Column="0" Text="할당량" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <TextBox Name="Quota" Grid.Row="5" Grid.Column="1" Background="#FFE5E5E5" Text="2000" FontSize="20" BorderThickness="1" VerticalAlignment="Center" TextAlignment="Left" Width="150" Margin="30 0 20 0"/>
+                        <TextBox Name="QuotaText" Grid.Row="5" Grid.Column="1" Width="150" Margin="30 0 20 0" Background="#FFE5E5E5"
+                                 FontSize="20" VerticalAlignment="Center" TextAlignment="Left"
+                                 Text="{Binding SelectedLineSetting[quota]}"/>
+
 
                         <TextBlock Grid.Row="6" Grid.Column="0" Text="마감기한:" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
-                        <DatePicker Name="DeadlineStart" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Text="null" FontSize="15" VerticalAlignment="Center" Width="120" Margin="-260 0 0 0"/>
+                        <DatePicker Name="DeadlineStartPicker" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Width="120" Margin="-260 0 0 0" 
+                                    FontSize="15" VerticalAlignment="Center"
+                                    SelectedDate="{Binding SelectedLineSetting[deadlineStart]}"/>
                         <TextBlock Grid.Row="6" Grid.Column="1" Text="~" FontSize="20" VerticalAlignment="Center" TextAlignment="Center" Width="30" Margin="-110,0,0,0"/>
-                        <DatePicker Name="DeadlineEnd" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Text="null" FontSize="15" VerticalAlignment="Center" Width="120" Margin="40,0,0,0"/>
-
+                        <DatePicker Name="DeadlineEndPicker" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Width="120" Margin="40,0,0,0"
+                                    FontSize="15" VerticalAlignment="Center"
+                                    SelectedDate="{Binding SelectedLineSetting[deadlineEnd]}"/>
                     </Grid>
                 </Grid>
             </Border>
