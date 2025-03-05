@@ -22,16 +22,14 @@ namespace batteryQI_plus.ViewModels
             = new ObservableCollection<ProductionLine>(); // Setting View 각 생산라인별 설정 저장
 
         // EditSetting View 필드
-        // 설정 옵션 컨트롤 목록(combobox, textbox, Datepicker) items 필드
+        // 설정 옵션 combobox Item 목록
         private IList<string> _lineIdList; 
         private IList<string> _usageNameList;
         private IList<string> _batteryTypeList;
         private IList<string> _batteryShapeList;
         private Dictionary<string, string> _buyerDataDic; // Key: 발주처 Id, Value: 발주처 이름을 저장한 딕셔너리. 같은 발주처를 의미하는 Id와 이름끼리 묶어 한 요소로 취급
-        private IList<string> _quotaList;
-        private IList<string> _deadlineStartList;
-        private IList<string> _deadlineEndList;
         private ProductionLine _selectedLineSetting = new ProductionLine(); // 선택된 설정 옵션 필드
+        private string _selectedLineId; // EditSetting View에서 선택한 LineId에 따라 나머지 설정 옵션들이 현재 설정값을 가리키도록 Triger를 설정하기 위한 프로퍼티
 
         // Setting View 프로퍼티
         public bool IsEditSettingRole
@@ -75,21 +73,6 @@ namespace batteryQI_plus.ViewModels
         {
             get => _buyerDataDic;
             set => SetProperty(ref _buyerDataDic, value);
-        }
-        public IList<string> QuotaList
-        {
-            get => _quotaList;
-            set => SetProperty(ref _quotaList, value);
-        }
-        public IList<string> DeadlineStartList
-        {
-            get => _deadlineStartList;
-            set => SetProperty(ref _deadlineStartList, value);
-        }
-        public IList<string> DeadlineEndList
-        {
-            get => _deadlineEndList;
-            set => SetProperty(ref _deadlineEndList, value);
         }
         public ProductionLine SelectedLineSetting
         {
@@ -137,15 +120,6 @@ namespace batteryQI_plus.ViewModels
             {
                 BuyerDataDic.Add(dict["buyerId"].ToString(), dict["buyerName"].ToString());
             }
-            QuotaList = _lineSettingCollection
-                .Where(dict => dict.ContainsKey("quota"))
-                .Select(dict => dict["quota"]).ToList();
-            DeadlineStartList = _lineSettingCollection
-                .Where(dict => dict.ContainsKey("deadlineStart"))
-                .Select(dict => dict["deadlineStart"]).ToList();
-            DeadlineEndList = _lineSettingCollection
-                .Where(dict => dict.ContainsKey("deadlineEnd"))
-                .Select(dict => dict["deadlineEnd"]).ToList();
         }
     }
 }
