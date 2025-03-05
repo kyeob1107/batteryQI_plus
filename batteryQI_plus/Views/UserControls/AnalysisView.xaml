@@ -169,7 +169,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                     <!-- id 검색 영역 -->
                     <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
                         <TextBlock Text="배터리 id:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,5,0"/>
-                        <TextBox Text="{Binding BatteryId}"/>
+                        <TextBox Text="{Binding BatteryId}" PreviewTextInput="TextBox_PreviewTextInput"/>
                     </StackPanel>
                     <!-- 조회 버튼 -->
                     <Button Grid.Column="2" Content="조회" Width="60" Height="60"
