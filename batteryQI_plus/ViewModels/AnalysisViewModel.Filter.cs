@@ -14,128 +14,20 @@ namespace batteryQI_plus.ViewModels
     public partial class AnalysisViewModel
     {
         private DateTime _startDate;
-        public DateTime StartDate
-        {
-            get => _startDate;
-            set => SetProperty(ref _startDate, value);
-        }
-
         private string _startTime;
-        public string StartTime
-        {
-            get => _startTime;
-            set => SetProperty(ref _startTime, value);
-        }
-
         private DateTime _endDate;
-        public DateTime EndDate
-        {
-            get => _endDate;
-            set => SetProperty(ref _endDate, value);
-        }
-
         private string _endTime;
-        public string EndTime
-        {
-            get => _endTime;
-            set => SetProperty(ref _endTime, value);
-        }
-
         private DateTime _dateRangeStart;
-        public DateTime DateRangeStart
-        {
-            get => _dateRangeStart;
-            set => SetProperty(ref _dateRangeStart, value);
-        }
-
         private DateTime _dateRangeEnd;
-        public DateTime DateRangeEnd
-        {
-            get => _dateRangeEnd;
-            set => SetProperty(ref _dateRangeEnd, value);
-        }
-
         private string _batteryId;
-        public string BatteryId
-        {
-            get { return _batteryId; }
-            set
-            {
-                SetProperty(ref _batteryId, value);
-                //MessageBox.Show(BatteryId); // 디버그용
-            }
-        }
-
-        // 시간을 파싱하고 유효성을 검사하는 메서드
-        private DateTime CombineDateAndTime(DateTime date, string time)
-        {
-            if (TimeSpan.TryParse(time, out TimeSpan timeSpan))
-            {
-                return date.Date + timeSpan;
-            }
-            return date;
-        }
-
-        // 날짜와 시간을 결합하여 완전한 DateTime을 얻는 메서드
-        public DateTime GetStartDateTime()
-        {
-            return CombineDateAndTime(StartDate, StartTime);
-        }
-
-        public DateTime GetEndDateTime()
-        {
-            return CombineDateAndTime(EndDate, EndTime);
-        }
-
         private ObservableCollection<SelectableItem> _usageItems;
-        public ObservableCollection<SelectableItem> UsageItems
-        {
-            get => _usageItems;
-            set => SetProperty(ref _usageItems, value);
-        }
-
         private ObservableCollection<SelectableItem> _buyerItems;
-        public ObservableCollection<SelectableItem> BuyerItems
-        {
-            get => _buyerItems;
-            set => SetProperty(ref _buyerItems, value);
-        }
-
         private ObservableCollection<SelectableItem> _batteryTypeItems;
-        public ObservableCollection<SelectableItem> BatteryTypeItems
-        {
-            get => _batteryTypeItems;
-            set => SetProperty(ref _batteryTypeItems, value);
-        }
-
         private ObservableCollection<SelectableItem> _batteryShapeItems;
-        public ObservableCollection<SelectableItem> BatteryShapeItems
-        {
-            get => _batteryShapeItems;
-            set => SetProperty(ref _batteryShapeItems, value);
-        }
-
         private ObservableCollection<SelectableItem> _statusItems;
-        public ObservableCollection<SelectableItem> StatusItems
-        {
-            get => _statusItems;
-            set => SetProperty(ref _statusItems, value);
-        }
-
         private ObservableCollection<SelectableItem> _productionLineItems;
-        public ObservableCollection<SelectableItem> ProductionLineItems
-        {
-            get => _productionLineItems;
-            set => SetProperty(ref _productionLineItems, value);
-        }
-        private List<Dictionary<string, object>> SelectFilterValue(string category, string table = "batteryInfo")
-        {
-            string query = $"SELECT DISTINCT {category} FROM {table};";
-            var FilterValueList = _dblink.Select(query);
-            return FilterValueList;
-        }
 
-        private List<string> FilterBatteryIds()
+        private List<List<string>> FilterBatteryIds()
         {
             Console.WriteLine("필터메소드 작동\r\n");
             string filter = "";
@@ -151,14 +43,16 @@ namespace batteryQI_plus.ViewModels
             _productionLineItems - pie는 라인을 데이터 가져올때 용
              */
             List<string> filteredBatteryIds = new List<string>();
+            List<string> filteredBatteryIds_status = new List<string>();
             Dictionary<string, List<string>> checkedList = new Dictionary<string, List<string>>
             {
-                { "usageName", new List<string>()},
-                { "buyerName", new List<string>()},
-                { "batteryType", new List<string>()},
-                { "batteryShape", new List<string>()}
+                { "usageName", new List<string>() },
+                { "buyerName", new List<string>() },
+                { "batteryType", new List<string>() },
+                { "batteryShape", new List<string>() },
+                { "lineId", new List<string>() }
             };
-            // usageItems
+            // 체크내용 확인
             foreach (var item in _usageItems)
             {
                 if (item.IsSelected) { checkedList["usageName"].Add(item.Name); }
@@ -174,6 +68,10 @@ namespace batteryQI_plus.ViewModels
             foreach (var item in _batteryShapeItems)
             {
                 if (item.IsSelected) { checkedList["batteryShape"].Add(item.Name); }
+            }
+            foreach (var item in _productionLineItems)
+            {
+                if (item.IsSelected) { checkedList["lineId"].Add(item.Name.Replace("Line","")); }
             }
 
             foreach (KeyValuePair<string, List<string>> item in checkedList)
@@ -192,10 +90,20 @@ namespace batteryQI_plus.ViewModels
                                      INNER JOIN buyers b ON bi.buyerId = b.buyerId
                                      WHERE {filter};";
 
+            // 상태에 따른 batteryId값 조건에 추가 - 얘는 보통 다 체크해두고 쓸듯하여 체크해제한 얘를 제거하는 방식으로 구현
+            List<string> notCheckedList_Status = new List<string>();
+            foreach (var item in _statusItems)
+            {
+                if (!item.IsSelected) { notCheckedList_Status.Add(item.Name); }
+            }
+
             try
             {
-                using (MySqlCommand cmd = new MySqlCommand(query_filter, _dblink.connection))
+                using (MySqlCommand cmd = new MySqlCommand())
                 {
+                    cmd.Connection = _dblink.connection;
+                    // 종합적인 필터부분
+                    cmd.CommandText = query_filter;
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -203,7 +111,31 @@ namespace batteryQI_plus.ViewModels
                             object value = reader.GetValue(0);
                             filteredBatteryIds.Add(value.ToString());
                         }
-                        Console.WriteLine($"값불러오는 것도 했음: {string.Join(", ", filteredBatteryIds)}");
+                        //Console.WriteLine($"값불러오는 것도 했음: {string.Join(", ", filteredBatteryIds)}");
+                    }
+                    if (notCheckedList_Status.Count > 0)
+                    {
+                        // status 필터부분
+                        string query_statusfilter = @$"SELECT batteryId,
+                                                        CASE
+                                                            WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) = 0 THEN '정상'
+                                                            WHEN SUM(fastPollutionCheck) <> 0 AND SUM(fastDamageCheck ) = 0 THEN '오염'
+                                                            WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) <> 0 THEN '손상'
+                                                            ELSE '오염 & 손상'
+                                                        END AS Status
+                                                    FROM inspectionResults
+                                                    GROUP BY batteryId
+                                                    HAVING Status IN ({string.Join(',', notCheckedList_Status.Select(v => $"\'{v}\'"))});";
+                        cmd.CommandText = query_statusfilter;
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                object value = reader.GetValue(0);
+                                filteredBatteryIds_status.Add(value.ToString());
+                            }
+                            //Console.WriteLine($"값불러오는 것도 했음: {string.Join(", ", filteredBatteryIds)}");
+                        }
                     }
                 }
             }
@@ -216,9 +148,107 @@ namespace batteryQI_plus.ViewModels
                     MessageBox.Show($"데이터베이스 접속 오류 \r\n 에러메시지: {ex.Message}",
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            Console.WriteLine(string.Join(", ", filteredBatteryIds));
+            //Console.WriteLine(string.Join(", ", filteredBatteryIds));
+            List<List<string>> result = new List<List<string>> { filteredBatteryIds, filteredBatteryIds_status };
+            return result;
+        }
 
-            return filteredBatteryIds;
+        // 시간을 파싱하고 유효성을 검사하는 메서드
+        private DateTime CombineDateAndTime(DateTime date, string time)
+        {
+            if (TimeSpan.TryParse(time, out TimeSpan timeSpan))
+            {
+                return date.Date + timeSpan;
+            }
+            return date;
+        }
+
+        // 날짜와 시간을 결합하여 완전한 DateTime을 얻는 메서드
+        public DateTime GetStartDateTime()
+        {
+            return CombineDateAndTime(StartDate, StartTime);
+        }
+        public DateTime GetEndDateTime()
+        {
+            return CombineDateAndTime(EndDate, EndTime);
+        }
+        
+        private List<Dictionary<string, object>> SelectFilterValue(string category, string table = "batteryInfo")
+        {
+            string query = $"SELECT DISTINCT {category} FROM {table};";
+            var FilterValueList = _dblink.Select(query);
+            return FilterValueList;
+        }
+
+        // 프로퍼티
+        public DateTime StartDate
+        {
+            get => _startDate;
+            set => SetProperty(ref _startDate, value);
+        }
+        public string StartTime
+        {
+            get => _startTime;
+            set => SetProperty(ref _startTime, value);
+        }
+        public DateTime EndDate
+        {
+            get => _endDate;
+            set => SetProperty(ref _endDate, value);
+        }
+        public string EndTime
+        {
+            get => _endTime;
+            set => SetProperty(ref _endTime, value);
+        }
+        public DateTime DateRangeStart
+        {
+            get => _dateRangeStart;
+            set => SetProperty(ref _dateRangeStart, value);
+        }
+        public DateTime DateRangeEnd
+        {
+            get => _dateRangeEnd;
+            set => SetProperty(ref _dateRangeEnd, value);
+        }
+        public string BatteryId
+        {
+            get { return _batteryId; }
+            set
+            {
+                SetProperty(ref _batteryId, value);
+                //MessageBox.Show(BatteryId); // 디버그용
+            }
+        }
+        public ObservableCollection<SelectableItem> UsageItems
+        {
+            get => _usageItems;
+            set => SetProperty(ref _usageItems, value);
+        }
+        public ObservableCollection<SelectableItem> BuyerItems
+        {
+            get => _buyerItems;
+            set => SetProperty(ref _buyerItems, value);
+        }
+        public ObservableCollection<SelectableItem> BatteryTypeItems
+        {
+            get => _batteryTypeItems;
+            set => SetProperty(ref _batteryTypeItems, value);
+        }
+        public ObservableCollection<SelectableItem> BatteryShapeItems
+        {
+            get => _batteryShapeItems;
+            set => SetProperty(ref _batteryShapeItems, value);
+        }
+        public ObservableCollection<SelectableItem> StatusItems
+        {
+            get => _statusItems;
+            set => SetProperty(ref _statusItems, value);
+        }
+        public ObservableCollection<SelectableItem> ProductionLineItems
+        {
+            get => _productionLineItems;
+            set => SetProperty(ref _productionLineItems, value);
         }
     }
 }

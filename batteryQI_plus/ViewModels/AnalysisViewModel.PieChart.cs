@@ -32,7 +32,7 @@ namespace batteryQI_plus.ViewModels
         //    var selectedSeries = (PieSeries)chartpoint.SeriesView;
         //    selectedSeries.PushOut = 8;
         //}
-        private void DrawPieChart(string filter = "TRUE")
+        private void DrawPieChart(string filter = "TRUE", string filter2_notIN = "TRUE")
         {
             string query_Pie = @$"SELECT Status, COUNT(batteryId) AS batteryCount
 	                            FROM (SELECT batteryId,
@@ -43,7 +43,7 @@ namespace batteryQI_plus.ViewModels
 				                            ELSE 'pollution & damage'
 			                            END AS Status
 		                            FROM inspectionResults
-                                    WHERE {filter}
+                                    WHERE {filter} AND {filter2_notIN}
 		                            GROUP BY batteryId) AS subquery
 	                            GROUP BY Status
                                 ORDER BY 

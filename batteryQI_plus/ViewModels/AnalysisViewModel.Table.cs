@@ -21,14 +21,22 @@ namespace batteryQI_plus.ViewModels
         }
 
         // 이름 DrawTable로 할까 고민중
-        private void LoadData(string filter = "TRUE")
+        private void LoadData(string filter = "TRUE", string filter2_notIN = "TRUE")
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) // 디자인 타임(모드) 동안 DB 연결이 수행되는것을 방지
                 return;
 
             try
             {
-                string tablequery = $"SELECT * FROM inspectionResults WHERE {filter}";
+                string tablequery;
+                if (_batteryId == "")
+                {
+                    tablequery = $"SELECT * FROM inspectionResults WHERE {filter} AND {filter2_notIN}";
+                }
+                else
+                {
+                    tablequery = $"SELECT * FROM inspectionResults WHERE batteryId = {_batteryId}";
+                }
                 Console.WriteLine("테이블: " + tablequery);
                 // 이 부분 using 사용하는 것으로 수정하기
                 MySqlCommand cmd = new MySqlCommand(tablequery, _dblink.connection);

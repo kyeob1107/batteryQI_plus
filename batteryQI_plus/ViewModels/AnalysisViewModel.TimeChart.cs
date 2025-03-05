@@ -19,8 +19,8 @@ namespace batteryQI_plus.ViewModels
             set { SetProperty(ref _timeChart, value); }
         }
 
-        // 이름 수정해야할 듯
-        private void InitializeMultipleTimeCharts(int numOfLine, string filter = "TRUE")
+        // 이름 수정해야할 듯, 추가로 numOfLine 그냥 private 변수인 numOfLine쓰게 할지 아니면 인자로 받게 할지 고민
+        private void InitializeMultipleTimeCharts(int numOfLine, string filter = "TRUE", string filter2_notIN = "TRUE")
         {
             // 초기화 필요해서 일단 당장 이 방식으로 해줬음
             _timeChart = new ObservableCollection<AnalysisModel>();
@@ -54,7 +54,7 @@ namespace batteryQI_plus.ViewModels
                                                         ELSE 'defect'
                                                     END AS Status
                                                 FROM batteryQIPlus.inspectionResults
-                                                WHERE lineid = {line + 1} AND {filter}
+                                                WHERE lineid = {line + 1} AND {filter} AND {filter2_notIN}
                                                 GROUP BY time_interval, batteryId
                                             ) AS subquery ON t.time_interval = subquery.time_interval
                                             GROUP BY t.time_interval
@@ -69,6 +69,28 @@ namespace batteryQI_plus.ViewModels
             // 이부분 원래 함수 밖에 있다가 함수로 옮김 이부분 확인다시 해봐야함
             var dates = _timeChart[0].TimeList; // new List<DateTime>();
             DateTimeFormatter = value => dates[((int)value)].ToString("yyyy-MM-dd HH:mm:ss");
+            #region 에러상황방지 - 현재는 이렇게까진 필요없을 듯하여 보류
+            //DateTimeFormatter = value =>
+            //{
+            //    try
+            //    {
+            //        if (!(value is int))
+            //            throw new InvalidCastException($"Value is not an integer: {value},{value.GetType()}");
+
+            //        int index = (int)value;
+
+            //        if (index < 0 || index >= dates.Count)
+            //            throw new IndexOutOfRangeException($"Index {index} is out of range for dates array.");
+
+            //        return dates[index].ToString("yyyy-MM-dd HH:mm:ss");
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine($"Error occurred. Value: {value}, Exception: {ex}");
+            //        throw;
+            //    }
+            //};
+            #endregion
         }
 
         // 시간별 라인차트
@@ -95,7 +117,7 @@ namespace batteryQI_plus.ViewModels
         //    set { SetProperty(ref _yFormatter, value); }
         //}
 
-        private void DrawTimeChart(string filter = "TRUE")
+        private void DrawTimeChart(string filter = "TRUE", string filter2_notIN = "TRUE")
         {
             InitializeMultipleTimeCharts(numOfLine, filter);
 
