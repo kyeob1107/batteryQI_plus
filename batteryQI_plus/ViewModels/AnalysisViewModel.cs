@@ -13,6 +13,8 @@ using ZstdSharp.Unsafe;
 using System.Windows.Shapes;
 using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json.Linq;
+using Microsoft.ML.OnnxRuntime;
+using System.Collections.Generic;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -46,6 +48,20 @@ namespace batteryQI_plus.ViewModels
             set => SetProperty(ref _endTime, value);
         }
 
+        private DateTime _dateRangeStart;
+        public DateTime DateRangeStart
+        {
+            get => _dateRangeStart;
+            set => SetProperty(ref _dateRangeStart, value);
+        }
+
+        private DateTime _dateRangeEnd;
+        public DateTime DateRangeEnd
+        {
+            get => _dateRangeEnd;
+            set => SetProperty(ref _dateRangeEnd, value);
+        }
+
         private ObservableCollection<AnalysisModel> _timeChart = new ObservableCollection<AnalysisModel>();
         public ObservableCollection<AnalysisModel> TimeChart
         {
@@ -53,31 +69,18 @@ namespace batteryQI_plus.ViewModels
             set { SetProperty(ref _timeChart, value); }
         }
 
-        private void InitializeMultipleTimeCharts(int numOfLine)
+        // 이름 수정해야할 듯
+        private void InitializeMultipleTimeCharts(int numOfLine, string filter = "TRUE")
         {
+            // 초기화 필요해서 일단 당장 이 방식으로 해줬음
+            _timeChart = new ObservableCollection<AnalysisModel>();
             for (int line = 0; line < numOfLine; line++)
             {
                 Console.WriteLine($"라인{line+1}입니다");
-                //string query_timeChart = $@"SELECT time_interval, COUNT(batteryId)
-                //                        FROM (
-                //                         SELECT 
-                //                                CONCAT(DATE_FORMAT(inspectionDatetime, '%Y-%m-%d %H:'), 
-                //                                  LPAD(CEIL(MINUTE(inspectionDatetime) / 10) * 10, 2, '0')) AS time_interval,
-                //                                batteryId, 
-                //                          CASE
-                //                          WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) = 0 THEN 'normal'
-                //                          ELSE 'defect'
-                //                         END AS Status
-                //                            FROM batteryQIPlus.inspectionResults
-                //                            WHERE lineid = {line}
-                //                            GROUP BY time_interval, batteryId
-                //                            ) AS subquery
-                //                        WHERE Status = 'defect'
-                //                        GROUP BY time_interval;";
 
                 // 임시용
-                string startDateForQuery = "2025-03-03 09:00";
-                string endDateForQuery = "2025-03-03 23:50";
+                string startDateForQuery = GetStartDateTime().ToString("yyyy-MM-dd HH:mm:ss"); // "2025-03-03 09:00";
+                string endDateForQuery = GetEndDateTime().ToString("yyyy-MM-dd HH:mm:ss"); //"2025-03-03 23:50";
                 string query_timeChart = @$"WITH RECURSIVE TimeIntervals AS (
                                                 SELECT CAST('{startDateForQuery}' AS DATETIME) AS time_interval
                                                 UNION ALL
@@ -101,45 +104,38 @@ namespace batteryQI_plus.ViewModels
                                                         ELSE 'defect'
                                                     END AS Status
                                                 FROM batteryQIPlus.inspectionResults
-                                                WHERE lineid = {line+1}
+                                                WHERE lineid = {line+1} AND {filter}
                                                 GROUP BY time_interval, batteryId
                                             ) AS subquery ON t.time_interval = subquery.time_interval
                                             GROUP BY t.time_interval
                                             ORDER BY t.time_interval;";
-                //string query_timeChart = @$"SELECT 
-                //                                time_interval,
-                //                                COALESCE(SUM(CASE WHEN subquery.Status = 'normal' THEN 1 ELSE 0 END), 0) AS normal_cnt,
-                //                                COALESCE(SUM(CASE WHEN subquery.Status = 'defect' THEN 1 ELSE 0 END), 0) AS defect_cnt
-                //                            FROM 
-                //                                (
-                //                                SELECT 
-                //                                    CONCAT(DATE_FORMAT(inspectionDatetime, '%Y-%m-%d %H:'), 
-                //                                            LPAD(FLOOR(MINUTE(inspectionDatetime) / 30) * 30, 2, '0')) AS time_interval,
-                //                                    batteryId, 
-                //                                    CASE
-                //                                        WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck) = 0 THEN 'normal'
-                //                                        ELSE 'defect'
-                //                                    END AS Status
-                //                                FROM batteryQIPlus.inspectionResults
-                //                                WHERE lineid = {line}
-                //                                GROUP BY time_interval, batteryId
-                //                            ) AS subquery
-                //                            GROUP BY time_interval
-                //                            ORDER BY time_interval;";
-
+                Console.WriteLine("타임차트: " + query_timeChart);
                 var queryResult = _dblink.Select(query_timeChart);
                 //foreach (string key in queryResult[0].Keys) { Console.WriteLine(key); }
                 AnalysisModel model = new AnalysisModel("timeChart", queryResult);
                 _timeChart.Add(model);
             }
+            
+            // 이부분 원래 함수 밖에 있다가 함수로 옮김 이부분 확인다시 해봐야함
+            var dates = _timeChart[0].TimeList; // new List<DateTime>();
+            DateTimeFormatter = value => dates[((int)value)].ToString("yyyy-MM-dd HH:mm:ss");
         }
 
         public AnalysisViewModel()
         {
+            string query_dateRange = @"SELECT 
+                                        MIN(Date(inspectionDatetime)) AS minDate, 
+                                        MAX(Date(inspectionDatetime)) AS maxDate 
+                                       FROM inspectionResults;";
+            var result_DateRange = _dblink.Select(query_dateRange);
+            DateRangeStart = (DateTime)result_DateRange[0]["minDate"];
+            DateRangeEnd = (DateTime)result_DateRange[0]["maxDate"];
             // 초기값 설정
-            StartDate = DateTime.Today; // 값수정 필요
+            //StartDate = DateTime.Today; // 값수정 필요
+            StartDate = DateRangeStart;
             StartTime = "00:00:00";
-            EndDate = DateTime.Today; // 값수정 필요
+            //EndDate = DateTime.Today; // 값수정 필요
+            EndDate = DateRangeEnd;
             EndTime = "23:59:59";
 
             // Initialize UsageItems with sample data
@@ -150,7 +146,7 @@ namespace batteryQI_plus.ViewModels
                 UsageItems.Add(
                     new SelectableItem 
                     { 
-                        Name = (string)UsageFilterlist[i]["usageName"], IsSelected = false 
+                        Name = (string)UsageFilterlist[i]["usageName"], IsSelected = true 
                     });
             }
 
@@ -163,7 +159,7 @@ namespace batteryQI_plus.ViewModels
                     new SelectableItem
                     {
                         Name = (string)BuyerFilterlist[i]["buyerName"],
-                        IsSelected = false
+                        IsSelected = true
                     });
             }
 
@@ -175,7 +171,7 @@ namespace batteryQI_plus.ViewModels
                     new SelectableItem
                     {
                         Name = (string)BatteryTypeFilterlist[i]["batteryType"],
-                        IsSelected = false
+                        IsSelected = true
                     });
             }
 
@@ -187,15 +183,15 @@ namespace batteryQI_plus.ViewModels
                     new SelectableItem
                     {
                         Name = (string)BatteryShapeFilterlist[i]["batteryShape"],
-                        IsSelected = false
+                        IsSelected = true
                     });
             }
 
             StatusItems = new ObservableCollection<SelectableItem>
             {
-                new SelectableItem { Name = "정상", IsSelected = false },
-                new SelectableItem { Name = "오염", IsSelected = false },
-                new SelectableItem { Name = "파손", IsSelected = false }
+                new SelectableItem { Name = "정상", IsSelected = true },
+                new SelectableItem { Name = "오염", IsSelected = true },
+                new SelectableItem { Name = "파손", IsSelected = true }
             };
 
             ProductionLineItems = new ObservableCollection<SelectableItem>();
@@ -206,7 +202,7 @@ namespace batteryQI_plus.ViewModels
                     new SelectableItem
                     {
                         Name = "Line" + ProductionLineFilterlist[i]["lineId"].ToString(),
-                        IsSelected = false
+                        IsSelected = true
                     });
             }
 
@@ -228,11 +224,6 @@ namespace batteryQI_plus.ViewModels
             
             InitializeMultipleTimeCharts(numOfLine);
 
-            var dates = _timeChart[0].TimeList; // new List<DateTime>();
-
-
-
-
             SeriesCollectionTimeChart = new SeriesCollection();
             for (int i = 0; i < numOfLine; i++)
             {
@@ -246,29 +237,7 @@ namespace batteryQI_plus.ViewModels
                     Fill = System.Windows.Media.Brushes.Transparent
                 });
             }
-            //SeriesCollectionTimeChart.Add(new LineSeries
-            //    {
-            //        Title = $"Line1",
-            //        //Values = innerList.AsChartValues(),
-            //        Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 10.0, 60.0, 12.0 },
-            //        Fill = System.Windows.Media.Brushes.Transparent
-            //    });
-            //SeriesCollectionTimeChart.Add(new LineSeries
-            //{
-            //    Title = $"Line2",
-            //    //Values = innerList.AsChartValues(),
-            //    Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 10.0, 30.0, 12.0 },
-            //    Fill = System.Windows.Media.Brushes.Transparent
-            //});
-            //SeriesCollectionTimeChart.Add(new LineSeries
-            //{
-            //    Title = $"Line3",
-            //    //Values = innerList.AsChartValues(),
-            //    Values = new ChartValues<double> { 10.0, 11.0, 9.0, 5.0, 25.0, 10.0, 12.0 },
-            //    Fill = System.Windows.Media.Brushes.Transparent
-            //});
-
-            DateTimeFormatter = value => dates[((int)value)].ToString("yyyy-MM-dd HH:mm:ss");
+            
             //DateTimeFormatter = value =>
             //{
             //    try
@@ -309,44 +278,16 @@ namespace batteryQI_plus.ViewModels
             var result_Pie = _dblink.Select(query_Pie);
 
             SeriesCollectionPie = new SeriesCollection();
-            foreach(var item in result_Pie)
+            
+            foreach (var item in result_Pie)
             {
                 SeriesCollectionPie.Add(new PieSeries
                 {
                     Title = (string)item["Status"],
                     Values = new ChartValues<double> { Convert.ToDouble(item["batteryCount"]) },
-                    DataLabels = true
+                    DataLabels = true //default값이 true인듯
                 });
             }
-            #region 예제 삭제예정
-            // 원래 생성자 쪽에 달려있던 고정 예시 초기값
-            //{
-            //    new PieSeries
-            //    {
-            //        Title = "Maria",
-            //        Values = new ChartValues<double> { 3 },
-            //        DataLabels = true
-            //    },
-            //    new PieSeries
-            //    {
-            //        Title = "Charles",
-            //        Values = new ChartValues<double> { 4 },
-            //        DataLabels = true
-            //    },
-            //    new PieSeries
-            //    {
-            //        Title = "Frida",
-            //        Values = new ChartValues<double> { 6 },
-            //        DataLabels = true
-            //    },
-            //    new PieSeries
-            //    {
-            //        Title = "Frederic",
-            //        Values = new ChartValues<double> { 2 },
-            //        DataLabels = true
-            //    }
-            //};
-            #endregion
 
             PointLabel = chartPoint =>
                 string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
@@ -406,7 +347,8 @@ namespace batteryQI_plus.ViewModels
                 {
                     Title = (string)result_column[s]["Status"],
                     //Values = valueListColumn.AsChartValues()
-                    Values = new ChartValues<int>(valueListColumn)
+                    Values = new ChartValues<int>(valueListColumn),
+                    DataLabels = true
                 });
             }
 
@@ -523,16 +465,108 @@ namespace batteryQI_plus.ViewModels
             }
         }
 
-        private void ApplyFilter()
+        private List<string> FilterBatteryIds()
         {
+            Console.WriteLine("필터메소드 작동\r\n");
+            string filter = "";
+            filter += @$"(inspectionDatetime BETWEEN '{GetStartDateTime().ToString("yyyy-MM-dd HH:mm:ss")}' 
+                        AND '{GetEndDateTime().ToString("yyyy-MM-dd HH:mm:ss")}')";
+            /*
+            _usageItems
+            _buyerItems
+            _batteryTypeItems
+            _batteryShapeItems
+            ------------------------------------------------------------
+            _statusItems - 이건 그냥하면 안됨
+            _productionLineItems - pie는 라인을 데이터 가져올때 용
+             */
+            List<string> filteredBatteryIds =  new List<string>();
+            Dictionary<string, List<string>> checkedList = new Dictionary<string, List<string>>
+            {
+                { "usageName", new List<string>()},
+                { "buyerName", new List<string>()},
+                { "batteryType", new List<string>()},
+                { "batteryShape", new List<string>()}
+            };
+            // usageItems
+            foreach (var item in _usageItems)
+            {
+                if (item.IsSelected) { checkedList["usageName"].Add(item.Name); }
+            }
+            foreach (var item in _buyerItems)
+            {
+                if (item.IsSelected) { checkedList["buyerName"].Add(item.Name); }
+            }
+            foreach (var item in _batteryTypeItems)
+            {
+                if (item.IsSelected) { checkedList["batteryType"].Add(item.Name); }
+            }
+            foreach (var item in _batteryShapeItems)
+            {
+                if (item.IsSelected) { checkedList["batteryShape"].Add(item.Name); }
+            }
 
+            foreach (KeyValuePair<string, List<string>> item in checkedList)
+            {
+                if (item.Value.Count > 0) 
+                {
+                    if (filter != "") filter += " AND ";
+                    filter += $"{item.Key} IN ({string.Join(", ", item.Value.Select(v => $"\'{v}\'"))})";
+
+                }
+            }
+            if (filter == "") { filter = "False"; }
+            Console.WriteLine(filter);
+            string query_filter = @$"SELECT batteryId 
+                                     FROM batteryInfo bi 
+                                     INNER JOIN buyers b ON bi.buyerId = b.buyerId
+                                     WHERE {filter};";
+
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query_filter, _dblink.connection))
+                {
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            object value = reader.GetValue(0);
+                            filteredBatteryIds.Add(value.ToString());
+                        }
+                        Console.WriteLine($"값불러오는 것도 했음: {string.Join(", ", filteredBatteryIds)}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (_dblink.connection == null)
+                    MessageBox.Show($"데이터베이스 접속 오류 \r\n 에러메시지: {ex.Message} 연결 안됨 에러위치: {ex.StackTrace}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                else
+                    MessageBox.Show($"데이터베이스 접속 오류 \r\n 에러메시지: {ex.Message}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            Console.WriteLine(string.Join(", ", filteredBatteryIds));
+            
+            return filteredBatteryIds;
         }
 
         [RelayCommand]
         private void Search()
         {
+
+            //Console.WriteLine($"{GetStartDateTime().ToString("yyyy-MM-dd HH:mm:ss")} ~ {GetEndDateTime().ToString("yyyy-MM-dd HH:mm:ss")}");
             // 검색 조건 설정 내용 출력
-            MessageBox.Show(BatteryId);
+            var temp = FilterBatteryIds();
+            //Console.WriteLine("디버깅:" + string.Join(", ", temp) + ": 여기까지");
+            string filteredBatteryIds_string = string.Join(", ", FilterBatteryIds());
+            //Console.WriteLine("필터로 쓰이는건" + filteredBatteryIds_string);
+            string filterCondition = filteredBatteryIds_string.Length>0 ? $"batteryId IN ({filteredBatteryIds_string})" : "TRUE";
+            DrawTimeChart(filterCondition);
+            DrawPieChart(filterCondition);
+            DrawColumnChart(filterCondition);
+            LoadData(filterCondition);
+            //MessageBox.Show(BatteryId);
         }
 
 
@@ -546,11 +580,49 @@ namespace batteryQI_plus.ViewModels
             get { return _seriesCollectionTimeChart; }
             set { SetProperty(ref _seriesCollectionTimeChart, value); }
         }
-        public Func<double, string> DateTimeFormatter { get; set; }
+        private Func<double, string> _dateTimeFormatter;
+        public Func<double, string> DateTimeFormatter
+        {
+            get { return _dateTimeFormatter; }
+            set { SetProperty(ref _dateTimeFormatter, value); }
+        }
         public Func<double, string> YFormatter { get; set; }
+        // 이건 굳이 할 필요 없는 듯하여 하지 않음
+        //private Func<double, string> _yFormatter;
+        //public Func<double, string> YFormatter
+        //{
+        //    get { return _yFormatter; }
+        //    set { SetProperty(ref _yFormatter, value); }
+        //}
+
+        private void DrawTimeChart(string filter = "TRUE")
+        {
+            InitializeMultipleTimeCharts(numOfLine, filter);
+
+            //var dates = _timeChart[0].TimeList; // new List<DateTime>();
+
+            SeriesCollectionTimeChart = new SeriesCollection();
+            for (int i = 0; i < numOfLine; i++)
+            {
+                var innerList = new List<double>();
+                SeriesCollectionTimeChart.Add(
+                new LineSeries
+                {
+                    Title = $"Line{i + 1}",
+                    //Values = innerList.AsChartValues(),
+                    Values = new ChartValues<double>(_timeChart[i].CountValue),
+                    Fill = System.Windows.Media.Brushes.Transparent
+                });
+            }
+        }
 
         // 파이차트
-        public SeriesCollection SeriesCollectionPie { get; set; }
+        private SeriesCollection _seriesCollectionPie;
+        public SeriesCollection SeriesCollectionPie
+        {
+            get { return _seriesCollectionPie; }
+            set { SetProperty(ref _seriesCollectionPie, value); }
+        }
 
         public Func<ChartPoint, string> PointLabel { get; set; }
 
@@ -566,6 +638,42 @@ namespace batteryQI_plus.ViewModels
         //    var selectedSeries = (PieSeries)chartpoint.SeriesView;
         //    selectedSeries.PushOut = 8;
         //}
+        private void DrawPieChart(string filter = "TRUE")
+        {
+            string query_Pie = @$"SELECT Status, COUNT(batteryId) AS batteryCount
+	                            FROM (SELECT batteryId,
+			                            CASE
+				                            WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) = 0 THEN 'normal'
+				                            WHEN SUM(fastPollutionCheck) <> 0 AND SUM(fastDamageCheck ) = 0 THEN 'pollution'
+				                            WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) <> 0 THEN 'damage'
+				                            ELSE 'pollution & damage'
+			                            END AS Status
+		                            FROM inspectionResults
+                                    WHERE {filter}
+		                            GROUP BY batteryId) AS subquery
+	                            GROUP BY Status
+                                ORDER BY 
+                                    CASE
+                                        WHEN Status = 'normal' THEN 0
+                                        WHEN Status = 'pollution' THEN 1
+                                        WHEN Status = 'damage' THEN 2
+                                        ELSE 3
+                                    END;";
+            Console.WriteLine("파이차트: " + query_Pie);
+            var result_Pie = _dblink.Select(query_Pie);
+
+            SeriesCollectionPie = new SeriesCollection();
+
+            foreach (var item in result_Pie)
+            {
+                SeriesCollectionPie.Add(new PieSeries
+                {
+                    Title = (string)item["Status"],
+                    Values = new ChartValues<double> { Convert.ToDouble(item["batteryCount"]) },
+                    DataLabels = true //default값이 true인듯
+                });
+            }
+        }
 
         // column차트
         private SeriesCollection _seriesCollectionColumn;
@@ -577,6 +685,74 @@ namespace batteryQI_plus.ViewModels
         public string[] LabelsColumn { get; set; }
         public Func<double, string> FormatterColumn { get; set; }
 
+        private void DrawColumnChart(string filter = "TRUE")
+        {
+            PointLabel = chartPoint =>
+                string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+
+            // column차트 - 따로 메소드 만들어서 사용하는 식으로 해야할듯
+            string query_column = $@"WITH StatusList AS (
+                                            SELECT * FROM (
+                                            VALUES 
+                                                ROW('normal'),
+                                                ROW('pollution'),
+                                                ROW('damage'),
+                                                ROW('pollution & damage')
+                                            ) AS t(Status)
+                                        ),
+                                        LineList AS (
+                                            SELECT DISTINCT lineId
+                                            FROM batteryQIPlus.inspectionResults
+                                        )
+                                        SELECT l.lineId, sl.Status, COALESCE(COUNT(s.batteryId), 0) AS Count
+                                        FROM LineList l
+                                        CROSS JOIN StatusList sl
+                                        LEFT JOIN (
+                                                SELECT lineId, batteryId,
+                                                CASE
+                                                    WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) = 0 THEN 'normal'
+                                                    WHEN SUM(fastPollutionCheck) <> 0 AND SUM(fastDamageCheck ) = 0 THEN 'pollution'
+                                                    WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) <> 0 THEN 'damage'
+                                                    ELSE 'pollution & damage'
+                                                END AS Status
+                                            FROM batteryQIPlus.inspectionResults
+                                            WHERE {filter}
+                                            GROUP BY lineId, batteryId) AS s ON l.lineId = s.lineId AND sl.Status = s.Status                         
+                                            GROUP BY l.lineId, sl.Status
+                                        ORDER BY l.lineId, 
+                                                CASE
+                                                    WHEN sl.Status = 'normal' THEN 0
+                                                    WHEN sl.Status = 'pollution' THEN 1
+                                                    WHEN sl.Status = 'damage' THEN 2
+                                                    ELSE 3
+                                                END;";
+
+            Console.WriteLine("콜롬차트: " + query_column);
+            //     WHERE inspectionDatetime BETWEEN '2025-02-28 22:10:00' AND '2025-03-02 12:30:00'
+
+            List<Dictionary<string, object>> result_column = _dblink.Select(query_column);
+
+            int numOfStatus = 4;
+            int numOfLineColumn = result_column.Count / numOfStatus; // 일단 임시로 선언, 나중에 통일시켜도 될듯
+            SeriesCollectionColumn = new SeriesCollection();
+            List<int> valueListColumn = new List<int>(); // 값 저장해서 chartvalues로 설정할 때 쓸 리스트
+            for (int s = 0; s < numOfStatus; s++)
+            {
+                valueListColumn.Clear();
+                for (int line = 0; line < numOfLineColumn; line++)
+                {
+                    valueListColumn.Add(Convert.ToInt32(result_column[line * numOfStatus + s]["Count"]));
+                }
+                SeriesCollectionColumn.Add(new ColumnSeries
+                {
+                    Title = (string)result_column[s]["Status"],
+                    //Values = valueListColumn.AsChartValues()
+                    Values = new ChartValues<int>(valueListColumn),
+                    DataLabels = true
+                });
+            }
+        }
+
         // 테이블 뷰
         private DataView _queryResultsTable;
         public DataView QueryResultsTable
@@ -584,15 +760,17 @@ namespace batteryQI_plus.ViewModels
             get => _queryResultsTable;
             set => SetProperty(ref _queryResultsTable, value);
         }
-
-        private void LoadData()
+        
+        // 이름 DrawTable로 할까 고민중
+        private void LoadData(string filter = "TRUE")
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) // 디자인 타임(모드) 동안 DB 연결이 수행되는것을 방지
                 return;
             
             try
             {
-                string tablequery = "SELECT * FROM inspectionResults";
+                string tablequery = $"SELECT * FROM inspectionResults WHERE {filter}";
+                Console.WriteLine("테이블: " + tablequery);
                 // 이 부분 using 사용하는 것으로 수정하기
                 MySqlCommand cmd = new MySqlCommand(tablequery, _dblink.connection);
 

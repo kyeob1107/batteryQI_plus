@@ -52,11 +52,13 @@
                                 </StackPanel>-->
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="시작:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                                    <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}" Width="120"/>
+                                    <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}" Width="120"
+                                                DisplayDateStart="{Binding DateRangeStart}" DisplayDateEnd="{Binding DateRangeEnd}"/>
                                     <TextBox Text="{Binding StartTime, Mode=TwoWay}" Width="80" Margin="5,0,0,0" VerticalContentAlignment="Center"/>
 
                                     <TextBlock Text="끝:" VerticalAlignment="Center" Margin="20,0,5,0"/>
-                                    <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay}" Width="120"/>
+                                    <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay}" Width="120"
+                                                DisplayDateStart="{Binding DateRangeStart}" DisplayDateEnd="{Binding DateRangeEnd}"/>
                                     <TextBox Text="{Binding EndTime, Mode=TwoWay}" Width="80" Margin="5,0,0,0" VerticalContentAlignment="Center"/>
                                 </StackPanel>
                                 <UniformGrid Rows="1">
@@ -68,7 +70,7 @@
                                                     <ItemsControl ItemsSource="{Binding UsageItems}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
@@ -84,7 +86,7 @@
                                                     <ItemsControl ItemsSource="{Binding BuyerItems}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
@@ -100,7 +102,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=BatteryTypeExpander}">
                                                     <ItemsControl ItemsSource="{Binding BatteryTypeItems}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
@@ -116,7 +118,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=BatteryTypeExpander}">
                                                     <ItemsControl ItemsSource="{Binding BatteryShapeItems}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
@@ -136,7 +138,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=StatusExpander}">
                                                 <ItemsControl ItemsSource="{Binding StatusItems}">
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
-                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
@@ -152,7 +154,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                                                 <ItemsControl ItemsSource="{Binding ProductionLineItems}">
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
-                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>

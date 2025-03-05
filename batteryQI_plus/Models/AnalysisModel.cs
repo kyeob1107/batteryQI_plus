@@ -77,7 +77,7 @@ namespace batteryQI_plus.Models
                     // 변환 실패 시 로그 출력 또는 예외 처리
                     Console.WriteLine($"Invalid date format: {timeIntervalString}");
                 }
-                Console.WriteLine("값은" + queryresult[i]["normal_cnt"].ToString() + "," + queryresult[i]["defect_cnt"].ToString());
+                //Console.WriteLine("값은" + queryresult[i]["normal_cnt"].ToString() + "," + queryresult[i]["defect_cnt"].ToString());
                 int normalCount = Convert.ToInt32(queryresult[i]["normal_cnt"]);
                 int defectCount = Convert.ToInt32(queryresult[i]["defect_cnt"]);
                 double defectRate_timeChart = (defectCount + normalCount)>0 ? 100 * (double)defectCount / (defectCount + normalCount) : -0.001 ;
