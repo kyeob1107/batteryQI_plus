@@ -54,6 +54,7 @@ namespace batteryQI_plus.ViewModels
 
         [RelayCommand] private void OpenEditSetting() // 설정 편집창 열기
         {
+            SelectedLineId = GetTabByLineId(_selectedTabIndex);
             EditSettingView editSettingPage = new EditSettingView();
             editSettingPage.ShowDialog();
         }
@@ -87,73 +88,83 @@ namespace batteryQI_plus.ViewModels
 
         [RelayCommand] private void SaveLineSettingButtonClick(object sender) // 변경된 설정 저장 메소드
         {
-            if (System.Windows.Forms.MessageBox.Show($"설정을 저장하시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (_selectedLineSetting.LineId != "") // 생산라인 Id를 선택했을 때
             {
-                // 설정 옵션 선택을 통해 설정을 변경한 생산라인을 실제 프로퍼티, DB에 반영
-                for (int lineSequence = 0; lineSequence < LineSettingCollection.Count; lineSequence++)
+                if (System.Windows.Forms.MessageBox.Show($"설정을 저장하시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes) // 설정 저장 여부를 묻는 메시지
                 {
-                    // 설정을 변경한 생산라인을 기존 설정의 생산라인과 매칭
-                    if (LineSettingCollection[lineSequence]["lineId"] == _selectedLineSetting["lineId"])
+                    // 설정 옵션 선택을 통해 설정을 변경한 생산라인을 실제 프로퍼티, DB에 반영
+                    for (int lineSequence = 0; lineSequence < LineSettingCollection.Count; lineSequence++)
                     {
-                        // View의 DatePicker의 SelectedDate 값이 미국식 날짜 format인 "MM/dd/yyyy hh:mm:ss tt"로만 반환되는 문제.
-                        // string -> DateTime -> string 변환으로 원하는 "yyyy-MM-dd" format으로 변환.
-                        // CultureInfo.InvariantCulture: 날짜 변환 중 문화권 형식에 의존하지 않도록 강제하는 옵션
-                        _selectedLineSetting["deadlineStart"] = _selectedLineSetting["deadlineStart"] != "" ? DateTime.Parse(_selectedLineSetting["deadlineStart"], CultureInfo.InvariantCulture)
-                            .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : "";
-                        _selectedLineSetting["deadlineEnd"] = _selectedLineSetting["deadlineEnd"] != "" ? DateTime.Parse(_selectedLineSetting["deadlineEnd"], CultureInfo.InvariantCulture)
-                            .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : "";
-
-                        // 변경된 설정 DB 업데이트
-                        // DB 업데이트에 사용할 쿼리문 구성(Set)에 사용할 Key 목록
-                        // lineId는 별도 처리, buyerName은 DB의 ProductionLine 테이블에 없는 컬럼이기 때문에 생략
-                        string[] updateKeys = _selectedLineSetting.Keys.Where(key => key != "lineId" && key != "buyerName").ToArray(); 
-                        // 업데이트할 열의 할당 구문을 저장할 리스트
-                        List<string> updateSettingColumns = new List<string>();
-                        foreach (var key in updateKeys)
+                        // 설정을 변경한 생산라인을 기존 설정의 생산라인과 매칭
+                        if (LineSettingCollection[lineSequence]["lineId"] == _selectedLineSetting["lineId"])
                         {
-                            // 기존 값과 변경된 값이 다를 때만 업데이트
-                            if (_selectedLineSetting[key] != LineSettingCollection[lineSequence][key])
+                            // View의 DatePicker의 SelectedDate 값이 미국식 날짜 format인 "MM/dd/yyyy hh:mm:ss tt"로만 반환되는 문제.
+                            // string -> DateTime -> string 변환으로 원하는 "yyyy-MM-dd" format으로 변환.
+                            // CultureInfo.InvariantCulture: 날짜 변환 중 문화권 형식에 의존하지 않도록 강제하는 옵션
+                            _selectedLineSetting["deadlineStart"] = _selectedLineSetting["deadlineStart"] != "" ? DateTime.Parse(_selectedLineSetting["deadlineStart"], CultureInfo.InvariantCulture)
+                                .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : "";
+                            _selectedLineSetting["deadlineEnd"] = _selectedLineSetting["deadlineEnd"] != "" ? DateTime.Parse(_selectedLineSetting["deadlineEnd"], CultureInfo.InvariantCulture)
+                                .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : "";
+
+                            // 변경된 설정 DB 업데이트
+                            // DB 업데이트에 사용할 쿼리문 구성(Set)에 사용할 Key 목록
+                            // lineId는 별도 처리, buyerName은 DB의 ProductionLine 테이블에 없는 컬럼이기 때문에 생략
+                            string[] updateKeys = _selectedLineSetting.Keys.Where(key => key != "lineId" && key != "buyerName").ToArray();
+                            // 업데이트할 열의 할당 구문을 저장할 리스트
+                            List<string> updateSettingColumns = new List<string>();
+                            foreach (var key in updateKeys)
                             {
-                                string newSettingValue = _selectedLineSetting[key];
-                                
-                                if (string.IsNullOrEmpty(newSettingValue)) // 값이 빈 문자열이면 NULL로 업데이트
+                                // 기존 값과 변경된 값이 다를 때만 업데이트
+                                if (_selectedLineSetting[key] != LineSettingCollection[lineSequence][key])
                                 {
-                                    updateSettingColumns.Add($"{key} = NULL");
-                                }
-                                else
-                                {
-                                    if (int.TryParse(newSettingValue, out int newSettingValueNum)) // 숫자형 DB 데이터일 경우
-                                        updateSettingColumns.Add($"{key} = {newSettingValueNum}");
+                                    string newSettingValue = _selectedLineSetting[key];
+
+                                    if (string.IsNullOrEmpty(newSettingValue)) // 값이 빈 문자열이면 NULL로 업데이트
+                                    {
+                                        updateSettingColumns.Add($"{key} = NULL");
+                                    }
                                     else
-                                        updateSettingColumns.Add($"{key} = '{newSettingValue}'");
+                                    {
+                                        if (int.TryParse(newSettingValue, out int newSettingValueNum)) // 숫자형 DB 데이터일 경우
+                                            updateSettingColumns.Add($"{key} = {newSettingValueNum}");
+                                        else
+                                            updateSettingColumns.Add($"{key} = '{newSettingValue}'");
+                                    }
                                 }
                             }
-                        }
-                        if (updateSettingColumns.Count > 0) // 업데이트할 열이 하나 이상
-                        {
-                            string setClause = string.Join(", ", updateSettingColumns); // SET 구문 생성
-                            // 최종 sql 명령문 완성. Set 구문과 lineId 기준 Where 구문 결합.
-                            string sql = $"UPDATE productionLines SET {setClause} WHERE lineId = {_selectedLineSetting["lineId"]}";
+                            if (updateSettingColumns.Count > 0) // 업데이트할 열이 하나 이상
+                            {
+                                string setClause = string.Join(", ", updateSettingColumns); // SET 구문 생성
+                                                                                            // 최종 sql 명령문 완성. Set 구문과 lineId 기준 Where 구문 결합.
+                                string sql = $"UPDATE productionLines SET {setClause} WHERE lineId = {_selectedLineSetting["lineId"]}";
 
-                            // 최종 완성한 sql을 사용하여 DB 업데이트 수행
-                            _dblink.Update(sql);
-                        }
+                                // 최종 완성한 sql을 사용하여 DB 업데이트 수행
+                                _dblink.Update(sql);
+                            }
 
-                        // 업데이트된 Setting 데이터와 Setting View UI 매칭(현재는 C# 내부에서 매칭 수행, 시간 여유 있으면 DB에서 가져오는 걸로 변경)
-                        int tempSelectedTabIndex = SelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치 저장
-                        SelectedTabIndex = -1; // 설정 Tab 선택 초기화.
-                        foreach (var setting in _selectedLineSetting) // 얕은 복사
-                        {
-                            if (LineSettingCollection[lineSequence][setting.Key] != setting.Value)
-                                LineSettingCollection[lineSequence][setting.Key] = setting.Value;
-                        }
-                        SelectedTabIndex = tempSelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치로 재이동. 재이동을 통해 Tab의 새로고침 유도
+                            // 업데이트된 Setting 데이터와 Setting View UI 매칭(현재는 C# 내부에서 매칭 수행, 시간 여유 있으면 DB에서 가져오는 걸로 변경)
+                            int tempSelectedTabIndex = SelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치 저장
+                            SelectedTabIndex = -1; // 설정 Tab 선택 초기화.
+                            foreach (var setting in _selectedLineSetting) // 얕은 복사
+                            {
+                                if (LineSettingCollection[lineSequence][setting.Key] != setting.Value)
+                                    LineSettingCollection[lineSequence][setting.Key] = setting.Value;
+                            }
+                            SelectedTabIndex = tempSelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치로 재이동. 재이동을 통해 Tab의 새로고침 유도
 
-                        break;
+                            break;
+                        }
                     }
+                    CloseAction?.Invoke(); // EditSetting View 닫기
                 }
-                CloseAction?.Invoke(); // EditSetting View 닫기
             }
+        }
+
+        private string GetTabByLineId(int selectedTabIndex) // Setting View에서 선택한 Tab의 lineId를 찾아 반환하는 메소드
+        {
+            if (selectedTabIndex < 0) // 선택한 Tab의 Index가 아무것도 선택하지 않은 상태(-1)일 경우 빈 문자열 반환
+                return string.Empty;
+            return LineSettingCollection[selectedTabIndex].LineId;
         }
     }
 }

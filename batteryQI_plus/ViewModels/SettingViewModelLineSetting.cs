@@ -17,7 +17,7 @@ namespace batteryQI_plus.ViewModels
     {
         // Setting View 필드
         private bool _isEditSettingRole; // 설정 편집창을 열 수 있는 권한 설정
-        private int _selectedTabIndex;
+        private int _selectedTabIndex; // 선택된 Tab index
         private ObservableCollection<ProductionLine> _lineSettingCollection 
             = new ObservableCollection<ProductionLine>(); // Setting View 각 생산라인별 설정 저장
 
@@ -29,7 +29,7 @@ namespace batteryQI_plus.ViewModels
         private IList<string> _batteryShapeList;
         private Dictionary<string, string> _buyerDataDic; // Key: 발주처 Id, Value: 발주처 이름을 저장한 딕셔너리. 같은 발주처를 의미하는 Id와 이름끼리 묶어 한 요소로 취급
         private ProductionLine _selectedLineSetting = new ProductionLine(); // 선택된 설정 옵션 필드
-        private string _selectedLineId; // EditSetting View에서 선택한 LineId에 따라 나머지 설정 옵션들이 현재 설정값을 가리키도록 Triger를 설정하기 위한 프로퍼티
+        private string _selectedLineId; // EditSetting View에서 선택한 LineId에 따라 나머지 설정 옵션들이 현재 설정값을 가리키도록 Triger를 설정하기 위한 필드
 
         // Setting View 프로퍼티
         public bool IsEditSettingRole
@@ -78,6 +78,28 @@ namespace batteryQI_plus.ViewModels
         {
             get => _selectedLineSetting;
             set => SetProperty(ref _selectedLineSetting, value);
+        }
+        public string SelectedLineId
+        {
+            get => _selectedLineId;
+            set // EditSetting View에서 특정 생산라인을 선택했을 경우 나머지 설정 옵션들이 해당 생산라인의 현재 설정값을 가리키도록 Triger 설정
+            {
+                if (value != null && SetProperty(ref _selectedLineId, value))
+                {
+                    var selectedLine = _lineSettingCollection.FirstOrDefault(line => line["lineId"] == value);
+                    if (selectedLine != null)
+                    {
+                        SelectedLineSetting.LineId = selectedLine.LineId;
+                        SelectedLineSetting.UsageName = selectedLine.UsageName;
+                        SelectedLineSetting.BatteryType = selectedLine.BatteryType;
+                        SelectedLineSetting.BatteryShape = selectedLine.BatteryShape;
+                        SelectedLineSetting.BuyerData = selectedLine.BuyerData;
+                        SelectedLineSetting.Quota = selectedLine.Quota;
+                        SelectedLineSetting.DeadlineStart = selectedLine.DeadlineStart;
+                        SelectedLineSetting.DeadlineEnd = selectedLine.DeadlineEnd;
+                    }
+                }
+            }
         }
 
         private void getLineSetting() // DB에서 값을 가져와 Setting View에 사용할 프로퍼티 초기화
