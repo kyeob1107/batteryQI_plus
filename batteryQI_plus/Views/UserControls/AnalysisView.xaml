@@ -52,11 +52,13 @@
                                 </StackPanel>-->
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="시작:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                                    <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}" Width="120"/>
+                                    <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}" Width="120"
+                                                DisplayDateStart="{Binding DateRangeStart}" DisplayDateEnd="{Binding DateRangeEnd}"/>
                                     <TextBox Text="{Binding StartTime, Mode=TwoWay}" Width="80" Margin="5,0,0,0" VerticalContentAlignment="Center"/>
 
                                     <TextBlock Text="끝:" VerticalAlignment="Center" Margin="20,0,5,0"/>
-                                    <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay}" Width="120"/>
+                                    <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay}" Width="120"
+                                                DisplayDateStart="{Binding DateRangeStart}" DisplayDateEnd="{Binding DateRangeEnd}"/>
                                     <TextBox Text="{Binding EndTime, Mode=TwoWay}" Width="80" Margin="5,0,0,0" VerticalContentAlignment="Center"/>
                                 </StackPanel>
                                 <UniformGrid Rows="1">
@@ -68,7 +70,7 @@
                                                     <ItemsControl ItemsSource="{Binding UsageItems}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
@@ -84,7 +86,7 @@
                                                     <ItemsControl ItemsSource="{Binding BuyerItems}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
@@ -100,7 +102,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=BatteryTypeExpander}">
                                                     <ItemsControl ItemsSource="{Binding BatteryTypeItems}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
@@ -116,7 +118,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=BatteryTypeExpander}">
                                                     <ItemsControl ItemsSource="{Binding BatteryShapeItems}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
@@ -136,7 +138,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=StatusExpander}">
                                                 <ItemsControl ItemsSource="{Binding StatusItems}">
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
-                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
@@ -152,7 +154,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                                                 <ItemsControl ItemsSource="{Binding ProductionLineItems}">
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
-                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" />
+                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
@@ -167,7 +169,8 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                     <!-- id 검색 영역 -->
                     <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
                         <TextBlock Text="배터리 id:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,5,0"/>
-                        <TextBox Text="{Binding BatteryId}"/>
+                        <TextBox Text="{Binding BatteryId}" PreviewTextInput="TextBox_PreviewTextInput"
+                                 IsEnabled="{Binding IsTextBoxEnabled}"/>
                     </StackPanel>
                     <!-- 조회 버튼 -->
                     <Button Grid.Column="2" Content="조회" Width="60" Height="60"
@@ -176,7 +179,8 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
             </Border>
 
             <!-- 하단: 탭 컨트롤 -->
-            <TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="1">
+            <TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="1"
+                         SelectedIndex="{Binding SelectedTabIndex}">
                 <!-- 타임차트 탭 -->
                 <TabItem Header="타임차트">
                     <Border Background="#FFFFFF" Padding="10">
@@ -197,12 +201,13 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                         <!-- 그래프 Placeholder -->
                         <!--<TextBlock Text="불량비율 그래프 영역 (바인딩 필요)" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
                         <lvc:PieChart LegendLocation="Right" 
-                                      Hoverable="False" 
+                                      Hoverable="True" 
                                       DataTooltip="{x:Null}"
-                                      Series="{Binding SeriesCollectionPie}">
-                            <lvc:PieChart.DataClickCommand>
-                                <Binding Path="DataClickCommand" />
-                            </lvc:PieChart.DataClickCommand>
+                                      Series="{Binding SeriesCollectionPie}"
+                                      DataClick="Chart_OnDataClick">
+                            <!--<lvc:PieChart.DataClickCommand>
+                                <Binding Path="Chart_OnDataClickCommand" />
+                            </lvc:PieChart.DataClickCommand>-->
                         </lvc:PieChart>
                     </Border>
                 </TabItem>

@@ -66,25 +66,46 @@ namespace batteryQI_plus.Models
             _endDatetime = DateTime.Now.FloorToNearestMinutes(10);
             //MessageBox.Show(_startDatetime.ToString());
             //MessageBox.Show(_endDatetime.ToString());
-            Console.WriteLine(_startDatetime.ToString()+"~"+_endDatetime.ToString());
+            //Console.WriteLine(_startDatetime.ToString()+"~"+_endDatetime.ToString());
 
             // 일단 임시로 해둔 것
             #region 검사 수 & 불량 수
-            string unitTestQuery1 = $@"SELECT 
-                                                COUNT(DISTINCT batteryId) AS cnt
-                                            FROM 
-                                             inspectionResults
-                                            WHERE 
-                                             lineId = {line} 
-                                             AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}');";
-            string unitTestQuery2 = $@"SELECT 
-                                                COUNT(DISTINCT batteryId) AS cnt
-                                            FROM 
-                                             inspectionResults
-                                            WHERE 
-                                             lineId = {line} 
-                                             AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
-                                             AND (fastPollutionCheck = 1 OR fastDamageCheck = 1);";
+            //string unitTestQuery1 = $@"SELECT 
+            //                                    COUNT(DISTINCT batteryId) AS cnt
+            //                                FROM 
+            //                                 inspectionResults
+            //                                WHERE 
+            //                                 lineId = {line} 
+            //                                 AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}');";
+            //string unitTestQuery2 = $@"SELECT 
+            //                                    COUNT(DISTINCT batteryId) AS cnt
+            //                                FROM 
+            //                                 inspectionResults
+            //                                WHERE 
+            //                                 lineId = {line} 
+            //                                 AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
+            //                                 AND (fastPollutionCheck = 1 OR fastDamageCheck = 1);";
+            string unitTestQuery2 = $@"WITH StatusList AS (
+                                                    SELECT 'normal' AS Status
+                                                    UNION ALL
+                                                    SELECT 'defect'
+                                                )
+                                                SELECT s.Status, COALESCE(COUNT(subquery.batteryId), 0) AS cnt
+                                                FROM StatusList s
+                                                LEFT JOIN (
+                                                    SELECT batteryId,
+                                                        CASE
+                                                            WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck) = 0 THEN 'normal'
+                                                            ELSE 'defect'
+                                                        END AS Status
+                                                    FROM batteryQIPlus.inspectionResults ir
+                                                    WHERE lineId = {line}
+                                                        AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
+                                                    GROUP BY batteryId
+                                                ) AS subquery ON s.Status = subquery.Status
+                                                GROUP BY s.Status
+                                                ORDER BY CASE WHEN s.Status = 'normal' THEN 0 ELSE 1 END;";
+
             // 디버깅용 쿼리
             //string unitTestQuery1 = $@"SELECT 
             //                                 DISTINCT batteryId, lineId, inspectionDatetime, fastPollutionCheck, fastDamageCheck
@@ -104,7 +125,7 @@ namespace batteryQI_plus.Models
             //                                 AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
             //                                 AND (fastPollutionCheck = 1 OR fastDamageCheck = 1);";
             #endregion
-            List<Dictionary<string, object>> result1 = db.Select(unitTestQuery1);
+            //List<Dictionary<string, object>> result1 = db.Select(unitTestQuery1);
             List<Dictionary<string, object>> result2 = db.Select(unitTestQuery2);
             //MessageBox.Show(_startDatetime.ToString() + "," + _endDatetime.ToString());
             #region 디버깅 용
@@ -137,11 +158,11 @@ namespace batteryQI_plus.Models
             //// 메시지 박스에 출력
             ////MessageBox.Show(message2, "Query Result");
             //Console.WriteLine(message2);
- 
+
             #endregion
-            _inspectionCount = Convert.ToInt32(result1[0]["cnt"]);
-            _defectCount = Convert.ToInt32(result2[0]["cnt"]);
-            _normalCount = _inspectionCount - _defectCount;
+            _normalCount = Convert.ToInt32(result2[0]["cnt"]);
+            _defectCount = Convert.ToInt32(result2[1]["cnt"]);
+            _inspectionCount = _normalCount + _defectCount;
             //_defectRate = 0;
             UpdateDefectRate();
         }
