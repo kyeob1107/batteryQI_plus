@@ -17,21 +17,19 @@ namespace batteryQI_plus.ViewModels
     {
         // Setting View 필드
         private bool _isEditSettingRole; // 설정 편집창을 열 수 있는 권한 설정
-        private int _selectedTabIndex;
+        private int _selectedTabIndex; // 선택된 Tab index
         private ObservableCollection<ProductionLine> _lineSettingCollection 
             = new ObservableCollection<ProductionLine>(); // Setting View 각 생산라인별 설정 저장
 
         // EditSetting View 필드
-        private IList<string> _lineIdList; // 설정 옵션 컨트롤 목록(combobox, textbox, Datepicker) items 필드
+        // 설정 옵션 combobox Item 목록
+        private IList<string> _lineIdList; 
         private IList<string> _usageNameList;
         private IList<string> _batteryTypeList;
         private IList<string> _batteryShapeList;
-        private IList<string> _buyerNameList;
-        private IList<string> _quotaList;
-        private IList<string> _deadlineStartList;
-        private IList<string> _deadlineEndList;
+        private Dictionary<string, string> _buyerDataDic; // Key: 발주처 Id, Value: 발주처 이름을 저장한 딕셔너리. 같은 발주처를 의미하는 Id와 이름끼리 묶어 한 요소로 취급
         private ProductionLine _selectedLineSetting = new ProductionLine(); // 선택된 설정 옵션 필드
-            
+        private string _selectedLineId; // EditSetting View에서 선택한 LineId에 따라 나머지 설정 옵션들이 현재 설정값을 가리키도록 Triger를 설정하기 위한 필드
 
         // Setting View 프로퍼티
         public bool IsEditSettingRole
@@ -71,37 +69,44 @@ namespace batteryQI_plus.ViewModels
             get => _batteryShapeList;
             set => SetProperty(ref _batteryShapeList, value);
         }
-        public IList<string> BuyerNameList
+        public Dictionary<string, string> BuyerDataDic
         {
-            get => _buyerNameList;
-            set => SetProperty(ref _buyerNameList, value);
-        }
-        public IList<string> QuotaList
-        {
-            get => _quotaList;
-            set => SetProperty(ref _quotaList, value);
-        }
-        public IList<string> DeadlineStartList
-        {
-            get => _deadlineStartList;
-            set => SetProperty(ref _deadlineStartList, value);
-        }
-        public IList<string> DeadlineEndList
-        {
-            get => _deadlineEndList;
-            set => SetProperty(ref _deadlineEndList, value);
+            get => _buyerDataDic;
+            set => SetProperty(ref _buyerDataDic, value);
         }
         public ProductionLine SelectedLineSetting
         {
             get => _selectedLineSetting;
             set => SetProperty(ref _selectedLineSetting, value);
         }
+        public string SelectedLineId
+        {
+            get => _selectedLineId;
+            set // EditSetting View에서 특정 생산라인을 선택했을 경우 나머지 설정 옵션들이 해당 생산라인의 현재 설정값을 가리키도록 Triger 설정
+            {
+                if (value != null && SetProperty(ref _selectedLineId, value))
+                {
+                    var selectedLine = _lineSettingCollection.FirstOrDefault(line => line["lineId"] == value);
+                    if (selectedLine != null)
+                    {
+                        SelectedLineSetting.LineId = selectedLine.LineId;
+                        SelectedLineSetting.UsageName = selectedLine.UsageName;
+                        SelectedLineSetting.BatteryType = selectedLine.BatteryType;
+                        SelectedLineSetting.BatteryShape = selectedLine.BatteryShape;
+                        SelectedLineSetting.BuyerData = selectedLine.BuyerData;
+                        SelectedLineSetting.Quota = selectedLine.Quota;
+                        SelectedLineSetting.DeadlineStart = selectedLine.DeadlineStart;
+                        SelectedLineSetting.DeadlineEnd = selectedLine.DeadlineEnd;
+                    }
+                }
+            }
+        }
 
         private void getLineSetting() // DB에서 값을 가져와 Setting View에 사용할 프로퍼티 초기화
         {
             _lineSettingCollection.Clear();
             List<Dictionary<string, object>> lineSettingCollection = 
-                _dblink.Select("SELECT pl.lineId, pl.usageName, pl.batteryType, pl.batteryShape, b.buyerName, pl.quota, pl.deadlineStart, pl.deadlineEnd " +
+                _dblink.Select("SELECT pl.lineId, pl.usageName, pl.batteryType, pl.batteryShape, pl.buyerId, b.buyerName, pl.quota, pl.deadlineStart, pl.deadlineEnd " +
                 "FROM productionLines pl LEFT JOIN buyers b ON pl.buyerId = b.buyerId WHERE lineId<> 0; "); // 0번 행(관리자 직책)은 실질적인 생산라인이 아니기 때문에 제외 
             foreach (var row in lineSettingCollection) // 생산라인 행별로 설정 저장. TryGetValue 사용시 불필요한 인덱싱과 예외 발생 가능성을 줄여 더 빠르다고함
             {
@@ -109,7 +114,8 @@ namespace batteryQI_plus.ViewModels
                 string? usageName = row.TryGetValue("usageName", out var usageNameObj) && usageNameObj != null ? usageNameObj.ToString() : "";
                 string? batteryType = row.TryGetValue("batteryType", out var batteryTypeObj) && batteryTypeObj != null ? batteryTypeObj.ToString() : "";
                 string? batteryShape = row.TryGetValue("batteryShape", out var batteryShapeObj) && batteryShapeObj != null ? batteryShapeObj.ToString() : "";
-                string? buyerName = row.TryGetValue("buyerName", out var buyerIdObj) && buyerIdObj != null ? buyerIdObj.ToString() : "";
+                string? buyerId = row.TryGetValue("buyerId", out var buyerIdObj) && buyerIdObj != null ? buyerIdObj.ToString() : "";
+                string? buyerName = row.TryGetValue("buyerName", out var buyerNameObj) && buyerNameObj != null ? buyerNameObj.ToString() : "";
                 string? quota = row.TryGetValue("quota", out var quotaObj) && quotaObj != null ? quotaObj.ToString() : "";
                 string? deadlineStart = row.TryGetValue("deadlineStart", out var deadlineStartObj) && deadlineStartObj != null ? deadlineStartObj.ToString() : "";
                 string? deadlineEnd = row.TryGetValue("deadlineEnd", out var deadlineEndObj) && deadlineEndObj != null ? deadlineEndObj.ToString() : "";
@@ -118,7 +124,7 @@ namespace batteryQI_plus.ViewModels
                 {
                     LineId = lineId,
                     UsageName = usageName, BatteryType = batteryType, BatteryShape = batteryShape,
-                    BuyerName = buyerName, Quota = quota, DeadlineStart = deadlineStart, DeadlineEnd = deadlineEnd
+                    BuyerData = new KeyValuePair<string, string>(buyerId, buyerName), Quota = quota, DeadlineStart = deadlineStart, DeadlineEnd = deadlineEnd
                 });
             }
         }
@@ -131,19 +137,11 @@ namespace batteryQI_plus.ViewModels
             UsageNameList = new List<string>() { "Industrial", "Household" };
             BatteryTypeList = new List<string>() { "Cell", "Module", "Pack" };
             BatteryShapeList = new List<string>() { "Cylinder", "Pouch" };
-            BuyerNameList = _lineSettingCollection
-                .Where(dict => dict.ContainsKey("buyerName"))
-                .Select(dict => dict["buyerName"])
-                .Distinct().ToList();
-            QuotaList = _lineSettingCollection
-                .Where(dict => dict.ContainsKey("quota"))
-                .Select(dict => dict["quota"]).ToList();
-            DeadlineStartList = _lineSettingCollection
-                .Where(dict => dict.ContainsKey("deadlineStart"))
-                .Select(dict => dict["deadlineStart"]).ToList();
-            DeadlineEndList = _lineSettingCollection
-                .Where(dict => dict.ContainsKey("deadlineEnd"))
-                .Select(dict => dict["deadlineEnd"]).ToList();
+            BuyerDataDic = new Dictionary<string, string>();
+            foreach (var dict in _dblink.Select("SELECT buyerId, buyerName FROM buyers order by buyerId ASC;"))
+            {
+                BuyerDataDic.Add(dict["buyerId"].ToString(), dict["buyerName"].ToString());
+            }
         }
     }
 }
