@@ -153,5 +153,21 @@ namespace batteryQI_plus.ViewModels
             LoadData(filterCondition, filterCondition2);
             //MessageBox.Show(BatteryId);
         }
+
+        // view쪽 컨트롤 설정 관련
+        private int _selectedTabIndex;
+        public int SelectedTabIndex
+        {
+            get => _selectedTabIndex;
+            set
+            {
+                if (SetProperty(ref _selectedTabIndex, value))
+                {
+                    OnPropertyChanged(nameof(IsTextBoxEnabled));
+                }
+            }
+        }
+
+        public bool IsTextBoxEnabled => SelectedTabIndex == 3;
     }
 }

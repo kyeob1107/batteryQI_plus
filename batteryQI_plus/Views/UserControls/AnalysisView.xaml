@@ -169,7 +169,8 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                     <!-- id 검색 영역 -->
                     <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
                         <TextBlock Text="배터리 id:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,5,0"/>
-                        <TextBox Text="{Binding BatteryId}" PreviewTextInput="TextBox_PreviewTextInput"/>
+                        <TextBox Text="{Binding BatteryId}" PreviewTextInput="TextBox_PreviewTextInput"
+                                 IsEnabled="{Binding IsTextBoxEnabled}"/>
                     </StackPanel>
                     <!-- 조회 버튼 -->
                     <Button Grid.Column="2" Content="조회" Width="60" Height="60"
@@ -178,7 +179,8 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
             </Border>
 
             <!-- 하단: 탭 컨트롤 -->
-            <TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="1">
+            <TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="1"
+                         SelectedIndex="{Binding SelectedTabIndex}">
                 <!-- 타임차트 탭 -->
                 <TabItem Header="타임차트">
                     <Border Background="#FFFFFF" Padding="10">
