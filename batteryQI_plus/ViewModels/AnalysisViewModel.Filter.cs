@@ -27,6 +27,97 @@ namespace batteryQI_plus.ViewModels
         private ObservableCollection<SelectableItem> _statusItems;
         private ObservableCollection<SelectableItem> _productionLineItems;
 
+        private void InitializeFilter()
+        {
+            // 필터 초기화 부분
+            string query_dateRange = @"SELECT 
+                                        MIN(Date(inspectionDatetime)) AS minDate, 
+                                        MAX(Date(inspectionDatetime)) AS maxDate 
+                                       FROM inspectionResults;";
+            var result_DateRange = _dblink.Select(query_dateRange);
+            DateRangeStart = (DateTime)result_DateRange[0]["minDate"];
+            DateRangeEnd = (DateTime)result_DateRange[0]["maxDate"];
+            // 초기값 설정
+            //StartDate = DateTime.Today; // 값수정 필요
+            StartDate = DateRangeStart;
+            StartTime = "00:00:00";
+            //EndDate = DateTime.Today; // 값수정 필요
+            EndDate = DateRangeEnd;
+            EndTime = "23:59:59";
+
+            // Initialize UsageItems with sample data
+            UsageItems = new ObservableCollection<SelectableItem>();
+            var UsageFilterlist = SelectFilterValue("usageName");
+            for (int i = 0; i < UsageFilterlist.Count; i++)
+            {
+                UsageItems.Add(
+                    new SelectableItem
+                    {
+                        Name = (string)UsageFilterlist[i]["usageName"],
+                        IsSelected = true
+                    });
+            }
+
+            //buy는 일단 통일성있게 해주려고 id로 해주고 buyer테이블 참고해서 이름으로 표시하거나 하는 과정 추가해주기
+            BuyerItems = new ObservableCollection<SelectableItem>();
+            var BuyerFilterlist = SelectFilterValue("buyerName", "batteryInfo bi INNER JOIN buyers b ON bi.buyerId = b.buyerId;");
+            for (int i = 0; i < BuyerFilterlist.Count; i++)
+            {
+                BuyerItems.Add(
+                    new SelectableItem
+                    {
+                        Name = (string)BuyerFilterlist[i]["buyerName"],
+                        IsSelected = true
+                    });
+            }
+
+            BatteryTypeItems = new ObservableCollection<SelectableItem>();
+            var BatteryTypeFilterlist = SelectFilterValue("batteryType");
+            for (int i = 0; i < BatteryTypeFilterlist.Count; i++)
+            {
+                BatteryTypeItems.Add(
+                    new SelectableItem
+                    {
+                        Name = (string)BatteryTypeFilterlist[i]["batteryType"],
+                        IsSelected = true
+                    });
+            }
+
+            BatteryShapeItems = new ObservableCollection<SelectableItem>();
+            var BatteryShapeFilterlist = SelectFilterValue("batteryShape");
+            for (int i = 0; i < BatteryShapeFilterlist.Count; i++)
+            {
+                BatteryShapeItems.Add(
+                    new SelectableItem
+                    {
+                        Name = (string)BatteryShapeFilterlist[i]["batteryShape"],
+                        IsSelected = true
+                    });
+            }
+
+            StatusItems = new ObservableCollection<SelectableItem>
+            {
+                new SelectableItem { Name = "정상", IsSelected = true },
+                new SelectableItem { Name = "오염", IsSelected = true },
+                new SelectableItem { Name = "손상", IsSelected = true },
+                new SelectableItem { Name = "오염 & 손상", IsSelected = true }
+            };
+
+            ProductionLineItems = new ObservableCollection<SelectableItem>();
+            var ProductionLineFilterlist = SelectFilterValue("lineId");
+            for (int i = 0; i < ProductionLineFilterlist.Count; i++)
+            {
+                ProductionLineItems.Add(
+                    new SelectableItem
+                    {
+                        Name = "Line" + ProductionLineFilterlist[i]["lineId"].ToString(),
+                        IsSelected = true
+                    });
+            }
+
+            BatteryId = "";
+        }
+
         private List<List<string>> FilterBatteryIds()
         {
             Console.WriteLine("필터메소드 작동\r\n");
