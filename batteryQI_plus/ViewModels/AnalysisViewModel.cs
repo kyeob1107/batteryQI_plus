@@ -20,14 +20,28 @@ namespace batteryQI_plus.ViewModels
 {
     public partial class AnalysisViewModel : ViewModelBases
     {
+        int numOfLine;
         public AnalysisViewModel()
         {
             // 필터 초기화 부분
             InitializeFilter();
 
+           // 체크한 line 갯수 기록
+           List<string>lineIds = new List<string>();
+            foreach (var item in _productionLineItems)
+            {
+                if (item.IsSelected) { lineIds.Add(item.Name.Replace("Line", "")); }
+            }
+            string lineIdCondition = lineIds.Count > 0 ? $"lineId IN({string.Join(',', lineIds)})" : "FALSE";
+            //string lineCountQuery = $@"SELECT COUNT(DISTINCT lineId) AS Count 
+            //               FROM productionLines
+            //               WHERE {lineIdCondition};";
+            string lineCountQuery = $@"SELECT COUNT(DISTINCT lineId) AS Count 
+                           FROM productionLines;";
+            var lineCountResult = _dblink.Select(lineCountQuery);
+            numOfLine = Convert.ToInt32(lineCountResult[0]["Count"]) - 1;
+            
             // 타임차트
-            var lineCountquery = _dblink.Select($"SELECT COUNT(DISTINCT lineId) AS Count FROM productionLines;");
-            numOfLine = Convert.ToInt32(lineCountquery[0]["Count"]) - 1;
             DrawTimeChart();
             // 타임차트 y값 포맷
             YFormatter = value => value.ToString("N");
