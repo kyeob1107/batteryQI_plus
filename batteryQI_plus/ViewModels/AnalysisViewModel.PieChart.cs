@@ -70,7 +70,7 @@ namespace batteryQI_plus.ViewModels
             //        });
             //    }
             #endregion
-            Pie piechart = new Pie();
+            PieChartModel piechart = new PieChartModel();
             piechart.ConfigureChart(_dblink, filter, filter2_notIN);
             SeriesCollectionPie = piechart.SeriesCollectionPieModel;
         }

@@ -118,7 +118,7 @@ namespace batteryQI_plus.ViewModels
             //    LabelsColumn[i] = $"Line{i + 1}";
             //}
             #endregion
-            Column column = new Column();
+            ColumnChartModel column = new ColumnChartModel();
             column.ConfigureChart(_dblink, filter, filter2_notIN);
             SeriesCollectionColumn = column.SeriesCollectionColumnModel;
             //FormatterColumn = value => value.ToString("N0");

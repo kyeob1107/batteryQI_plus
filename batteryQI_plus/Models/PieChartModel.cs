@@ -10,7 +10,7 @@ using static System.Windows.Forms.LinkLabel;
 
 namespace batteryQI_plus.Models
 {
-    public partial class Pie : ObservableObject
+    public partial class PieChartModel : ObservableObject
     {
         string filter;
         string filter2_notIN;
@@ -23,7 +23,7 @@ namespace batteryQI_plus.Models
             set { SetProperty(ref _seriesCollectionPieModel, value); }
         }
 
-        public Pie() 
+        public PieChartModel() 
         {
             filter = "TRUE";
             filter2_notIN = "TRUE";

@@ -9,7 +9,7 @@ using LiveCharts.Wpf;
 
 namespace batteryQI_plus.Models
 {
-    public class Column : ObservableObject
+    public class ColumnChartModel : ObservableObject
     {
         string filter;
         string filter2_notIN;
@@ -22,7 +22,7 @@ namespace batteryQI_plus.Models
             get { return _seriesCollectionColumnModel; }
             set { SetProperty(ref _seriesCollectionColumnModel, value); }
         }
-        public Column() 
+        public ColumnChartModel() 
         {
             filter = "TRUE";
             filter2_notIN = "TRUE";

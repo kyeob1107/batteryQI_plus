@@ -12,8 +12,8 @@ namespace batteryQI_plus.ViewModels
 {
     public partial class AnalysisViewModel
     {
-        private ObservableCollection<AnalysisModel> _timeChart = new ObservableCollection<AnalysisModel>();
-        public ObservableCollection<AnalysisModel> TimeChart
+        private ObservableCollection<TimeChartModel> _timeChart = new ObservableCollection<TimeChartModel>();
+        public ObservableCollection<TimeChartModel> TimeChart
         {
             get { return _timeChart; }
             set { SetProperty(ref _timeChart, value); }
@@ -23,10 +23,10 @@ namespace batteryQI_plus.ViewModels
         private void InitializeMultipleTimeCharts(int numOfLine, string filter = "TRUE", string filter2_notIN = "TRUE")
         {
             // 초기화 필요해서 일단 당장 이 방식으로 해줬음
-            _timeChart = new ObservableCollection<AnalysisModel>();
+            _timeChart = new ObservableCollection<TimeChartModel>();
             for (int line = 0; line < numOfLine; line++)
             {
-                Console.WriteLine($"라인{line + 1}입니다");
+                //Console.WriteLine($"라인{line + 1}입니다");
 
                 // 임시용
                 string startDateForQuery = GetStartDateTime().ToString("yyyy-MM-dd HH:mm:ss"); // "2025-03-03 09:00";
@@ -59,10 +59,10 @@ namespace batteryQI_plus.ViewModels
                                             ) AS subquery ON t.time_interval = subquery.time_interval
                                             GROUP BY t.time_interval
                                             ORDER BY t.time_interval;";
-                Console.WriteLine("타임차트: " + query_timeChart);
+                //Console.WriteLine("타임차트: " + query_timeChart);
                 var queryResult = _dblink.Select(query_timeChart);
                 //foreach (string key in queryResult[0].Keys) { Console.WriteLine(key); }
-                AnalysisModel model = new AnalysisModel("timeChart", queryResult);
+                TimeChartModel model = new TimeChartModel("timeChart", queryResult);
                 _timeChart.Add(model);
             }
 
@@ -95,7 +95,7 @@ namespace batteryQI_plus.ViewModels
 
         // 시간별 라인차트
         int numOfLine; // 전체 다 쓰일지도
-        private List<AnalysisModel> _timeCharts = new List<AnalysisModel>();
+        private List<TimeChartModel> _timeCharts = new List<TimeChartModel>();
         private SeriesCollection _seriesCollectionTimeChart;
         public SeriesCollection SeriesCollectionTimeChart
         {

@@ -16,7 +16,7 @@ namespace batteryQI_plus.Models
     //    public List<string> productionLine; // 근무자는 제한되게 볼 수 있도록?
     //}
 
-    public class AnalysisModel : ObservableObject
+    public class TimeChartModel : ObservableObject
     {
         // 아예 chartModel로 빼거나 TimeChartModel로 더 세부적으로 나눌까 고민중
         #region 처음 설계했던 것 - 안씀
@@ -36,20 +36,9 @@ namespace batteryQI_plus.Models
         #endregion
         private List<DateTime>? _timeList;
         private List<double>? _countValue;
-        public List<DateTime>? TimeList
-        {
-            get { return _timeList; }
-            set { SetProperty(ref _timeList, value); }
-        }
-        public List<double>? CountValue
-        {
-            get { return _countValue; }
-            set { SetProperty(ref _countValue, value); }
-        }
-
 
         // 초기화 어떻게 해야할지 안떠올라서 일단 틀만 해둠
-        public AnalysisModel(string option, List<Dictionary<string, Object>> queryresult) 
+        public TimeChartModel(string option, List<Dictionary<string, Object>> queryresult) 
         { 
             if (option == "timeChart") { InitializeTimeChart(queryresult); }
         }
@@ -83,6 +72,17 @@ namespace batteryQI_plus.Models
                 double defectRate_timeChart = (defectCount + normalCount)>0 ? 100 * (double)defectCount / (defectCount + normalCount) : -0.001 ;
                 _countValue.Add(defectRate_timeChart); 
             }
+        }
+
+        public List<DateTime>? TimeList
+        {
+            get { return _timeList; }
+            set { SetProperty(ref _timeList, value); }
+        }
+        public List<double>? CountValue
+        {
+            get { return _countValue; }
+            set { SetProperty(ref _countValue, value); }
         }
     }
 }
