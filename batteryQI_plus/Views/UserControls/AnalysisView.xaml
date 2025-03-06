@@ -41,15 +41,6 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                <!--<StackPanel Orientation="Horizontal">-->
-                                    <!-- 시작 날짜 시간 -->
-                                    <!--<ComboBox Width="150" SelectedItem="{Binding SelectedUsage}" ItemsSource="{Binding UsageList}" Margin="0,0,10,0"/>
-                                    <TextBox Text="바인딩으로 수정필요"/>
-                                    <TextBlock Text=" ~ "/>-->
-                                    <!-- 끝 날짜 시간 -->
-                                    <!--<ComboBox Width="150" SelectedItem="{Binding SelectedUsage}" ItemsSource="{Binding UsageList}" Margin="0,0,10,0"/>
-                                    <TextBox Text="바인딩으로 수정필요"/>
-                                </StackPanel>-->
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="시작:" VerticalAlignment="Center" Margin="0,0,5,0"/>
                                     <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}" Width="120"

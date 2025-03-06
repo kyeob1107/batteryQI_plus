@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LiveCharts.Wpf;
 using LiveCharts;
+using batteryQI_plus.Models;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -18,55 +19,60 @@ namespace batteryQI_plus.ViewModels
             set { SetProperty(ref _seriesCollectionPie, value); }
         }
 
-        public Func<ChartPoint, string> PointLabel { get; set; }
+        public Func<ChartPoint, string> PointLabelPie { get; set; }
 
-        // 이거 이렇게 하니까 작동안하는듯
-        //[RelayCommand]
-        //private void Chart_OnDataClick(ChartPoint chartpoint)
-        //{
-        //    var chart = (LiveCharts.Wpf.PieChart)chartpoint.ChartView;
+        //// 이거 이렇게 하니까 작동안하는듯
+        ////[RelayCommand]
+        ////private void Chart_OnDataClick(ChartPoint chartpoint)
+        ////{
+        ////    var chart = (LiveCharts.Wpf.PieChart)chartpoint.ChartView;
 
-        //    foreach (PieSeries series in chart.Series)
-        //        series.PushOut = 0;
+        ////    foreach (PieSeries series in chart.Series)
+        ////        series.PushOut = 0;
 
-        //    var selectedSeries = (PieSeries)chartpoint.SeriesView;
-        //    selectedSeries.PushOut = 8;
-        //}
+        ////    var selectedSeries = (PieSeries)chartpoint.SeriesView;
+        ////    selectedSeries.PushOut = 8;
+        ////}
         private void DrawPieChart(string filter = "TRUE", string filter2_notIN = "TRUE")
         {
-            string query_Pie = @$"SELECT Status, COUNT(batteryId) AS batteryCount
-	                            FROM (SELECT batteryId,
-			                            CASE
-				                            WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) = 0 THEN 'normal'
-				                            WHEN SUM(fastPollutionCheck) <> 0 AND SUM(fastDamageCheck ) = 0 THEN 'pollution'
-				                            WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) <> 0 THEN 'damage'
-				                            ELSE 'pollution & damage'
-			                            END AS Status
-		                            FROM inspectionResults
-                                    WHERE {filter} AND {filter2_notIN}
-		                            GROUP BY batteryId) AS subquery
-	                            GROUP BY Status
-                                ORDER BY 
-                                    CASE
-                                        WHEN Status = 'normal' THEN 0
-                                        WHEN Status = 'pollution' THEN 1
-                                        WHEN Status = 'damage' THEN 2
-                                        ELSE 3
-                                    END;";
-            Console.WriteLine("파이차트: " + query_Pie);
-            var result_Pie = _dblink.Select(query_Pie);
+            #region model부분
+            //    string query_Pie = @$"SELECT Status, COUNT(batteryId) AS batteryCount
+            //                     FROM (SELECT batteryId,
+            //                       CASE
+            //                        WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) = 0 THEN 'normal'
+            //                        WHEN SUM(fastPollutionCheck) <> 0 AND SUM(fastDamageCheck ) = 0 THEN 'pollution'
+            //                        WHEN SUM(fastPollutionCheck) = 0 AND SUM(fastDamageCheck ) <> 0 THEN 'damage'
+            //                        ELSE 'pollution & damage'
+            //                       END AS Status
+            //                      FROM inspectionResults
+            //                            WHERE {filter} AND {filter2_notIN}
+            //                      GROUP BY batteryId) AS subquery
+            //                     GROUP BY Status
+            //                        ORDER BY 
+            //                            CASE
+            //                                WHEN Status = 'normal' THEN 0
+            //                                WHEN Status = 'pollution' THEN 1
+            //                                WHEN Status = 'damage' THEN 2
+            //                                ELSE 3
+            //                            END;";
+            //    //Console.WriteLine("파이차트: " + query_Pie);
+            //    var result_Pie = _dblink.Select(query_Pie);
 
-            SeriesCollectionPie = new SeriesCollection();
+            //    SeriesCollectionPie = new SeriesCollection();
 
-            foreach (var item in result_Pie)
-            {
-                SeriesCollectionPie.Add(new PieSeries
-                {
-                    Title = (string)item["Status"],
-                    Values = new ChartValues<double> { Convert.ToDouble(item["batteryCount"]) },
-                    DataLabels = true //default값이 true인듯
-                });
-            }
+            //    foreach (var item in result_Pie)
+            //    {
+            //        SeriesCollectionPie.Add(new PieSeries
+            //        {
+            //            Title = (string)item["Status"],
+            //            Values = new ChartValues<double> { Convert.ToDouble(item["batteryCount"]) },
+            //            DataLabels = true //default값이 true인듯
+            //        });
+            //    }
+            #endregion
+            Pie piechart = new Pie();
+            piechart.ConfigureChart(_dblink, filter, filter2_notIN);
+            SeriesCollectionPie = piechart.SeriesCollectionPieModel;
         }
     }
 }

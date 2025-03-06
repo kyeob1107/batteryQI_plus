@@ -34,12 +34,16 @@ namespace batteryQI_plus.ViewModels
 
             // 파이차트
             DrawPieChart();
-            // 파이차트 라벨 표시관련
-            PointLabel = chartPoint =>
+            // 파이차트 라벨 표시관련 - 초기화로 넘겨도 될듯?
+            PointLabelPie = chartPoint =>
                 string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
 
             // column차트 - 따로 메소드 만들어서 사용하는 식으로 해야할듯
             DrawColumnChart();
+            // 콜롬차트 라벨 표시관련 - 초기화로 넘겨도 될듯?
+            PointLabelColumn = chartPoint =>
+                string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+            FormatterColumn = value => value.ToString("N0");
 
             // 테이블
             LoadData();
