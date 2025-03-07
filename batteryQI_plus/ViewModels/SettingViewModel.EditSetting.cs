@@ -1,94 +1,101 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿// 외부 네임스페이스 참조
 using CommunityToolkit.Mvvm.Input;
-using System.Windows.Controls;
-using System.Data.Common;
-using batteryQI_plus.Models;
-using System.Windows.Forms;
-using Mysqlx.Crud;
-using batteryQI_plus.ViewModels.Bases;
-using System.Windows;
-using System.Data;
-using System.Collections.ObjectModel;
-using batteryQI_plus.Views;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 using System.Globalization;
-using MySql.Data.MySqlClient;
-using System.Windows.Shapes;
+using System.Windows.Forms;
+// 내부 네임스페이스 참조
+using batteryQI_plus.ViewModels.Bases;
+using batteryQI_plus.Models;
+
 
 namespace batteryQI_plus.ViewModels
 {
-    // 설정 조회, 설정 편집 페이지
+    // 설정 편집 페이지(EditSetting View) partial class
     public partial class SettingViewModel : ViewModelBases
     {
-        private Employee _employee;
-        private bool? _isLinePower; // 생산라인 전원
-        
-        public Employee Employee
-        {
-            get => _employee;
-            set => SetProperty(ref _employee, value);
-        }
-        
-        public SettingViewModel()
-        {
-            _employee = Employee.Instance();
-            _isEditSettingRole = _employee.EmployeeRole >= 10 ? true : false; // _employee.EmployeeRole이 10 이상이라면 설정 편집창 열기 권한 허용.
-            getLineSetting(); // 설정 조회창의 설정 목록 초기화
-            getSettingItemList(); // 설정 편집창의 설정 옵션 목록 초기화
-        }
-        public bool? IsLinePower // 생산라인 전원 프로퍼티
-        {
-            get => _isLinePower;
-            set
-            {
-                SetProperty(ref _isLinePower, LinePower());
-            }
-        }
-        public Action? CloseAction { get; set; } // 페이지 닫기 프로퍼티
+        // 필드 및 프로퍼티-----------------------------------------------------------------------------------------
+        // 설정 옵션 combobox Item 목록
+        private IList<string> _lineIdList; // 생산라인 Id 옵션 목록
+        private IList<string> _usageNameList; // 배터리 사용처 옵션 목록
+        private IList<string> _batteryTypeList; // 배터리 타입 옵션 목록
+        private IList<string> _batteryShapeList; // 배터리 형태 옵션 목록
+        private Dictionary<string, string> _buyerDataDic; // Key: 발주처 Id, Value: 발주처 이름을 저장한 딕셔너리. 같은 발주처를 의미하는 Id와 이름끼리 묶어 한 요소로 취급
+        private ProductionLine _selectedLineSetting = new ProductionLine(); // 선택된 설정 옵션 필드
+        private string _selectedLineId; // EditSetting View에서 선택한 LineId에 따라 나머지 설정 옵션들이 현재 설정값을 가리키도록 Triger를 설정하기 위한 필드
 
-        [RelayCommand] private void OpenEditSetting() // 설정 편집창 열기
+        public IList<string> LineIdList // 생산라인 Id 프로퍼티
         {
-            SelectedLineId = GetTabByLineId(_selectedTabIndex);
-            EditSettingView editSettingPage = new EditSettingView();
-            editSettingPage.ShowDialog();
+            get => _lineIdList;
+            set => SetProperty(ref _lineIdList, value);
         }
-
-        private bool? LinePower() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
+        public IList<string> UsageNameList // 배터리 사용처 프로퍼티
         {
-            if (_isLinePower == false)
+            get => _usageNameList;
+            set => SetProperty(ref _usageNameList, value);
+        }
+        public IList<string> BatteryTypeList // 배터리 타입 프로퍼티
+        {
+            get => _batteryTypeList;
+            set => SetProperty(ref _batteryTypeList, value); 
+        }
+        public IList<string> BatteryShapeList // 배터리 형태 프로퍼티
+        {
+            get => _batteryShapeList;
+            set => SetProperty(ref _batteryShapeList, value);
+        }
+        public Dictionary<string, string> BuyerDataDic  // Key: 발주처 Id, Value: 발주처 이름을 저장한 딕셔너리 프로퍼티.
+        {
+            get => _buyerDataDic;
+            set => SetProperty(ref _buyerDataDic, value);
+        }
+        public ProductionLine SelectedLineSetting // 선택된 설정 옵션 프로퍼티
+        {
+            get => _selectedLineSetting;
+            set => SetProperty(ref _selectedLineSetting, value);
+        }
+        public string SelectedLineId // 생산라인 Id 기반 Triger 프로퍼티
+        {
+            get => _selectedLineId;
+            set // EditSetting View에서 특정 생산라인을 선택했을 경우 나머지 설정 옵션들이 해당 생산라인의 현재 설정값을 가리키도록 Triger 설정
             {
-                if (System.Windows.Forms.MessageBox.Show($"생산라인의 전원을 켜시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (value != null && SetProperty(ref _selectedLineId, value))
                 {
-                    _isLinePower = true;
+                    var selectedLine = _lineSettingCollection.FirstOrDefault(line => line["lineId"] == value);
+                    if (selectedLine != null)
+                    {
+                        SelectedLineSetting.LineId = selectedLine.LineId;
+                        SelectedLineSetting.UsageName = selectedLine.UsageName;
+                        SelectedLineSetting.BatteryType = selectedLine.BatteryType;
+                        SelectedLineSetting.BatteryShape = selectedLine.BatteryShape;
+                        SelectedLineSetting.BuyerData = selectedLine.BuyerData;
+                        SelectedLineSetting.Quota = selectedLine.Quota;
+                        SelectedLineSetting.DeadlineStart = selectedLine.DeadlineStart;
+                        SelectedLineSetting.DeadlineEnd = selectedLine.DeadlineEnd;
+                    }
                 }
             }
-            else if (_isLinePower == true)
+        }
+        public Action? CloseAction { get; set; } // 설정 편집 페이지 닫기 프로퍼티
+
+        // 메소드-----------------------------------------------------------------------------------------
+        private void getSettingItemList() // EditSetting View에 설정 옵션으로 사용할 프로퍼티 초기화
+        {
+            LineIdList = _lineSettingCollection
+                .Where(dict => dict.ContainsKey("lineId"))
+                .Select(dict => dict["lineId"]).ToList();
+            UsageNameList = new List<string>() { "Industrial", "Household" };
+            BatteryTypeList = new List<string>() { "Cell", "Module", "Pack" };
+            BatteryShapeList = new List<string>() { "Cylinder", "Pouch" };
+            BuyerDataDic = new Dictionary<string, string>();
+            foreach (var dict in _dblink.Select("SELECT buyerId, buyerName FROM buyers order by buyerId ASC;"))
             {
-                if (System.Windows.Forms.MessageBox.Show($"정말로 생산라인의 전원을 끄시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    _isLinePower = false;
-                }
+                BuyerDataDic.Add(dict["buyerId"].ToString(), dict["buyerName"].ToString());
             }
-            else
-            {
-                DialogResult dialogResult = System.Windows.Forms.MessageBox.Show($"생산라인의 작동 여부가 저장되어있지 않습니다.\r\n현재 생산라인이 작동 중입니까?", "Yes-No", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                    _isLinePower = true;
-                else
-                    _isLinePower = false;
-            }
-            return _isLinePower;
         }
 
-        [RelayCommand] private void SaveLineSettingButtonClick(object sender) // 변경된 설정 저장 메소드
+        // 커멘드------------------------------------------------------------------------------------------
+        [RelayCommand] private void SaveLineSettingButtonClick(object sender) // 변경된 설정 저장 커멘드
         {
-            if (_selectedLineSetting.LineId != "") // 생산라인 Id를 선택했을 때
+            if (_selectedLineSetting.LineId != "") // 생산라인 Id를 선택했을 때만 저장
             {
                 if (System.Windows.Forms.MessageBox.Show($"설정을 저장하시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes) // 설정 저장 여부를 묻는 메시지
                 {
@@ -158,13 +165,6 @@ namespace batteryQI_plus.ViewModels
                     CloseAction?.Invoke(); // EditSetting View 닫기
                 }
             }
-        }
-
-        private string GetTabByLineId(int selectedTabIndex) // Setting View에서 선택한 Tab의 lineId를 찾아 반환하는 메소드
-        {
-            if (selectedTabIndex < 0) // 선택한 Tab의 Index가 아무것도 선택하지 않은 상태(-1)일 경우 빈 문자열 반환
-                return string.Empty;
-            return LineSettingCollection[selectedTabIndex].LineId;
         }
     }
 }
