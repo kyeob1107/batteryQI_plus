@@ -30,13 +30,13 @@ namespace batteryQI_plus.Views.UserControls
             Unloaded += DashboardView_Unloaded; // 타이머 리소스 해제
         }
 
-        // 페이지 언로드 될 때 타이머 리소스 해제
+        // 페이지 언로드 될 때 타이머 리소스 해제 - 다른 페이지일 때도 돌아가면서 갱신해줘야해서 다시 주석처리
         private void DashboardView_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is DashboardViewModel viewModel)
-            {
-                viewModel.Dispose();
-            }
+            //if (DataContext is DashboardViewModel viewModel)
+            //{
+            //    viewModel.Dispose();
+            //}
         }
 
     }
