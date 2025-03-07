@@ -27,7 +27,8 @@
                     <Grid>
                         <Button Style="{StaticResource SettingButton}" Content="설정" FontSize="20" FontWeight="SemiBold" Panel.ZIndex="2"
                                     HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,14,60,0" Padding="10,5" Width="150" Height="55"
-                                    Command="{Binding OpenEditSettingCommand}" IsEnabled="{Binding IsEditSettingRole}"/>
+                                    Command="{Binding OpenEditSettingCommand}" Visibility="{Binding EditButtonVisibility}"
+                                    IsEnabled="{Binding IsEditSettingRole}"/>
 
                         <TabControl d:ItemsSource="{StaticResource DummyTabItems}"
                                     ItemsSource="{Binding LineSettingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

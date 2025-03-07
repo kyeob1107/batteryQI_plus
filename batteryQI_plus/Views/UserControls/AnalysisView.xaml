@@ -159,9 +159,11 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                     </StackPanel>
                     <!-- id 검색 영역 -->
                     <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="배터리 id:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,5,0"/>
+                        <TextBlock Text="배터리 id:" HorizontalAlignment="Left" 
+                                   VerticalAlignment="Center" Margin="20,0,5,0"
+                                   Visibility="{Binding TextBoxVisibility}"/>
                         <TextBox Text="{Binding BatteryId}" PreviewTextInput="TextBox_PreviewTextInput"
-                                 IsEnabled="{Binding IsTextBoxEnabled}"/>
+                                 Visibility="{Binding TextBoxVisibility}" IsEnabled="{Binding IsTextBoxEnabled}"/>
                     </StackPanel>
                     <!-- 조회 버튼 -->
                     <Button Grid.Column="2" Content="조회" Width="60" Height="60"

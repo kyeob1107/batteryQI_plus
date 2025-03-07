@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using batteryQI_plus.ViewModels.Bases;
 using batteryQI_plus.Models;
 using batteryQI_plus.Views;
+using System.Windows;
 
 
 namespace batteryQI_plus.ViewModels
@@ -39,6 +40,7 @@ namespace batteryQI_plus.ViewModels
             get => _isEditSettingRole;
             set => SetProperty(ref _isEditSettingRole, value);
         }
+        public Visibility EditButtonVisibility { get; private set; }
         public int SelectedTabIndex // 선택된 Tab index 프로퍼티
         {
             get => _selectedTabIndex;
@@ -55,6 +57,7 @@ namespace batteryQI_plus.ViewModels
         {
             _employee = Employee.Instance(); // 로그인한 사용자 직원 정보
             _isEditSettingRole = Employee.EmployeeRole >= 10 ? true : false; // 로그인한 사용자 직원의 권한이 특정 기준을 넘으면 설정 편집창 열기 권한 허용.
+            EditButtonVisibility = _isEditSettingRole ? Visibility.Visible : Visibility.Collapsed;
             getLineSetting(); // 설정 조회창의 설정 목록 초기화
             getSettingItemList(); // 설정 편집창의 설정 옵션 목록 초기화
         }

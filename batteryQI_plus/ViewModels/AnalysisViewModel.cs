@@ -89,6 +89,9 @@ namespace batteryQI_plus.ViewModels
         // view쪽 컨트롤 설정 관련
         private int _selectedTabIndex;
         public bool IsTextBoxEnabled => SelectedTabIndex == 3;
+        // 보이게 하는 여부 Collapsed: 숨김(레이아웃 공간에서도 제거), Visible: 표시, Hidden: 보이기는 하지만 레이아웃 공간 유지
+        public Visibility TextBoxVisibility => SelectedTabIndex != 3 ? Visibility.Collapsed : Visibility.Visible;
+
         public int SelectedTabIndex
         {
             get => _selectedTabIndex;
@@ -97,6 +100,7 @@ namespace batteryQI_plus.ViewModels
                 if (SetProperty(ref _selectedTabIndex, value))
                 {
                     OnPropertyChanged(nameof(IsTextBoxEnabled));
+                    OnPropertyChanged(nameof(TextBoxVisibility));
                 }
             }
         }
