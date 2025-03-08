@@ -20,8 +20,6 @@ namespace batteryQI_plus.ViewModels
         private bool? _isLinePower; // 생산라인 전원
         private bool _isEditSettingRole; // 설정 편집창을 열 수 있는 권한 설정
         private int _selectedTabIndex; // 선택된 Tab index
-        //private ObservableCollection<ProductionLine> _lineSettingCollection // Setting View 각 생산라인별 설정 저장
-        //    = new ObservableCollection<ProductionLine>();
         private ObservableCollection<ProductionLine> _lineSettingCollection; // Setting View 각 생산라인별 설정 저장
 
         public Employee Employee

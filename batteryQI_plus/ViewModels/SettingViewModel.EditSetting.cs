@@ -68,9 +68,7 @@ namespace batteryQI_plus.ViewModels
                         SelectedLineSetting.UsageName = selectedLine.UsageName;
                         SelectedLineSetting.BatteryType = selectedLine.BatteryType;
                         SelectedLineSetting.BatteryShape = selectedLine.BatteryShape;
-                        //SelectedLineSetting.BuyerData = selectedLine.BuyerData;
                         SelectedLineSetting.BuyerId = selectedLine.BuyerId;
-                        //SelectedLineSetting.BuyerName = selectedLine.BuyerName;
                         SelectedLineSetting.Quota = selectedLine.Quota;
                         SelectedLineSetting.DeadlineStart = selectedLine.DeadlineStart;
                         SelectedLineSetting.DeadlineEnd = selectedLine.DeadlineEnd;
@@ -117,14 +115,11 @@ namespace batteryQI_plus.ViewModels
                             _selectedLineSetting.DeadlineEnd = _selectedLineSetting.DeadlineEnd != "" ? DateTime.Parse(_selectedLineSetting.DeadlineEnd, CultureInfo.InvariantCulture)
                                 .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : "";
 
-                            // 변경된 설정 DB 업데이트
-                            // DB 업데이트에 사용할 쿼리문 구성(Set)에 사용할 Key 목록
-                            // lineId는 별도 처리, buyerName은 DB의 ProductionLine 테이블에 없는 컬럼이기 때문에 생략
-                            //string[] updateKeys = _selectedLineSetting.Keys.Where(key => key != "lineId" && key != "buyerName").ToArray();
-                            // 프로퍼티 정보를 저장할 변수
+                            // 변경된 설정 DB 업데이트 및 View 내용 업데이트
+                            // lineId별로 확인하기 때문에 프로퍼티 중 LineId는 제외
+                            // 프로퍼티 정보를 동적으로 저장할 변수
                             IEnumerable<PropertyInfo> properties = _selectedLineSetting.GetType()
                                                             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                                            //.Where(p => p.Name != "LineId" && p.Name != "BuyerName");
                                                             .Where(p => p.Name != "LineId");
                             // 업데이트할 열의 할당 구문을 저장할 리스트
                             List<string> updateSettingColumns = new List<string>();
@@ -145,6 +140,7 @@ namespace batteryQI_plus.ViewModels
                             foreach (var property in properties)
                             {
 
+                                // DB 업데이트에 사용할 쿼리문 구성(Set)에 사용할 부분 작성
                                 // 기존 값과 변경된 값이 다를 때만 업데이트
                                 object currentValue = property.GetValue(_selectedLineSetting);
                                 object originalValue = LineSettingCollection[lineSequence].GetType().GetProperty(property.Name)
@@ -183,10 +179,12 @@ namespace batteryQI_plus.ViewModels
                                 if (originalValue != currentValue)
                                 {
                                     // LineSettingCollection[lineSequence]의 프로퍼티 값을 직접 변경
-                                    LineSettingCollection[lineSequence].GetType().GetProperty(property.Name).SetValue(LineSettingCollection[lineSequence], currentValue);
+                                    LineSettingCollection[lineSequence].GetType().GetProperty(property.Name)
+                                                          .SetValue(LineSettingCollection[lineSequence], currentValue);
                                 }
 
                             }
+                            // DB에 테이블 Update부분
                             if (updateSettingColumns.Count > 0) // 업데이트할 열이 하나 이상
                             {
                                 string setClause = string.Join(", ", updateSettingColumns); // SET 구문 생성
@@ -196,27 +194,6 @@ namespace batteryQI_plus.ViewModels
                                 // 최종 완성한 sql을 사용하여 DB 업데이트 수행
                                 _dblink.Update(sql);
                             }
-
-                            //    // 업데이트된 Setting 데이터와 Setting View UI 매칭(현재는 C# 내부에서 매칭 수행, 시간 여유 있으면 DB에서 가져오는 걸로 변경)
-                            //    int tempSelectedTabIndex = SelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치 저장
-                            //    SelectedTabIndex = -1; // 설정 Tab 선택 초기화.
-                            //    IEnumerable<PropertyInfo> propertiesForUpdate = _selectedLineSetting.GetType()
-                            //                                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                            //                                    .Where(p => p.Name != "LineId" && p.Name != "BuyerName"); ;
-                            //    foreach (var property in propertiesForUpdate) // 얕은 복사
-                            //    {
-                            //        object updateValue = property.GetValue(_selectedLineSetting);
-                            //        object originalValue = LineSettingCollection[lineSequence].GetType().
-                            //                                                        GetProperty(property.Name)
-                            //                                                        .GetValue(LineSettingCollection[lineSequence]);
-                            //        if (originalValue != updateValue)
-                            //        {
-                            //            // LineSettingCollection[lineSequence]의 프로퍼티 값을 직접 변경
-                            //            LineSettingCollection[lineSequence].GetType().GetProperty(property.Name).SetValue(LineSettingCollection[lineSequence], updateValue);
-                            //        }
-                            //    }
-                            //    SelectedTabIndex = tempSelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치로 재이동. 재이동을 통해 Tab의 새로고침 유도
-
                             break;
                         }
                     }
