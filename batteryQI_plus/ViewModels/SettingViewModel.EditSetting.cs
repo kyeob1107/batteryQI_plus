@@ -147,8 +147,7 @@ namespace batteryQI_plus.ViewModels
 
                                 // 기존 값과 변경된 값이 다를 때만 업데이트
                                 object currentValue = property.GetValue(_selectedLineSetting);
-                                object originalValue = LineSettingCollection[lineSequence].GetType().
-                                                                                GetProperty(property.Name)
+                                object originalValue = LineSettingCollection[lineSequence].GetType().GetProperty(property.Name)
                                                                                 .GetValue(LineSettingCollection[lineSequence]);
                                 if (property.Name == "BuyerId")
                                 {
@@ -176,16 +175,18 @@ namespace batteryQI_plus.ViewModels
                                                 updateSettingColumns.Add($"{sqlColumnMapping[property.Name]} = {newSettingValueNum}");
                                             else
                                                 updateSettingColumns.Add($"{sqlColumnMapping[property.Name]} = '{newSettingValue}'");
-
-                                            // 바뀐 부분 설정 조회 부분에 업데이트
                                         }
                                     }
                                 }
-                                
-                            }
 
-                            Console.WriteLine(string.Join(", ", updateSettingColumns));
-                        
+                                // 바뀐 부분 설정 조회용 view에 표시되는 내용 업데이트
+                                if (originalValue != currentValue)
+                                {
+                                    // LineSettingCollection[lineSequence]의 프로퍼티 값을 직접 변경
+                                    LineSettingCollection[lineSequence].GetType().GetProperty(property.Name).SetValue(LineSettingCollection[lineSequence], currentValue);
+                                }
+
+                            }
                             if (updateSettingColumns.Count > 0) // 업데이트할 열이 하나 이상
                             {
                                 string setClause = string.Join(", ", updateSettingColumns); // SET 구문 생성
@@ -196,25 +197,25 @@ namespace batteryQI_plus.ViewModels
                                 _dblink.Update(sql);
                             }
 
-                            // 업데이트된 Setting 데이터와 Setting View UI 매칭(현재는 C# 내부에서 매칭 수행, 시간 여유 있으면 DB에서 가져오는 걸로 변경)
-                            int tempSelectedTabIndex = SelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치 저장
-                            SelectedTabIndex = -1; // 설정 Tab 선택 초기화.
-                            IEnumerable<PropertyInfo> propertiesForUpdate = _selectedLineSetting.GetType()
-                                                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                                            .Where(p => p.Name != "LineId" && p.Name != "BuyerName"); ;
-                            foreach (var property in propertiesForUpdate) // 얕은 복사
-                            {
-                                object updateValue = property.GetValue(_selectedLineSetting);
-                                object originalValue = LineSettingCollection[lineSequence].GetType().
-                                                                                GetProperty(property.Name)
-                                                                                .GetValue(LineSettingCollection[lineSequence]);
-                                if (originalValue != updateValue)
-                                {
-                                    // LineSettingCollection[lineSequence]의 프로퍼티 값을 직접 변경
-                                    LineSettingCollection[lineSequence].GetType().GetProperty(property.Name).SetValue(LineSettingCollection[lineSequence], updateValue);
-                                }
-                            }
-                            SelectedTabIndex = tempSelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치로 재이동. 재이동을 통해 Tab의 새로고침 유도
+                            //    // 업데이트된 Setting 데이터와 Setting View UI 매칭(현재는 C# 내부에서 매칭 수행, 시간 여유 있으면 DB에서 가져오는 걸로 변경)
+                            //    int tempSelectedTabIndex = SelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치 저장
+                            //    SelectedTabIndex = -1; // 설정 Tab 선택 초기화.
+                            //    IEnumerable<PropertyInfo> propertiesForUpdate = _selectedLineSetting.GetType()
+                            //                                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                            //                                    .Where(p => p.Name != "LineId" && p.Name != "BuyerName"); ;
+                            //    foreach (var property in propertiesForUpdate) // 얕은 복사
+                            //    {
+                            //        object updateValue = property.GetValue(_selectedLineSetting);
+                            //        object originalValue = LineSettingCollection[lineSequence].GetType().
+                            //                                                        GetProperty(property.Name)
+                            //                                                        .GetValue(LineSettingCollection[lineSequence]);
+                            //        if (originalValue != updateValue)
+                            //        {
+                            //            // LineSettingCollection[lineSequence]의 프로퍼티 값을 직접 변경
+                            //            LineSettingCollection[lineSequence].GetType().GetProperty(property.Name).SetValue(LineSettingCollection[lineSequence], updateValue);
+                            //        }
+                            //    }
+                            //    SelectedTabIndex = tempSelectedTabIndex; // 설정 편집 이전 조회중이던 Tab 위치로 재이동. 재이동을 통해 Tab의 새로고침 유도
 
                             break;
                         }
