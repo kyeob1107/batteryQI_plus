@@ -7,6 +7,7 @@ using batteryQI_plus.ViewModels.Bases;
 using batteryQI_plus.Models;
 using batteryQI_plus.Views;
 using System.Windows;
+using System.Reflection;
 
 
 namespace batteryQI_plus.ViewModels
@@ -19,8 +20,9 @@ namespace batteryQI_plus.ViewModels
         private bool? _isLinePower; // 생산라인 전원
         private bool _isEditSettingRole; // 설정 편집창을 열 수 있는 권한 설정
         private int _selectedTabIndex; // 선택된 Tab index
-        private ObservableCollection<ProductionLine> _lineSettingCollection // Setting View 각 생산라인별 설정 저장
-            = new ObservableCollection<ProductionLine>();
+        //private ObservableCollection<ProductionLine> _lineSettingCollection // Setting View 각 생산라인별 설정 저장
+        //    = new ObservableCollection<ProductionLine>();
+        private ObservableCollection<ProductionLine> _lineSettingCollection; // Setting View 각 생산라인별 설정 저장
 
         public Employee Employee
         {
@@ -58,6 +60,7 @@ namespace batteryQI_plus.ViewModels
             _employee = Employee.Instance(); // 로그인한 사용자 직원 정보
             _isEditSettingRole = Employee.EmployeeRole >= 10 ? true : false; // 로그인한 사용자 직원의 권한이 특정 기준을 넘으면 설정 편집창 열기 권한 허용.
             EditButtonVisibility = _isEditSettingRole ? Visibility.Visible : Visibility.Collapsed;
+            _lineSettingCollection = new ObservableCollection<ProductionLine>();
             getLineSetting(); // 설정 조회창의 설정 목록 초기화
             getSettingItemList(); // 설정 편집창의 설정 옵션 목록 초기화
         }
@@ -99,7 +102,7 @@ namespace batteryQI_plus.ViewModels
 
         private void getLineSetting() // DB에서 값을 가져와 Setting View에 사용할 프로퍼티 초기화
         {
-            _lineSettingCollection.Clear();
+            //_lineSettingCollection.Clear();
             List<Dictionary<string, object>> lineSettingCollection =
                 _dblink.Select("SELECT pl.lineId, pl.usageName, pl.batteryType, pl.batteryShape, pl.buyerId, b.buyerName, pl.quota, pl.deadlineStart, pl.deadlineEnd " +
                 "FROM productionLines pl LEFT JOIN buyers b ON pl.buyerId = b.buyerId WHERE lineId<> 0; "); // 0번 행(관리자 직책)은 실질적인 생산라인이 아니기 때문에 제외 
@@ -121,7 +124,7 @@ namespace batteryQI_plus.ViewModels
                     UsageName = usageName,
                     BatteryType = batteryType,
                     BatteryShape = batteryShape,
-                    BuyerData = new KeyValuePair<string, string>(buyerId, buyerName),
+                    BuyerId = new KeyValuePair<string, string>(buyerName, buyerId),
                     Quota = quota,
                     DeadlineStart = deadlineStart,
                     DeadlineEnd = deadlineEnd

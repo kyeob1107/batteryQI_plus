@@ -124,8 +124,8 @@
                         <TextBlock Grid.Row="4" Grid.Column="0" Text="발주처" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
                         <ComboBox Name="BuyerNameBox" Grid.Row="4" Grid.Column="1" Margin="30 0 20 0" Height="30" Width="150"
                                   ItemsSource="{Binding Path=BuyerDataDic}" FontSize="18" VerticalAlignment="Center"
-                                  DisplayMemberPath="Value"
-                                  SelectedItem="{Binding SelectedLineSetting.BuyerData}"/>
+                                  DisplayMemberPath="Key"
+                                  SelectedItem="{Binding SelectedLineSetting.BuyerId}"/>
 
                         <TextBlock Grid.Row="5" Grid.Column="0" Text="할당량" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
                         <TextBox Name="QuotaText" Grid.Row="5" Grid.Column="1" Width="150" Margin="30 0 20 0" Background="#FFE5E5E5"
