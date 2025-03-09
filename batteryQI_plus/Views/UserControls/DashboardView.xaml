@@ -293,7 +293,7 @@
 
                             <!-- AngularGauge -->
                             <lvc:AngularGauge x:Name="Line3AngularGauge"
-                                                      Value="{Binding TotalUnitTest[2].DefectRate}"
+                                                      Value="{Binding TotalUnitTest[3].DefectRate}"
                                                       FromValue="0" ToValue="100"
                                                       LabelsStep="10" TicksStep="5"
                                                       Wedge="180"

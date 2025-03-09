@@ -259,9 +259,9 @@ namespace batteryQI_plus.ViewModels
                     #endregion
                     //List<Dictionary<string, object>> result1 = _dblink.Select(unitTestQuery1);
                     List<Dictionary<string, object>> result2 = _dblink.Select(unitTestQuery2);
-                    _unitTest[line].InspectionCount = (result2.Count > 0) ? Convert.ToInt32(result2[0]["cnt"]) : 0;
+                    _unitTest[line].NormalCount = (result2.Count > 0) ? Convert.ToInt32(result2[0]["cnt"]) : 0;
                     _unitTest[line].DefectCount = (result2.Count > 0) ? Convert.ToInt32(result2[1]["cnt"]) : 0;
-                    _unitTest[line].NormalCount = _unitTest[line].InspectionCount - _unitTest[line].DefectCount;
+                    _unitTest[line].InspectionCount = _unitTest[line].NormalCount + _unitTest[line].DefectCount;
                 }
                 UpdateLogContent();
             });
