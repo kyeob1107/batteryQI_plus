@@ -59,8 +59,8 @@
                     </Grid.RowDefinitions>
 
                     <!-- Title Section -->
-                    <Border Grid.Row="0" Padding="10" VerticalAlignment="Top">
-                        <TextBlock Text="BatteryQI+" Style="{StaticResource titleText}" Margin="0 0 0 20"/>
+                    <Border Grid.Row="0" Padding="5" VerticalAlignment="Top">
+                        <TextBlock Text="BatteryQI+" Style="{StaticResource titleText}" Margin="0 0 0 5"/>
                     </Border>
 
                     <!-- Frame Section -->

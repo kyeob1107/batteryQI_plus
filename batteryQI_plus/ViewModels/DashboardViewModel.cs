@@ -136,10 +136,13 @@ namespace batteryQI_plus.ViewModels
             for (int line = 1; line < numOfLinePlusOne; line++)
             {
 
-                string newLogEntry = $"[{timestamp}] <Line{line} | "
-                                    + $"{_totalUnitTest[line].StartDatetime} ~ {_totalUnitTest[line].EndDatetime}>"
-                                    + "\r\n"
-                                    + $"검사수: {_totalUnitTest[line].InspectionCount}개 | 정상: {_totalUnitTest[line].NormalCount}개 | "
+                //string newLogEntry = $"[{timestamp}] <Line{line} | "
+                //                    + $"{_totalUnitTest[line].StartDatetime} ~ {_totalUnitTest[line].EndDatetime}>"
+                //                    + "\r\n"
+                //                    + $"검사수: {_totalUnitTest[line].InspectionCount}개 | 정상: {_totalUnitTest[line].NormalCount}개 | "
+                //                    + $"불량: {_totalUnitTest[line].DefectCount}개 (불량률: {_totalUnitTest[line].DefectRate.ToString("F2")}%) "
+                //                    + "\r\n";
+                string newLogEntry = $"검사수: {_totalUnitTest[line].InspectionCount}개 | 정상: {_totalUnitTest[line].NormalCount}개 | "
                                     + $"불량: {_totalUnitTest[line].DefectCount}개 (불량률: {_totalUnitTest[line].DefectRate.ToString("F2")}%) "
                                     + "\r\n";
                 this.TotalLogContent[0] += newLogEntry;
@@ -362,6 +365,106 @@ namespace batteryQI_plus.ViewModels
             }
         }
 
+        //// (앵글러)게이지 차트 사이즈 조절
+        //private double _angularGaugeHeight;
+        //public double AngularGaugeHeight
+        //{
+        //    get => _angularGaugeHeight;
+        //    set => SetProperty(ref _angularGaugeHeight, value);
+        //}
+
+        //private double _angularGaugeWidth;
+        //public double AngularGaugeWidth
+        //{
+        //    get => _angularGaugeWidth;
+        //    set => SetProperty(ref _angularGaugeWidth, value);
+        //}
+
+        //public void UpdateGaugeSize(double parentHeight, double parentWidth)
+        //{
+        //    //// 부모 컨테이너 크기의 80%로 설정
+        //    //AngularGaugeHeight = parentHeight * 1;
+        //    //AngularGaugeWidth = parentWidth * 1.2;
+        //    // AngularGauge의 크기를 부모 컨테이너에 맞게 설정
+        //    double size = 1.5 * Math.Min(parentWidth, parentHeight); // 너비와 높이 중 작은 값을 기준으로 설정
+        //    AngularGaugeWidth = size;
+        //    AngularGaugeHeight = size;
+        //}
+
+        // 게이지 차트들 위치 조정
+        private double _gaugeLeft;
+        public double GaugeLeft
+        {
+            get => _gaugeLeft;
+            set => SetProperty(ref _gaugeLeft, value);
+        }
+
+        private double _gaugeTop;
+        public double GaugeTop
+        {
+            get => _gaugeTop;
+            set => SetProperty(ref _gaugeTop, value);
+        }
+
+        private double _gaugeWidth;
+        public double GaugeWidth
+        {
+            get => _gaugeWidth;
+            set => SetProperty(ref _gaugeWidth, value);
+        }
+
+        private double _gaugeHeight;
+        public double GaugeHeight
+        {
+            get => _gaugeHeight;
+            set => SetProperty(ref _gaugeHeight, value);
+        }
+
+        private double _angularGaugeLeft;
+        public double AngularGaugeLeft
+        {
+            get => _angularGaugeLeft;
+            set => SetProperty(ref _angularGaugeLeft, value);
+        }
+
+        private double _angularGaugeTop;
+        public double AngularGaugeTop
+        {
+            get => _angularGaugeTop;
+            set => SetProperty(ref _angularGaugeTop, value);
+        }
+
+        private double _angularGaugeWidth;
+        public double AngularGaugeWidth
+        {
+            get => _angularGaugeWidth;
+            set => SetProperty(ref _angularGaugeWidth, value);
+        }
+
+        private double _angularGaugeHeight;
+        public double AngularGaugeHeight
+        {
+            get => _angularGaugeHeight;
+            set => SetProperty(ref _angularGaugeHeight, value);
+        }
+
+        public void UpdateGaugePositions(double parentWidth, double parentHeight)
+        {
+            // Gauge 크기 및 위치 계산 (왼쪽 배치)
+            GaugeWidth = Math.Min(parentWidth, parentHeight) * 0.7; // 부모 크기의 40%
+            GaugeHeight = GaugeWidth;
+            //GaugeLeft = parentWidth * 0.025; // 왼쪽 여백
+            GaugeLeft = parentWidth * 0.035; // 왼쪽 여백
+            GaugeTop = (parentHeight - GaugeHeight) / 2; // 중앙 배치
+
+            // AngularGauge 크기 및 위치 계산 (오른쪽 배치)
+            double offset = 50; // 오프셋 설정 (중앙보다 20px 아래쪽으로 이동)
+            AngularGaugeWidth = Math.Min(parentWidth, parentHeight) * 1.3; // 부모 크기의 60%
+            AngularGaugeHeight = AngularGaugeWidth;
+            //AngularGaugeLeft = parentWidth * 0.375; // 오른쪽 여백
+            AngularGaugeLeft = parentWidth * 0.355; // 오른쪽 여백
+            AngularGaugeTop = (parentHeight - AngularGaugeHeight) / 2 + offset; // 중앙 배치
+        }
 
     }
 }

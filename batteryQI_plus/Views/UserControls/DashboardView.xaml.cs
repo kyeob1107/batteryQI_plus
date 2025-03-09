@@ -39,5 +39,24 @@ namespace batteryQI_plus.Views.UserControls
             //}
         }
 
+        private void ParentContainer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //// DataContext에서 ViewModel 가져오기
+            //if (DataContext is DashboardViewModel viewModel)
+            //{
+            //    // 부모 컨테이너 크기 전달
+            //    viewModel.UpdateGaugeSize(ParentContainer.ActualHeight, ParentContainer.ActualWidth);
+            //}
+
+            var container = sender as Canvas;
+            var viewModel = DataContext as DashboardViewModel;
+
+            if (viewModel != null)
+            {
+                //string containerName = container.Name;
+                viewModel.UpdateGaugePositions(container.ActualWidth, container.ActualHeight);
+            }
+        }
+
     }
 }

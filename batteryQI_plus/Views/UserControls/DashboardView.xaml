@@ -15,11 +15,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" />
                 <RowDefinition Height="2*" />
-                <RowDefinition Height="2*" />
+                <RowDefinition Height="3*" />
             </Grid.RowDefinitions>
 
             <!-- 단위시간 검사 모니터링 -->
-            <Border Grid.Row="0" Background="#7163ba" CornerRadius="10" Padding="10" Margin="0 0 0 10">
+            <Border Grid.Row="0" Background="#7163ba" CornerRadius="10" Padding="10" Margin="0 0 0 3">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -27,7 +27,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Title -->
-                    <TextBlock Text="단위시간 검사 모니터링" FontSize="18" FontWeight="Bold" Foreground="#333333" Margin="0 0 0 10"/>
+                    <TextBlock Grid.Row="0" Text="단위시간 검사 모니터링" FontSize="17" Foreground="White" FontWeight="SemiBold" Margin="0 0 0 10"/>
 
                     <!-- TabControl -->
                     <TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="0">
@@ -81,7 +81,7 @@
             </Border>
 
             <!-- 실시간 불량률 차트 -->
-            <Border Grid.Row="1" Background="#FFFFFF" CornerRadius="10" Padding="10" Margin="0 0 0 10">
+            <Border Grid.Row="1" Background="#FFFFFF" CornerRadius="10" Padding="0" Margin="0 0 0 0">
                 <!--<TextBlock Text="실시간 불량률 차트 (공간 확보)" FontSize="18" FontWeight="Bold" Foreground="#333333"/>-->
                 <!-- 차트 공간 확보 -->
                 <!--<lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right">
@@ -111,14 +111,15 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- Title -->
-                    <TextBlock Text="검사 진행률 &amp; 단위시간 검사 합계" FontSize="18" FontWeight="Bold" Foreground="#333333" Margin="0 0 0 10"/>
+                    <TextBlock Grid.Row="0" Text="검사 진행률 &amp; 평균 불량률" FontSize="17" Foreground="White" FontWeight="SemiBold" Margin="0 0 0 10"/>
 
-                    <!-- TabControl (구조 동일) -->
-                    <TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="0">
-                        <!-- 전체 탭 -->
+                    <!-- 검사 진행률 & 평균 불량률 (구조 동일) -->
+                    <!--<TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="0">
+                        
                         <TabItem Header="전체">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text="{Binding TotalLogContent[0]}" 
@@ -127,7 +128,7 @@
                             </ScrollViewer>
                         </TabItem>
 
-                        <!-- Line1 탭 -->
+                        
                         <TabItem Header="Line1">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text="{Binding TotalLogContent[1]}"
@@ -136,7 +137,7 @@
                             </ScrollViewer>
                         </TabItem>
 
-                        <!-- Line2 탭 -->
+                        
                         <TabItem Header="Line2">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text="{Binding TotalLogContent[2]}" 
@@ -145,7 +146,7 @@
                             </ScrollViewer>
                         </TabItem>
 
-                        <!-- Line3 탭 -->
+                        
                         <TabItem Header="Line3">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text="{Binding TotalLogContent[3]}" 
@@ -153,7 +154,179 @@
                                            Foreground="#333333"/>
                             </ScrollViewer>
                         </TabItem>
-                    </TabControl>
+                    </TabControl>-->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <!-- Line1 -->
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Line1" 
+                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                   Foreground="White" Margin="0 0 0 10" />
+                        <Canvas Grid.Column="0" Grid.Row="1" x:Name="Line1ParentContainer"
+                                SizeChanged="ParentContainer_SizeChanged">
+                            <!-- Gauge -->
+                            <lvc:Gauge x:Name="Line1GaugeChart"
+                                       Value="70"
+                                       Uses360Mode="True"
+                                       From="0" To="100"
+                                       HighFontSize="30"
+                                       Foreground="White" 
+                                       Width="{Binding GaugeWidth}"
+                                       Height="{Binding GaugeHeight}"
+                                       Canvas.Left="{Binding GaugeLeft}"
+                                       Canvas.Top="{Binding GaugeTop}">
+                                <lvc:Gauge.GaugeRenderTransform>
+                                    <TransformGroup>
+                                        <RotateTransform Angle="-90"></RotateTransform>
+                                        <ScaleTransform ScaleX="1"></ScaleTransform>
+                                    </TransformGroup>
+                                </lvc:Gauge.GaugeRenderTransform>
+                            </lvc:Gauge>
+
+                            <!-- AngularGauge -->
+                            <lvc:AngularGauge x:Name="Line1AngularGauge"
+                                              Value="{Binding TotalUnitTest[1].DefectRate}"
+                                              FromValue="0" ToValue="100"
+                                              LabelsStep="10" TicksStep="5"
+                                              Wedge="180"
+                                              TicksForeground="White" Foreground="White"
+                                              FontWeight="Bold" FontSize="16"
+                                              SectionsInnerRadius=".5"
+                                              Width="{Binding AngularGaugeWidth}"
+                                              Height="{Binding AngularGaugeHeight}"
+                                              Canvas.Left="{Binding AngularGaugeLeft}"
+                                              Canvas.Top="{Binding AngularGaugeTop}">
+                                <lvc:AngularGauge.Sections>
+                                    <lvc:AngularSection FromValue="0" ToValue="30" Fill="#dd5143"/>
+                                    <lvc:AngularSection FromValue="30" ToValue="70" Fill="#F8A725"/>
+                                    <lvc:AngularSection FromValue="70" ToValue="100" Fill="#FF3939"/>
+                                </lvc:AngularGauge.Sections>
+                            </lvc:AngularGauge>
+                        </Canvas>
+                        <!-- 간단 정보 출력 -->
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="{Binding TotalLogContent[1]}" 
+                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                   Foreground="White"  VerticalAlignment="Center" Padding="0,20,0,0" />
+
+                        <!-- Line2 -->
+                        <TextBlock Grid.Column="1" Grid.Row="0" Text="Line2" 
+                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                   Foreground="White" Margin="0 0 0 10" />
+                        <Canvas Grid.Column="1" Grid.Row="1" x:Name="Line2ParentContainer"
+        SizeChanged="ParentContainer_SizeChanged">
+                            <!-- Gauge -->
+                            <lvc:Gauge x:Name="Line2GaugeChart"
+                                               Value="70"
+                                               Uses360Mode="True"
+                                               From="0" To="100"
+                                               HighFontSize="30"
+                                               Foreground="White" 
+                                               Width="{Binding GaugeWidth}"
+                                               Height="{Binding GaugeHeight}"
+                                               Canvas.Left="{Binding GaugeLeft}"
+                                               Canvas.Top="{Binding GaugeTop}">
+                                <lvc:Gauge.GaugeRenderTransform>
+                                    <TransformGroup>
+                                        <RotateTransform Angle="-90"></RotateTransform>
+                                        <ScaleTransform ScaleX="1"></ScaleTransform>
+                                    </TransformGroup>
+                                </lvc:Gauge.GaugeRenderTransform>
+                            </lvc:Gauge>
+
+                            <!-- AngularGauge -->
+                            <lvc:AngularGauge x:Name="Line2AngularGauge"
+                                                      Value="{Binding TotalUnitTest[2].DefectRate}"
+                                                      FromValue="0" ToValue="100"
+                                                      LabelsStep="10" TicksStep="5"
+                                                      Wedge="180"
+                                                      TicksForeground="White" Foreground="White"
+                                                      FontWeight="Bold" FontSize="16"
+                                                      SectionsInnerRadius=".5"
+                                                      Width="{Binding AngularGaugeWidth}"
+                                                      Height="{Binding AngularGaugeHeight}"
+                                                      Canvas.Left="{Binding AngularGaugeLeft}"
+                                                      Canvas.Top="{Binding AngularGaugeTop}">
+                                <lvc:AngularGauge.Sections>
+                                    <lvc:AngularSection FromValue="0" ToValue="30" Fill="#dd5143"/>
+                                    <lvc:AngularSection FromValue="30" ToValue="70" Fill="#F8A725"/>
+                                    <lvc:AngularSection FromValue="70" ToValue="100" Fill="#FF3939"/>
+                                </lvc:AngularGauge.Sections>
+                            </lvc:AngularGauge>
+                        </Canvas>
+                        <!-- 간단 정보 출력 -->
+                        <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding TotalLogContent[2]}" 
+                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                   Foreground="White" VerticalAlignment="Center" Padding="0,20,0,0" />
+
+                        <!-- Line3 -->
+                        <TextBlock Grid.Column="2" Grid.Row="0" Text="Line3" 
+                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                   Foreground="White" Margin="0 0 0 10" />
+                        <Canvas Grid.Column="2" Grid.Row="1" x:Name="Line3ParentContainer"
+        SizeChanged="ParentContainer_SizeChanged">
+                            <!-- Gauge -->
+                            <lvc:Gauge x:Name="Line3GaugeChart"
+                                               Value="70"
+                                               Uses360Mode="True"
+                                               From="0" To="100"
+                                               HighFontSize="30"
+                                               Foreground="White" 
+                                               Width="{Binding GaugeWidth}"
+                                               Height="{Binding GaugeHeight}"
+                                               Canvas.Left="{Binding GaugeLeft}"
+                                               Canvas.Top="{Binding GaugeTop}">
+                                <lvc:Gauge.GaugeRenderTransform>
+                                    <TransformGroup>
+                                        <RotateTransform Angle="-90"></RotateTransform>
+                                        <ScaleTransform ScaleX="1"></ScaleTransform>
+                                    </TransformGroup>
+                                </lvc:Gauge.GaugeRenderTransform>
+                            </lvc:Gauge>
+
+                            <!-- AngularGauge -->
+                            <lvc:AngularGauge x:Name="Line3AngularGauge"
+                                                      Value="{Binding TotalUnitTest[2].DefectRate}"
+                                                      FromValue="0" ToValue="100"
+                                                      LabelsStep="10" TicksStep="5"
+                                                      Wedge="180"
+                                                      TicksForeground="White" Foreground="White"
+                                                      FontWeight="Bold" FontSize="16"
+                                                      SectionsInnerRadius=".5"
+                                                      Width="{Binding AngularGaugeWidth}"
+                                                      Height="{Binding AngularGaugeHeight}"
+                                                      Canvas.Left="{Binding AngularGaugeLeft}"
+                                                      Canvas.Top="{Binding AngularGaugeTop}">
+                                <lvc:AngularGauge.Sections>
+                                    <lvc:AngularSection FromValue="0" ToValue="30" Fill="#dd5143"/>
+                                    <lvc:AngularSection FromValue="30" ToValue="70" Fill="#F8A725"/>
+                                    <lvc:AngularSection FromValue="70" ToValue="100" Fill="#FF3939"/>
+                                </lvc:AngularGauge.Sections>
+                            </lvc:AngularGauge>
+                        </Canvas>
+                        <!-- 간단 정보 출력 -->
+                        <TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding TotalLogContent[3]}" 
+                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                   Foreground="White" VerticalAlignment="Center" Padding="0,20,0,0" />
+                    </Grid>
+                    <!-- 계산된 날짜시간 범위 표시 -->
+                    <TextBlock Grid.Row="2" FontSize="9" 
+                               FontWeight="Light" HorizontalAlignment="Center"
+                               Foreground="White" Margin="0 0 0 0">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0:yyyy-MM-dd HH:mm} ~ {1:yyyy-MM-dd HH:mm}">
+                                <Binding Path="TotalUnitTest[1].StartDatetime"/>
+                                <Binding Path="TotalUnitTest[1].EndDatetime"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                 </Grid>
             </Border>
         </Grid>
