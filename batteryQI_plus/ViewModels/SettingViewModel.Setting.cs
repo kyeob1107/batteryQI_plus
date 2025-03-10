@@ -21,6 +21,7 @@ namespace batteryQI_plus.ViewModels
         private bool _isEditSettingRole; // 설정 편집창을 열 수 있는 권한 설정
         private int _selectedTabIndex; // 선택된 Tab index
         private ObservableCollection<ProductionLine> _lineSettingCollection; // Setting View 각 생산라인별 설정 저장
+        private readonly ViewModelLocator _viewModelLocator;
 
         public Employee Employee
         {
@@ -53,9 +54,10 @@ namespace batteryQI_plus.ViewModels
         }
 
         // 생성자---------------------------------------------------------------------------
-        public SettingViewModel() // 생성자
+        public SettingViewModel(ViewModelLocator viewModelLocator) // 생성자
         {
             _employee = Employee.Instance(); // 로그인한 사용자 직원 정보
+            _viewModelLocator = viewModelLocator; // viewModelLocater에 구현된 메소드 사용을 위해
             _isEditSettingRole = Employee.EmployeeRole >= 10 ? true : false; // 로그인한 사용자 직원의 권한이 특정 기준을 넘으면 설정 편집창 열기 권한 허용.
             EditButtonVisibility = _isEditSettingRole ? Visibility.Visible : Visibility.Collapsed;
             _lineSettingCollection = new ObservableCollection<ProductionLine>();

@@ -63,7 +63,7 @@ namespace batteryQI_plus.ViewModels
             {
                 // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
                 if (_SettingViewModel == null)
-                    _SettingViewModel = new SettingViewModel();
+                    _SettingViewModel = new SettingViewModel(this); // ViewModelLocator 인스턴스를 전달
                 return _SettingViewModel;
             }
         }
@@ -89,6 +89,12 @@ namespace batteryQI_plus.ViewModels
                     _dashboardViewModel = new DashboardViewModel();
                 return _dashboardViewModel;
             }
+        }
+
+        public void ResetDashboardViewModel()
+        {
+            _dashboardViewModel = new DashboardViewModel();
+            // 필요시 추가적인 초기화 로직을 여기서 수행할 수 있습니다.
         }
 
         private AnalysisViewModel? _analysisViewModel; // 분석 View

@@ -198,6 +198,7 @@ namespace batteryQI_plus.ViewModels
                         }
                     }
                     CloseAction?.Invoke(); // EditSetting View 닫기
+                    _viewModelLocator.ResetDashboardViewModel(); // 대시보드 뷰모델 초기화
                 }
             }
         }
