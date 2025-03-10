@@ -41,6 +41,11 @@ namespace batteryQI_plus.Models
         private int _normalCount;
         private int _defectCount;
         private double _defectRate;
+
+        // 실시간 갱신 관련
+        private int _autoRefreshUnitTime; // 자동 실시간 시간반올림 단위
+        private int _manualRefreshUnitTime; // 수동 실시간 시간반올림 단위
+
         // 진행도 관련
         private int? _previousInspectionCount; // 이전 검사한 량 batteryId counts
         private int? _quota; // 할당량
@@ -299,6 +304,19 @@ namespace batteryQI_plus.Models
             get { return _totalProgress; }
             set { SetProperty(ref _totalProgress, value); }
         }
+
+        public int AutoRefreshUnitTime
+        {
+            get { return _autoRefreshUnitTime; }
+            //set { SetProperty(ref _autoRefreshUnitTime, value); }
+        }
+
+        public int ManualRefreshUnitTime
+        {
+            get { return _manualRefreshUnitTime; }
+            //set { SetProperty(ref _manualRefreshUnitTime, value); }
+        }
+
 
         private void UpdateDefectRate()
         {

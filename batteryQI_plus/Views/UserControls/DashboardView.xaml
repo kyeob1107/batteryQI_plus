@@ -4,6 +4,13 @@
              xmlns:local="clr-namespace:batteryQI_plus.ViewModels"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              >
+    <UserControl.Resources>
+        <Style x:Key="AngularGaugeStyle" TargetType="lvc:AngularGauge">
+            <Setter Property="NeedleFill" Value="#FF8F00"/>
+            <!-- Needle 색상 설정 (예: 주황색) -->
+        </Style>
+    </UserControl.Resources>
+
     <!-- DataContext 설정 -->
     <UserControl.DataContext>
         <Binding Path="DashboardViewModel" Source="{StaticResource Locator}" />
@@ -181,6 +188,7 @@
                                               TicksForeground="Transparent" Foreground="Transparent"
                                               FontWeight="Bold" FontSize="16"
                                               SectionsInnerRadius=".5"
+                                              Style="{StaticResource AngularGaugeStyle}"
                                               Width="{Binding ProgressWidth}"
                                               Height="{Binding ProgressHeight}"
                                               Canvas.Left="{Binding ProgressLeft}"
@@ -215,16 +223,18 @@
                                               LabelsStep="10" TicksStep="5"
                                               Wedge="180"
                                               TicksForeground="White" Foreground="White"
-                                              FontWeight="Bold" FontSize="16"
+                                              FontWeight="Bold" FontSize="10"
                                               SectionsInnerRadius=".5"
+                                              Style="{StaticResource AngularGaugeStyle}"
                                               Width="{Binding RateWidth}"
                                               Height="{Binding RateHeight}"
                                               Canvas.Left="{Binding RateLeft}"
                                               Canvas.Top="{Binding RateTop}">
                                 <lvc:AngularGauge.Sections>
-                                    <lvc:AngularSection FromValue="0" ToValue="30" Fill="#dd5143"/>
-                                    <lvc:AngularSection FromValue="30" ToValue="70" Fill="#F8A725"/>
-                                    <lvc:AngularSection FromValue="70" ToValue="100" Fill="#FF3939"/>
+                                    <lvc:AngularSection FromValue="0" ToValue="20" Fill="#86E57F"/>
+                                    <lvc:AngularSection FromValue="20" ToValue="60" Fill="#FAED7D"/>
+                                    <lvc:AngularSection FromValue="60" ToValue="80" Fill="#F361A6"/>
+                                    <lvc:AngularSection FromValue="80" ToValue="100" Fill="#FF3939"/>
                                 </lvc:AngularGauge.Sections>
                             </lvc:AngularGauge>
                         </Canvas>
@@ -248,6 +258,7 @@
                                               TicksForeground="Transparent" Foreground="Transparent"
                                               FontWeight="Bold" FontSize="16"
                                               SectionsInnerRadius=".5"
+                                              Style="{StaticResource AngularGaugeStyle}"
                                               Width="{Binding ProgressWidth}"
                                               Height="{Binding ProgressHeight}"
                                               Canvas.Left="{Binding ProgressLeft}"
@@ -279,21 +290,23 @@
 
                             <!-- Defect Rate -->
                             <lvc:AngularGauge x:Name="Line2AngularGauge"
-                                                      Value="{Binding TotalUnitTest[2].DefectRate}"
-                                                      FromValue="0" ToValue="100"
-                                                      LabelsStep="10" TicksStep="5"
-                                                      Wedge="180"
-                                                      TicksForeground="White" Foreground="White"
-                                                      FontWeight="Bold" FontSize="16"
-                                                      SectionsInnerRadius=".5"
-                                                      Width="{Binding RateWidth}"
-                                                      Height="{Binding RateHeight}"
-                                                      Canvas.Left="{Binding RateLeft}"
-                                                      Canvas.Top="{Binding RateTop}">
+                                              Value="{Binding TotalUnitTest[2].DefectRate}"
+                                              FromValue="0" ToValue="100"
+                                              LabelsStep="10" TicksStep="5"
+                                              Wedge="180"
+                                              TicksForeground="White" Foreground="White"
+                                              FontWeight="Bold" FontSize="10"
+                                              SectionsInnerRadius=".5"
+                                              Style="{StaticResource AngularGaugeStyle}"
+                                              Width="{Binding RateWidth}"
+                                              Height="{Binding RateHeight}"
+                                              Canvas.Left="{Binding RateLeft}"
+                                              Canvas.Top="{Binding RateTop}">
                                 <lvc:AngularGauge.Sections>
-                                    <lvc:AngularSection FromValue="0" ToValue="30" Fill="#dd5143"/>
-                                    <lvc:AngularSection FromValue="30" ToValue="70" Fill="#F8A725"/>
-                                    <lvc:AngularSection FromValue="70" ToValue="100" Fill="#FF3939"/>
+                                    <lvc:AngularSection FromValue="0" ToValue="20" Fill="#86E57F"/>
+                                    <lvc:AngularSection FromValue="20" ToValue="60" Fill="#FAED7D"/>
+                                    <lvc:AngularSection FromValue="60" ToValue="80" Fill="#F361A6"/>
+                                    <lvc:AngularSection FromValue="80" ToValue="100" Fill="#FF3939"/>
                                 </lvc:AngularGauge.Sections>
                             </lvc:AngularGauge>
                         </Canvas>
@@ -317,6 +330,7 @@
                                               TicksForeground="Transparent" Foreground="Transparent"
                                               FontWeight="Bold" FontSize="16"
                                               SectionsInnerRadius=".5"
+                                              Style="{StaticResource AngularGaugeStyle}"
                                               Width="{Binding ProgressWidth}"
                                               Height="{Binding ProgressHeight}"
                                               Canvas.Left="{Binding ProgressLeft}"
@@ -348,21 +362,23 @@
 
                             <!-- Defect Rate -->
                             <lvc:AngularGauge x:Name="Line3AngularGauge"
-                                                      Value="{Binding TotalUnitTest[3].DefectRate}"
-                                                      FromValue="0" ToValue="100"
-                                                      LabelsStep="10" TicksStep="5"
-                                                      Wedge="180"
-                                                      TicksForeground="White" Foreground="White"
-                                                      FontWeight="Bold" FontSize="16"
-                                                      SectionsInnerRadius=".5"
-                                                      Width="{Binding RateWidth}"
-                                                      Height="{Binding RateHeight}"
-                                                      Canvas.Left="{Binding RateLeft}"
-                                                      Canvas.Top="{Binding RateTop}">
+                                              Value="{Binding TotalUnitTest[3].DefectRate}"
+                                              FromValue="0" ToValue="100"
+                                              LabelsStep="10" TicksStep="5"
+                                              Wedge="180"
+                                              TicksForeground="White" Foreground="White"
+                                              FontWeight="Bold" FontSize="10"
+                                              SectionsInnerRadius=".5"
+                                              Style="{StaticResource AngularGaugeStyle}"
+                                              Width="{Binding RateWidth}"
+                                              Height="{Binding RateHeight}"
+                                              Canvas.Left="{Binding RateLeft}"
+                                              Canvas.Top="{Binding RateTop}">
                                 <lvc:AngularGauge.Sections>
-                                    <lvc:AngularSection FromValue="0" ToValue="30" Fill="#dd5143"/>
-                                    <lvc:AngularSection FromValue="30" ToValue="70" Fill="#F8A725"/>
-                                    <lvc:AngularSection FromValue="70" ToValue="100" Fill="#FF3939"/>
+                                    <lvc:AngularSection FromValue="0" ToValue="20" Fill="#86E57F"/>
+                                    <lvc:AngularSection FromValue="20" ToValue="60" Fill="#FAED7D"/>
+                                    <lvc:AngularSection FromValue="60" ToValue="80" Fill="#F361A6"/>
+                                    <lvc:AngularSection FromValue="80" ToValue="100" Fill="#FF3939"/>
                                 </lvc:AngularGauge.Sections>
                             </lvc:AngularGauge>
                         </Canvas>

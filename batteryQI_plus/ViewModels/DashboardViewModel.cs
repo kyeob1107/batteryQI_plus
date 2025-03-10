@@ -7,6 +7,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using LiveCharts.Helpers;
 using System.Collections.ObjectModel;
+using System.Windows.Shapes;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -40,10 +41,10 @@ namespace batteryQI_plus.ViewModels
         private void ScheduleNextExecution()
         {
             DateTime now = DateTime.Now;
-            int minutesUntilNextExecution = 10 - (now.Minute % 10);
+            int minutesUntilNextExecution = unitTestTimeMinites_auto - (now.Minute % unitTestTimeMinites_auto);
             if (minutesUntilNextExecution == 0 && now.Second > 0)
             {
-                minutesUntilNextExecution = 10;
+                minutesUntilNextExecution = unitTestTimeMinites_auto;
             }
 
             DateTime nextExecution = now.AddMinutes(minutesUntilNextExecution)
@@ -57,7 +58,9 @@ namespace batteryQI_plus.ViewModels
         }
         #endregion
 
-        int unitTestTimeMinites = 10; // 단위시간 검사 단위시간 값('분'단위 값) - 이 부분은 타이머랑 연동시킬 수 있으면 좋겠음
+        int unitTestTimeMinites_auto = 2; // 10; // 자동 단위시간 검사 단위시간 값('분'단위 값) 
+        int unitTestTimeMinites_manual = 1; // 수동 단위시간 검사 단위시간 값('분'단위 값) 
+        List<DateTime> dates;
 
         // 단위시간 검사 모니터링용
         int numOfLinePlusOne; // 쿼리보내서 line 몇개 있는지 count 수
@@ -180,21 +183,21 @@ namespace batteryQI_plus.ViewModels
             // 차트 데이터 초기화
             //var values = new ChartValues<double> { 3, 5, 2, 6, 2, 7, 1 };
             // 일단 0으로 초기화 후에 여유 있으면 이전 단위시간으로 쪼갠 값 가져와서 초기화
-            var values = new ChartValues<double>(Enumerable.Repeat(0.0, numOfLinePlusOne));
-            var values2 = new ChartValues<double>(Enumerable.Repeat(0.0, numOfLinePlusOne));
-            var dates = new List<DateTime>
+            //var values = new ChartValues<double>(Enumerable.Repeat(0.0, numOfLinePlusOne));
+            //var values2 = new ChartValues<double>(Enumerable.Repeat(0.0, numOfLinePlusOne));
+            dates = new List<DateTime>
         {
-            DateTime.Now.AddMinutes(-60),
-            DateTime.Now.AddMinutes(-50),
-            DateTime.Now.AddMinutes(-40),
-            DateTime.Now.AddMinutes(-30),
-            DateTime.Now.AddMinutes(-20),
-            DateTime.Now.AddMinutes(-10),
+            //DateTime.Now.AddMinutes(-6*unitTestTimeMinites_auto),
+            DateTime.Now.AddMinutes(-5*unitTestTimeMinites_auto),
+            DateTime.Now.AddMinutes(-4*unitTestTimeMinites_auto),
+            DateTime.Now.AddMinutes(-3*unitTestTimeMinites_auto),
+            DateTime.Now.AddMinutes(-2*unitTestTimeMinites_auto),
+            DateTime.Now.AddMinutes(-1*unitTestTimeMinites_auto),
             DateTime.Now
         };
             // 실시간 차트 부분
-            checkTimeRangeMinites = 60; // 범위 : 60분
-            numOfData = checkTimeRangeMinites / unitTestTimeMinites;
+            checkTimeRangeMinites = 12; //60; // 범위 : 60분
+            numOfData = checkTimeRangeMinites / unitTestTimeMinites_auto;
             dataListLiveChart = new List<List<double>>(numOfLinePlusOne - 1); // LiveChart y축 저장용
             SeriesCollectionLiveChart = new SeriesCollection();
 
@@ -225,7 +228,8 @@ namespace batteryQI_plus.ViewModels
                 for (int line = 1; line < numOfLinePlusOne; line++)
                 {
                     //_unitTest[line] = new DashboardModel(_dblink, _employee, line); // 나중에 이부분 함수로 깔끔하게 다듬기
-                    _unitTest[line].StartDatetime = _unitTest[line].EndDatetime;
+                    //_unitTest[line].StartDatetime = _unitTest[line].EndDatetime.AddMinutes(1);
+                    _unitTest[line].StartDatetime = _unitTest[line].EndDatetime.AddMinutes(1.0/6.0);
                     _unitTest[line].EndDatetime = DateTime.Now.FloorToNearestMinutes(timeFloorUnit);
                     // 일단 임시로 해둔 것
                     #region 검사 수 & 불량 수
@@ -278,11 +282,17 @@ namespace batteryQI_plus.ViewModels
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            
             Application.Current.Dispatcher.Invoke(() =>
             {
                 MessageBox.Show("타이머 Tick 작동\r\n" + $"{DateTime.Now}");
+                if (_unitTest[1].EndDatetime.AddMinutes(1.0 / 6.0) >= DateTime.Now.FloorToNearestMinutes(unitTestTimeMinites_auto))
+                {
+                    MessageBox.Show($"아직 시간이 {unitTestTimeMinites_auto}분이 지나지 않았습니다\r\n" + $"{DateTime.Now}");
+                    return;
+                }
                 // 화면에 보이는 값들 갱신
-                UpdateMonitoringLog(10);
+                UpdateMonitoringLog(unitTestTimeMinites_auto);
                 UpdateProgressNTotalUnitTest();
                 UpdateLiveChart();
             });
@@ -297,7 +307,12 @@ namespace batteryQI_plus.ViewModels
             Application.Current.Dispatcher.Invoke(() =>
             {
                 MessageBox.Show("버튼 작동\r\n" + $"{DateTime.Now}");
-                UpdateMonitoringLog(1);
+                if (_unitTest[1].EndDatetime.AddMinutes(1.0 / 6.0) >= DateTime.Now.FloorToNearestMinutes(unitTestTimeMinites_manual)) 
+                {
+                    MessageBox.Show($"아직 시간이 {unitTestTimeMinites_manual}분이 지나지 않았습니다\r\n" + $"{DateTime.Now}");
+                    return; 
+                }
+                UpdateMonitoringLog(unitTestTimeMinites_manual);
                 UpdateProgressNTotalUnitTest();
                 UpdateLiveChart();
             });
@@ -347,6 +362,9 @@ namespace batteryQI_plus.ViewModels
                 }
                 dataListLiveChart[i].Add(_unitTest[i+1].DefectRate); // 새 데이터 추가
             }
+            dates.RemoveAt(0);
+            dates.Add(_unitTest[1].EndDatetime);
+            DateTimeFormatter = value => dates[((int)value)].ToString("yyyy-MM-dd HH:mm:ss");
         }
 
         private void UpdateLiveChart()
