@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.CodeDom.Compiler;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace batteryQI_plus.Models
 {
@@ -40,6 +41,12 @@ namespace batteryQI_plus.Models
         private int _normalCount;
         private int _defectCount;
         private double _defectRate;
+        // 진행도 관련
+        private int? _previousInspectionCount; // 이전 검사한 량 batteryId counts
+        private int? _quota; // 할당량
+        private int? _totalInspectionCount; // 이전 검사량 + 현재 단위검사로 추가 검사한 량
+        private double? _previousProgress; // 이전 검사량으로 계산한 진행도
+        private double? _totalProgress;
 
         public DashboardModel() 
         {
@@ -50,6 +57,11 @@ namespace batteryQI_plus.Models
             _normalCount = 0;
             _defectCount = 0;
             _defectRate = 0;
+            _previousInspectionCount = 0;
+            _quota = 0;
+            _totalInspectionCount = 0;
+            _previousProgress = 0;
+            _totalProgress = 0;
         }
 
         public DashboardModel(DBlink db, Employee empl, int line) 
@@ -70,22 +82,7 @@ namespace batteryQI_plus.Models
 
             // 일단 임시로 해둔 것
             #region 검사 수 & 불량 수
-            //string unitTestQuery1 = $@"SELECT 
-            //                                    COUNT(DISTINCT batteryId) AS cnt
-            //                                FROM 
-            //                                 inspectionResults
-            //                                WHERE 
-            //                                 lineId = {line} 
-            //                                 AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}');";
-            //string unitTestQuery2 = $@"SELECT 
-            //                                    COUNT(DISTINCT batteryId) AS cnt
-            //                                FROM 
-            //                                 inspectionResults
-            //                                WHERE 
-            //                                 lineId = {line} 
-            //                                 AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
-            //                                 AND (fastPollutionCheck = 1 OR fastDamageCheck = 1);";
-            string unitTestQuery2 = $@"WITH StatusList AS (
+            string unitTestQuery1 = $@"WITH StatusList AS (
                                                     SELECT 'normal' AS Status
                                                     UNION ALL
                                                     SELECT 'defect'
@@ -106,6 +103,8 @@ namespace batteryQI_plus.Models
                                                 GROUP BY s.Status
                                                 ORDER BY CASE WHEN s.Status = 'normal' THEN 0 ELSE 1 END;";
 
+            
+
             // 디버깅용 쿼리
             //string unitTestQuery1 = $@"SELECT 
             //                                 DISTINCT batteryId, lineId, inspectionDatetime, fastPollutionCheck, fastDamageCheck
@@ -125,8 +124,7 @@ namespace batteryQI_plus.Models
             //                                 AND (inspectionDatetime BETWEEN '{_startDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_endDatetime.ToString("yyyy-MM-dd HH:mm:ss")}')
             //                                 AND (fastPollutionCheck = 1 OR fastDamageCheck = 1);";
             #endregion
-            //List<Dictionary<string, object>> result1 = db.Select(unitTestQuery1);
-            List<Dictionary<string, object>> result2 = db.Select(unitTestQuery2);
+            List<Dictionary<string, object>> result1 = db.Select(unitTestQuery1);
             //MessageBox.Show(_startDatetime.ToString() + "," + _endDatetime.ToString());
             #region 디버깅 용
             ////디버깅 용
@@ -160,8 +158,8 @@ namespace batteryQI_plus.Models
             //Console.WriteLine(message2);
 
             #endregion
-            _normalCount = Convert.ToInt32(result2[0]["cnt"]);
-            _defectCount = Convert.ToInt32(result2[1]["cnt"]);
+            _normalCount = Convert.ToInt32(result1[0]["cnt"]);
+            _defectCount = Convert.ToInt32(result1[1]["cnt"]);
             _inspectionCount = _normalCount + _defectCount;
             //_defectRate = 0;
             UpdateDefectRate();
@@ -179,6 +177,28 @@ namespace batteryQI_plus.Models
             _normalCount = 0;
             _defectRate = 0;
             //UpdateDefectRate();
+
+            // previous쿼리의 경우 나중에는 taskid로 나눠서 세도록 변경해야함
+            string previousInspectionCountQuery = $@"SELECT COUNT(*) AS cnt
+                                                    FROM batteryInfo 
+                                                    WHERE lineId = {line};";
+
+            string quotaQuery = $@"SELECT quota 
+                                    FROM productionLines 
+                                    WHERE lineId = {line};";
+
+            List<Dictionary<string, object>> result_precount = db.Select(previousInspectionCountQuery);
+            List<Dictionary<string, object>> result_quota = db.Select(quotaQuery);
+            _previousInspectionCount = Convert.ToInt32(result_precount[0]["cnt"]);
+            _quota = Convert.ToInt32(result_quota[0]["quota"]);
+            _totalInspectionCount = _previousInspectionCount;
+            if (_quota > 0 && _previousInspectionCount.HasValue && _previousInspectionCount >= 0)
+            {
+                double? tempValue = 100 * (double)this._previousInspectionCount / this._quota;
+                _previousProgress = tempValue <= 100 ? tempValue : 100;
+            }
+            else { _previousProgress = 0; }
+            UpdateProgress();
         }
 
         //public int LineId 
@@ -238,6 +258,48 @@ namespace batteryQI_plus.Models
             }
         }
 
+        public int? PreviousInspectionCount
+        {
+            get { return _previousInspectionCount; }
+            set 
+            { 
+                SetProperty(ref _previousInspectionCount, value);
+                UpdateProgress();
+            }
+        }
+
+        public int? Quota
+        {
+            get { return _quota; }
+            set 
+            { 
+                SetProperty(ref _quota, value);
+                UpdateProgress();
+            }
+        }
+
+        public int? TotalInspectionCount
+        {
+            get { return _totalInspectionCount; }
+            set 
+            { 
+                SetProperty(ref _totalInspectionCount, value);
+                UpdateProgress();
+            }
+        }
+
+        public double? PreviousProgress
+        {
+            get { return _previousProgress; }
+            set { SetProperty(ref _previousProgress, value); } 
+        }
+
+        public double? TotalProgress
+        {
+            get { return _totalProgress; }
+            set { SetProperty(ref _totalProgress, value); }
+        }
+
         private void UpdateDefectRate()
         {
             if (this._inspectionCount == 0)
@@ -247,6 +309,21 @@ namespace batteryQI_plus.Models
             else
             {
                 DefectRate = 100 * (double)this._defectCount / this._inspectionCount;
+            }
+        }
+
+        private void UpdateProgress()
+        {
+            if (this._quota == 0 || !(_totalInspectionCount.HasValue))
+            {
+                //PreviousProgress = 0;
+                TotalProgress = 0;
+            }
+            else
+            {
+                //PreviousProgress = 100 * (double)this._previousInspectionCount / this._quota;
+                TotalProgress = (100 * (double)this._totalInspectionCount / this._quota)<=100 ? 
+                                            100 * (double)this._totalInspectionCount / this._quota : 100;
             }
         }
         //public struct monitoringData

@@ -64,7 +64,7 @@ namespace batteryQI_plus.ViewModels
         private ObservableCollection<DashboardModel> _unitTest = new ObservableCollection<DashboardModel>();
         private ObservableCollection<string> _logContent = new ObservableCollection<string> ();
         
-        // 단위시간 검사 합계용
+        // 단위시간 검사 합계용( + 진행도 용도)
         private ObservableCollection<DashboardModel> _totalUnitTest = new ObservableCollection<DashboardModel>();
         private ObservableCollection<string> _totalLogContent = new ObservableCollection<string>();
 
@@ -212,7 +212,7 @@ namespace batteryQI_plus.ViewModels
                 });
             }
 
-            DateTimeLabels = dates.ConvertAll(d => d.ToString("yyyy-MM-dd HH:mm:ss")); // 이거 안쓰는듯?  
+            //DateTimeLabels = dates.ConvertAll(d => d.ToString("yyyy-MM-dd HH:mm:ss")); // 이거 안쓰는듯?  
 
             DateTimeFormatter = value => dates[((int)value)].ToString("yyyy-MM-dd HH:mm:ss");
             YFormatter = value => value.ToString("N");
@@ -229,14 +229,7 @@ namespace batteryQI_plus.ViewModels
                     _unitTest[line].EndDatetime = DateTime.Now.FloorToNearestMinutes(timeFloorUnit);
                     // 일단 임시로 해둔 것
                     #region 검사 수 & 불량 수
-                    //string unitTestQuery1 = $@"SELECT 
-                    //                            COUNT(DISTINCT batteryId) AS cnt
-                    //                        FROM 
-                    //                         inspectionResults
-                    //                        WHERE 
-                    //                         lineId = {line} 
-                    //                         AND (inspectionDatetime BETWEEN '{_unitTest[line].StartDatetime.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{_unitTest[line].EndDatetime.ToString("yyyy-MM-dd HH:mm:ss")}');";
-                    string unitTestQuery2 = $@"WITH StatusList AS (
+                    string unitTestQuery1 = $@"WITH StatusList AS (
                                                     SELECT 'normal' AS Status
                                                     UNION ALL
                                                     SELECT 'defect'
@@ -257,10 +250,9 @@ namespace batteryQI_plus.ViewModels
                                                 GROUP BY s.Status
                                                 ORDER BY CASE WHEN s.Status = 'normal' THEN 0 ELSE 1 END;";
                     #endregion
-                    //List<Dictionary<string, object>> result1 = _dblink.Select(unitTestQuery1);
-                    List<Dictionary<string, object>> result2 = _dblink.Select(unitTestQuery2);
-                    _unitTest[line].NormalCount = (result2.Count > 0) ? Convert.ToInt32(result2[0]["cnt"]) : 0;
-                    _unitTest[line].DefectCount = (result2.Count > 0) ? Convert.ToInt32(result2[1]["cnt"]) : 0;
+                    List<Dictionary<string, object>> result1 = _dblink.Select(unitTestQuery1);
+                    _unitTest[line].NormalCount = (result1.Count > 0) ? Convert.ToInt32(result1[0]["cnt"]) : 0;
+                    _unitTest[line].DefectCount = (result1.Count > 0) ? Convert.ToInt32(result1[1]["cnt"]) : 0;
                     _unitTest[line].InspectionCount = _unitTest[line].NormalCount + _unitTest[line].DefectCount;
                 }
                 UpdateLogContent();
@@ -278,6 +270,7 @@ namespace batteryQI_plus.ViewModels
                     _totalUnitTest[line].NormalCount += _unitTest[line].NormalCount;
                     _totalUnitTest[line].DefectCount += _unitTest[line].DefectCount;
                     // 불량률은 일단 위 값들 변경되면 자동 계산 다시해서 갱신하도록 설정 해뒀음
+                    _totalUnitTest[line].TotalInspectionCount += _unitTest[line].InspectionCount;
                 }
                 TotalUpdateLogContent();
             });
@@ -393,56 +386,56 @@ namespace batteryQI_plus.ViewModels
 
         // 게이지 차트들 위치 조정
         private double _gaugeLeft;
-        public double GaugeLeft
+        public double ProgressLeft
         {
             get => _gaugeLeft;
             set => SetProperty(ref _gaugeLeft, value);
         }
 
         private double _gaugeTop;
-        public double GaugeTop
+        public double ProgressTop
         {
             get => _gaugeTop;
             set => SetProperty(ref _gaugeTop, value);
         }
 
         private double _gaugeWidth;
-        public double GaugeWidth
+        public double ProgressWidth
         {
             get => _gaugeWidth;
             set => SetProperty(ref _gaugeWidth, value);
         }
 
         private double _gaugeHeight;
-        public double GaugeHeight
+        public double ProgressHeight
         {
             get => _gaugeHeight;
             set => SetProperty(ref _gaugeHeight, value);
         }
 
         private double _angularGaugeLeft;
-        public double AngularGaugeLeft
+        public double RateLeft
         {
             get => _angularGaugeLeft;
             set => SetProperty(ref _angularGaugeLeft, value);
         }
 
         private double _angularGaugeTop;
-        public double AngularGaugeTop
+        public double RateTop
         {
             get => _angularGaugeTop;
             set => SetProperty(ref _angularGaugeTop, value);
         }
 
         private double _angularGaugeWidth;
-        public double AngularGaugeWidth
+        public double RateWidth
         {
             get => _angularGaugeWidth;
             set => SetProperty(ref _angularGaugeWidth, value);
         }
 
         private double _angularGaugeHeight;
-        public double AngularGaugeHeight
+        public double RateHeight
         {
             get => _angularGaugeHeight;
             set => SetProperty(ref _angularGaugeHeight, value);
@@ -451,20 +444,39 @@ namespace batteryQI_plus.ViewModels
         public void UpdateGaugePositions(double parentWidth, double parentHeight)
         {
             // Gauge 크기 및 위치 계산 (왼쪽 배치)
-            GaugeWidth = Math.Min(parentWidth, parentHeight) * 0.7; // 부모 크기의 40%
-            GaugeHeight = GaugeWidth;
+            ProgressWidth = Math.Min(parentWidth, parentHeight) * 0.7; // 부모 크기의 40%
+            ProgressHeight = ProgressWidth;
             //GaugeLeft = parentWidth * 0.025; // 왼쪽 여백
-            GaugeLeft = parentWidth * 0.035; // 왼쪽 여백
-            GaugeTop = (parentHeight - GaugeHeight) / 2; // 중앙 배치
+            ProgressLeft = parentWidth * 0.035; // 왼쪽 여백
+            ProgressTop = (parentHeight - ProgressHeight) / 2; // 중앙 배치
+            Console.WriteLine($"{ProgressWidth},{ProgressHeight}");
+            // TextBlock의 위치 계산 승엽 화면 기준으로는 2.5에 한글자정도 인듯
+            CenterTextLeft = ProgressLeft + ProgressWidth / 2 - 15; // Textblock의 너비를 고려하여 조정
+            //CenterTextTop = ProgressTop + ProgressHeight / 2 + ProgressHeight * 0.53; // Textblock의 높이를 고려하여 조정
+            CenterTextTop = ProgressTop + ProgressHeight; // Textblock의 높이를 고려하여 조정
 
             // AngularGauge 크기 및 위치 계산 (오른쪽 배치)
             double offset = 50; // 오프셋 설정 (중앙보다 20px 아래쪽으로 이동)
-            AngularGaugeWidth = Math.Min(parentWidth, parentHeight) * 1.3; // 부모 크기의 60%
-            AngularGaugeHeight = AngularGaugeWidth;
+            RateWidth = Math.Min(parentWidth, parentHeight) * 1.3; // 부모 크기의 60%
+            RateHeight = RateWidth;
             //AngularGaugeLeft = parentWidth * 0.375; // 오른쪽 여백
-            AngularGaugeLeft = parentWidth * 0.355; // 오른쪽 여백
-            AngularGaugeTop = (parentHeight - AngularGaugeHeight) / 2 + offset; // 중앙 배치
+            RateLeft = parentWidth * 0.355; // 오른쪽 여백
+            RateTop = (parentHeight - RateHeight) / 2 + offset; // 중앙 배치
         }
 
+        // 값표시를 위한 텍스트블록 위치설정
+        private double _centerTextLeft;
+        public double CenterTextLeft
+        {
+            get => _centerTextLeft;
+            set => SetProperty(ref _centerTextLeft, value);
+        }
+
+        private double _centerTextTop;
+        public double CenterTextTop
+        {
+            get => _centerTextTop;
+            set => SetProperty(ref _centerTextTop, value);
+        }
     }
 }
