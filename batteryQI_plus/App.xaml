@@ -96,7 +96,7 @@
         </Style>
 
         <Style x:Key="OnOffToggleButton" TargetType="{x:Type ToggleButton}">
-            <Setter Property="Content" Value="OFF"/>
+            <Setter Property="Content" Value="RUN"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="BorderThickness" Value="3"/>
@@ -118,7 +118,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="Content" Value="ON"/>
+                                <Setter Property="Content" Value="STOP"/>
                                 <Setter TargetName="ToggleBorder" Property="Background" Value="#5a5080"/>
                                 <Setter TargetName="ToggleBorder" Property="BorderBrush" Value="#8a7fc7"/>
                                 <Setter Property="Foreground" Value="White"/>

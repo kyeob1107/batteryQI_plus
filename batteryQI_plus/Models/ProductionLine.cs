@@ -22,7 +22,8 @@ namespace batteryQI_plus.Models
         private string _quota;
         private string _deadlineStart;
         private string _deadlineEnd;
-        private bool _isLinePower; // 생산라인 전원
+        private bool _commandValue; 
+        private bool processStateValue; // 생산라인 전원
 
         public ProductionLine()
         {
@@ -65,7 +66,7 @@ namespace batteryQI_plus.Models
             _quota = other._quota;
             _deadlineStart = other._deadlineStart;
             _deadlineEnd = other._deadlineEnd;
-            _isLinePower = other._isLinePower;
+            _commandValue = other._commandValue;
         }
 
         public int LineId
@@ -108,12 +109,12 @@ namespace batteryQI_plus.Models
             get => _deadlineEnd;
             set => SetProperty(ref _deadlineEnd, value);
         }
-        public bool IsLinePower // 생산라인 전원 프로퍼티
+        public bool CommandValue // 생산라인 전원 프로퍼티
         {
-            get => _isLinePower;
+            get => _commandValue;
             set
             {
-                SetProperty(ref _isLinePower, LinePower());
+                SetProperty(ref _commandValue, CommandToggleSetting());
             }
         }
          
@@ -154,25 +155,37 @@ namespace batteryQI_plus.Models
             int state = (int)(sbyte)result[0]["processState"];
 
             if (state > 0)
-            { 
-                _isLinePower = true; 
+            {
+                processStateValue = true; 
             }
 
             else
             {
-                _isLinePower = false;
+                processStateValue = false;
             }
         }
-
-        private bool LinePower() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
+        private void CheckCommandState()
         {
-            string testOnQuery = $@"UPDATE inspectionCurrentState
-                                   SET processState = 1
-                                   WHERE stateId = {_lineId};";
-            string testOffQuery = $@"UPDATE inspectionCurrentState
-                                   SET processState = -1
-                                   WHERE stateId = {_lineId};";
-            string testExecuteQuery = "";
+            string checkQuery = $@"SELECT onOffCommand 
+                                    FROM inspectionCurrentState 
+                                    WHERE lineId = {_lineId};";
+            var result = _dblink.Select(checkQuery);
+            // bool state = (bool)result[0]["onOffCommand"];
+            // _commandValue = Convert.ToBoolean(state);
+            _commandValue = (bool)result[0]["onOffCommand"];
+        }
+
+        private bool CommandToggleSetting() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
+        {
+            #region 테스트용
+            //string testOnQuery = $@"UPDATE inspectionCurrentState
+            //                       SET processState = 1
+            //                       WHERE stateId = {_lineId};";
+            //string testOffQuery = $@"UPDATE inspectionCurrentState
+            //                       SET processState = -1
+            //                       WHERE stateId = {_lineId};";
+            //string testExecuteQuery = "";
+            #endregion
             string onCommandQuery = $@"UPDATE inspectionCurrentState
                                    SET onOffCommand = 1
                                    WHERE stateId = {_lineId};";
@@ -181,27 +194,57 @@ namespace batteryQI_plus.Models
                                    WHERE stateId = {_lineId};";
             string executeQuery = "";
 
-            bool selectYes = false;
+            bool needsUpdate = false;
 
-            CheckInspectionState(); // 변경하기 전 DB에서 상태 조회하여 동기화 체크
-            if (_isLinePower == false)
+            CheckInspectionState(); // 변경하기 전 DB에서 상태 조회하여 동기화 체크 
+            CheckCommandState(); // 명령 값 체크 - selected바뀔때마다 해주기?
+            Console.WriteLine($"상태:{processStateValue}, 명령:{_commandValue}");
+
+            if (processStateValue == _commandValue)
             {
-                if (System.Windows.Forms.MessageBox.Show($"생산라인의 전원을 켜시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (processStateValue == false)
                 {
-                    _isLinePower = true;
-                    testExecuteQuery = testOnQuery;
-                    executeQuery = onCommandQuery;
-                    selectYes = true;
+                    if (System.Windows.Forms.MessageBox.Show($"생산라인의 전원을 켜시겠습니까?", "Command Input", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        _commandValue = true;
+                        //testExecuteQuery = testOnQuery;
+                        executeQuery = onCommandQuery;
+                        needsUpdate = true;
+                    }
+                }
+                else if (processStateValue == true)
+                {
+                    if (System.Windows.Forms.MessageBox.Show($"정말로 생산라인의 전원을 끄시겠습니까?", "Command Input", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        _commandValue = false;
+                        //testExecuteQuery = testOffQuery;
+                        executeQuery = offCommandQuery;
+                        needsUpdate = true;
+                    }
                 }
             }
-            else if (_isLinePower == true)
+            // 명령 취소
+            else
             {
-                if (System.Windows.Forms.MessageBox.Show($"정말로 생산라인의 전원을 끄시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (processStateValue == false)
                 {
-                    _isLinePower = false;
-                    testExecuteQuery = testOffQuery;
-                    executeQuery = offCommandQuery;
-                    selectYes = true;
+                    if (System.Windows.Forms.MessageBox.Show($"명령을 취소하시겠습니까?(명령: 검사시작)", "Command Cancel", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        _commandValue = false;
+                        //testExecuteQuery = testOffQuery;
+                        executeQuery = offCommandQuery;
+                        needsUpdate = true;
+                    }
+                }
+                else if (processStateValue == true)
+                {
+                    if (System.Windows.Forms.MessageBox.Show($"명령을 취소하시겠습니까?(명령: 검사중단)", "Command Cancel", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        _commandValue = true;
+                        //testExecuteQuery = testOnQuery;
+                        executeQuery = onCommandQuery;
+                        needsUpdate = true;
+                    }
                 }
             }
             //else
@@ -213,9 +256,9 @@ namespace batteryQI_plus.Models
             //        _isLinePower = false;
             //}
 
-            if (selectYes == true)
+            if (needsUpdate == true)
             {
-                _dblink.Update(testExecuteQuery); // 테스트용 상태 업데이트
+                //_dblink.Update(testExecuteQuery); // 테스트용 상태 업데이트
                 _dblink.Update(executeQuery); // 명령 업데이트
 
                 // 업데이트 날짜시간 갱신
@@ -225,7 +268,7 @@ namespace batteryQI_plus.Models
                 _dblink.Update(updateDateTimeQuery);
             }
 
-            return _isLinePower;
+            return _commandValue;
         }
     }
 }
