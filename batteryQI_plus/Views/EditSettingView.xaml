@@ -136,11 +136,13 @@
                         <TextBlock Grid.Row="6" Grid.Column="0" Text="마감기한:" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" TextAlignment="Left" Margin="30 0 40 0"/>
                         <DatePicker Name="DeadlineStartPicker" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Width="120" Margin="-260 0 0 0" 
                                     FontSize="15" VerticalAlignment="Center"
-                                    SelectedDate="{Binding SelectedLineSetting.DeadlineStart}"/>
+                                    SelectedDate="{Binding SelectedLineSetting.DeadlineStart}"
+                                    DisplayDateEnd="{Binding SelectedLineSetting.DeadlineEnd}"/>
                         <TextBlock Grid.Row="6" Grid.Column="1" Text="~" FontSize="20" VerticalAlignment="Center" TextAlignment="Center" Width="30" Margin="-110,0,0,0"/>
                         <DatePicker Name="DeadlineEndPicker" Grid.Row="6" Grid.Column="1" Background="#FFE5E5E5" Width="120" Margin="40,0,0,0"
                                     FontSize="15" VerticalAlignment="Center"
-                                    SelectedDate="{Binding SelectedLineSetting.DeadlineEnd}"/>
+                                    SelectedDate="{Binding SelectedLineSetting.DeadlineEnd}"
+                                    DisplayDateStart="{Binding SelectedLineSetting.DeadlineStart}"/>
                     </Grid>
                 </Grid>
             </Border>
