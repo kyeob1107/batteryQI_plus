@@ -30,6 +30,7 @@ namespace batteryQI_plus.Models
 
         static DBlink staticDBlink; // DB 연결 객체 생성
         public MySqlConnection connection { get; private set; } // DB connection 객체
+        public event EventHandler ConnectionStateChanged;
 
         private DBlink() { } // 생성자 접근 제어 변경
         public static DBlink Instance()
@@ -80,7 +81,7 @@ namespace batteryQI_plus.Models
         {
             try
             {
-                if (connection.Ping())
+                if (connection != null && connection.Ping())
                     return true;
                 else
                     return false;
@@ -90,6 +91,34 @@ namespace batteryQI_plus.Models
                 return false;
             }
         }
+
+        // 상태표시줄에 실시간 주기적으로 체크해주는 메소드
+        public void MonitorConnection()
+        {
+            // 주기적으로 연결 상태를 확인하고 이벤트 발생
+            Task.Run(async () =>
+            {
+                bool previousState = ConnectOk();
+                while (true)
+                {
+                    await Task.Delay(1000); // 1초마다 확인
+                    bool currentState = ConnectOk();
+                    if (currentState != previousState)
+                    {
+                        previousState = currentState;
+                        OnConnectionStateChanged(); // 상태 변화 이벤트 발생
+                    }
+                }
+            });
+        }
+
+        protected virtual void OnConnectionStateChanged()
+        {
+            ConnectionStateChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+
+
         // DB insert
         public bool Insert(string sql)
         {

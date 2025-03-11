@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using batteryQI_plus.Views.UserControls;
 using batteryQI_plus.Models;
+using System.Windows.Media;
+using System.Windows;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -12,6 +14,9 @@ namespace batteryQI_plus.ViewModels
         private Dictionary<string, string> _employeeList; // 직원 Id, 같이 출력할 Image 경로
         // MainWindowView 중앙 화면 프레임
         private object _currentPage;
+        private string _dbConnectState; // 연결상태 메시지
+        private string _dbConnectionIcon; // 아이콘 이름 (FontAwesome 아이콘)
+        private Brush _dbConnectionColor; // 아이콘 색상
 
         public Employee Employee
         {
@@ -28,6 +33,21 @@ namespace batteryQI_plus.ViewModels
             get => _currentPage;
             set => SetProperty(ref _currentPage, value);
         }
+        public string DbConnectState
+        {
+            get => _dbConnectState;
+            set => SetProperty(ref _dbConnectState, value);
+        }
+        public string DbConnectionIcon
+        {
+            get => _dbConnectionIcon;
+            set => SetProperty(ref _dbConnectionIcon, value);
+        }
+        public Brush DbConnectionColor
+        {
+            get => _dbConnectionColor;
+            set => SetProperty(ref _dbConnectionColor, value);
+        }
         public Action? CloseAction { get; set; }
 
         public MainWindowViewModel()
@@ -35,6 +55,13 @@ namespace batteryQI_plus.ViewModels
             // 로그인 직원, 직원 리스트 초기화
             _employee = Employee.Instance();
             _employeeList = EmployeeListInit();
+            
+            // 이벤트 구독
+            _dblink.ConnectionStateChanged += OnDbConnectionStateChanged;
+            // 연결상태 초기 상태 설정
+            UpdateDbConnectionState();
+            // 연결 모니터링 시작
+            _dblink.MonitorConnection();
 
             // 초기 화면 설정
             _currentPage = new DashboardView();
@@ -56,6 +83,27 @@ namespace batteryQI_plus.ViewModels
                 employeeList.Add(rows[i]["employeeId"].ToString(), string.Format("/Images/{0}.png", i + 2));
             }
             return employeeList;
+        }
+        // 이벤트 핸들러
+        private void OnDbConnectionStateChanged(object sender, EventArgs e)
+        {
+            UpdateDbConnectionState();
+        }
+
+        private void UpdateDbConnectionState()
+        {
+            if (_dblink != null && _dblink.ConnectOk())
+            {
+                DbConnectState = "Connected";
+                DbConnectionIcon = "Link"; // "Database"; // FontAwesome 데이터베이스 아이콘
+                DbConnectionColor = Brushes.Green;
+            }
+            else
+            {
+                DbConnectState = "Disconnected";
+                DbConnectionIcon = "Unlink"; // "TimesCircle"; // FontAwesome 'X' 아이콘
+                DbConnectionColor = Brushes.Red;
+            }
         }
         
         [RelayCommand]
@@ -81,6 +129,19 @@ namespace batteryQI_plus.ViewModels
         {
             _dblink.Dispose(); // DB 연결 끊기
             CloseAction?.Invoke();
+        }
+
+        [RelayCommand]
+        private void TestConnection()
+        {
+            MessageBox.Show("연결 동작");
+            _dblink.Connect();
+        }
+        [RelayCommand]
+        private void TestDisconnection()
+        {
+            MessageBox.Show("연결 해제");
+            _dblink.Dispose();
         }
     }
 }

@@ -12,117 +12,161 @@
     >
 
     <Border Background="#cfd5e5" CornerRadius="10" BorderThickness="2" BorderBrush="#ebedf3"
-    Padding="20">
-        <Border CornerRadius="30">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#fefefe" Offset="0"/>
-                    <GradientStop Color="#fefefe" Offset="1"/>
-                </LinearGradientBrush>
-            </Border.Background>
+    Padding="20,20,20,0">
+        <Grid>
+            <!-- 기존 레이아웃 -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <!-- 기존 콘텐츠 -->
+                <RowDefinition Height="Auto"/>
+                <!-- 상태 표시줄 -->
+            </Grid.RowDefinitions>
+            <!-- 기존 콘텐츠 -->
+            <Border CornerRadius="30">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#fefefe" Offset="0"/>
+                        <GradientStop Color="#fefefe" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="130"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="300"/>
-                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- Left Menu -->
-                <Border CornerRadius="30" Background="#7163ba" Margin="20">
-                    <Grid>
-                        <StackPanel VerticalAlignment="Top">
-                            <Separator Background="#877cc5" Margin="20 55 20 10" Height="0.8"/>
-                            <Button Style="{StaticResource topMenuButton}" Background="#5a5080" Command="{Binding HomeButtonCommand}">
-                                <fa:IconImage Icon="House" Style="{StaticResource menuButtonIcon}"/>
+                    <!-- Left Menu -->
+                    <Border CornerRadius="30" Background="#7163ba" Margin="20">
+                        <Grid>
+                            <StackPanel VerticalAlignment="Top">
+                                <Separator Background="#877cc5" Margin="20 55 20 10" Height="0.8"/>
+                                <Button Style="{StaticResource topMenuButton}" Background="#5a5080" Command="{Binding HomeButtonCommand}">
+                                    <fa:IconImage Icon="House" Style="{StaticResource menuButtonIcon}"/>
+                                </Button>
+                                <Button Style="{StaticResource topMenuButton}" Background="#5a5080" Command="{Binding ChartButtonCommand}">
+                                    <fa:IconImage Icon="ChartSimple" Style="{StaticResource menuButtonIcon}"/>
+                                </Button>
+                                <Button Style="{StaticResource topMenuButton}" Background="#5a5080" Command="{Binding ManagerButtonCommand}">
+                                    <fa:IconImage Icon="Gear" Style="{StaticResource menuButtonIcon}"/>
+                                </Button>
+                            </StackPanel>
+
+                            <Separator Background="#877cc5" Margin="20 0 20 90" Height="0.8" VerticalAlignment="Bottom"/>
+                            <Button Style="{StaticResource topMenuButton}" VerticalAlignment="Bottom" Margin="0 0 0 25" Command="{Binding ExitButtonCommand}">
+                                <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}"/>
                             </Button>
-                            <Button Style="{StaticResource topMenuButton}" Background="#5a5080" Command="{Binding ChartButtonCommand}">
-                                <fa:IconImage Icon="ChartSimple" Style="{StaticResource menuButtonIcon}"/>
-                            </Button>
-                            <Button Style="{StaticResource topMenuButton}" Background="#5a5080" Command="{Binding ManagerButtonCommand}">
-                                <fa:IconImage Icon="Gear" Style="{StaticResource menuButtonIcon}"/>
-                            </Button>
-                        </StackPanel>
-
-                        <Separator Background="#877cc5" Margin="20 0 20 90" Height="0.8" VerticalAlignment="Bottom"/>
-                        <Button Style="{StaticResource topMenuButton}" VerticalAlignment="Bottom" Margin="0 0 0 25" Command="{Binding ExitButtonCommand}">
-                            <fa:IconImage Icon="PowerOff" Style="{StaticResource menuButtonIcon}"/>
-                        </Button>
-                    </Grid>
-                </Border>
-
-                <!-- Main Section -->
-                <Grid Grid.Column="1" Margin="5 20 25 20" Panel.ZIndex="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- Title Section -->
-                    <Border Grid.Row="0" Padding="5" VerticalAlignment="Top">
-                        <TextBlock Text="BatteryQI+" Style="{StaticResource titleText}" Margin="0 0 0 5"/>
+                        </Grid>
                     </Border>
 
-                    <!-- Frame Section -->
-                    <Grid Grid.Row="1" x:Name="mainSection">
-                        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}"/>
-                    </Grid>
-                </Grid>
-
-                <!-- Right Section -->
-                <Grid Background="White" Grid.Column="2">
-                    <Grid>
+                    <!-- Main Section -->
+                    <Grid Grid.Column="1" Margin="5 20 25 20" Panel.ZIndex="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="70"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <!-- Manager View Section -->
-                        <Grid Grid.Row="0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="15 20 0 0">
-                                <Ellipse Width="45" Height="45">
-                                    <Ellipse.Fill>
-                                        <ImageBrush ImageSource="/Images/1.png"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
+                        <!-- Title Section -->
+                        <Border Grid.Row="0" Padding="5" VerticalAlignment="Top">
+                            <TextBlock Text="BatteryQI+" Style="{StaticResource titleText}" Margin="0 0 0 5"/>
+                        </Border>
 
-                                <TextBlock Text="{Binding Employee.EmployeeID, StringFormat='{}{0}님 환영합니다.'}" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="18" FontWeight="Medium" />
-                            </StackPanel>
+                        <!-- Frame Section -->
+                        <Grid Grid.Row="1" x:Name="mainSection">
+                            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}"/>
                         </Grid>
+                    </Grid>
 
-                        <!-- Employee List Section -->
-                        <Grid Grid.Row="1" Margin="30 30 10 0">
-                            <TextBlock Text="팀원 리스트" FontSize="18" FontWeight="SemiBold" Margin="10 15 0 0"/>
-                            <!-- ItemsControl을 사용하여 EmployeeIds 컬렉션을 출력 -->
-                            <ItemsControl ItemsSource="{Binding EmployeeList}" Margin="15 35 0 0">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel>
-                                            <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                                                <!-- 필요에 따라 이미지 소스는 고정된 값 혹은 Converter로 동적으로 지정 -->
-                                                <Ellipse Width="30" Height="30">
-                                                    <Ellipse.Fill>
-                                                        <ImageBrush ImageSource="{Binding Value}"/>
-                                                    </Ellipse.Fill>
-                                                </Ellipse>
-                                                <!-- 단순히 EmployeeId 문자열을 출력 -->
-                                                <TextBlock Text="{Binding Key}" VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15"  FontWeight="Medium"/>
+                    <!-- Right Section -->
+                    <Grid Background="White" Grid.Column="2">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="70"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Manager View Section -->
+                            <Grid Grid.Row="0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="15 20 0 0">
+                                    <Ellipse Width="45" Height="45">
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="/Images/1.png"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+
+                                    <TextBlock Text="{Binding Employee.EmployeeID, StringFormat='{}{0}님 환영합니다.'}" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="18" FontWeight="Medium" />
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Employee List Section -->
+                            <Grid Grid.Row="1" Margin="30 30 10 0">
+                                <TextBlock Text="팀원 리스트" FontSize="18" FontWeight="SemiBold" Margin="10 15 0 0"/>
+                                <!-- ItemsControl을 사용하여 EmployeeIds 컬렉션을 출력 -->
+                                <ItemsControl ItemsSource="{Binding EmployeeList}" Margin="15 35 0 0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+                                                    <!-- 필요에 따라 이미지 소스는 고정된 값 혹은 Converter로 동적으로 지정 -->
+                                                    <Ellipse Width="30" Height="30">
+                                                        <Ellipse.Fill>
+                                                            <ImageBrush ImageSource="{Binding Value}"/>
+                                                        </Ellipse.Fill>
+                                                    </Ellipse>
+                                                    <!-- 단순히 EmployeeId 문자열을 출력 -->
+                                                    <TextBlock Text="{Binding Key}" VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15"  FontWeight="Medium"/>
+                                                </StackPanel>
+                                                <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
                                             </StackPanel>
-                                            <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                                <!-- ItemsPanelTemplate을 통해 수직 StackPanel 사용 -->
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <!-- ItemsPanelTemplate을 통해 수직 StackPanel 사용 -->
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Vertical"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-        </Border>
+            </Border>
+            <!-- 상태 표시줄 -->
+            <StatusBar Grid.Row="1" Background="Transparent">
+                <StatusBarItem HorizontalAlignment="Stretch">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <!-- FontAwesome 아이콘 -->
+                        <fa:IconBlock Icon="{Binding DbConnectionIcon}" 
+                                      Foreground="{Binding DbConnectionColor}" 
+                                      FontWeight="Bold"
+                                      Width="20" Height="20" 
+                                      Margin="10,0,0,0" VerticalAlignment="Bottom"/>
+
+                        <!-- 상태 메시지 텍스트 -->
+                        <TextBlock Foreground="{Binding DbConnectionColor}" VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center" Padding="0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}DB연결상태: {0}">
+                                    <Binding Path="DbConnectState"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                </StatusBarItem>
+                <!-- 연결 테스트 용도 -->
+                <StatusBarItem HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="Test Connection" 
+                    Command="{Binding TestConnectionCommand}" 
+                    Width="120" Height="30" Background="#7163ba" Foreground="White" Margin="10,0,0,0"/>
+                        <Button Content="Test Disconnection" 
+                    Command="{Binding TestDisconnectionCommand}" 
+                    Width="120" Height="30" Background="#7163ba" Foreground="White" Margin="10,0,0,0"/>
+                    </StackPanel>
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
     </Border>
 </Window>
