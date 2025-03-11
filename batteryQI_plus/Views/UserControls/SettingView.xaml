@@ -66,7 +66,7 @@
                                     </Grid>
                                 </ControlTemplate>
                             </TabControl.Template>
-                            
+
                             <TabControl.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock TextAlignment="Center">
@@ -89,15 +89,14 @@
                                                     <RowDefinition Height="2*"/>
                                                 </Grid.RowDefinitions>
 
-                                                <!-- 첫 번째 행 내용 -->
+                                                <!-- 첫 번째 행 내용: 생산라인 검사 전원 -->
                                                 <Grid Grid.Row="0" Margin="40,0">
                                                     <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                                                     <ToggleButton Style="{StaticResource OnOffToggleButton}" Margin="0,20,0,30" Width="170" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center"
                                                                     IsChecked="{Binding IsLinePower, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                     <TextBlock Text="생산라인 전원" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="190,20,0,30"/>
                                                 </Grid>
-
-                                                <!-- 두 번째 행 내용 -->
+                                                <!-- 두 번째 행 내용: 배터리 정보 -->
                                                 <Grid Grid.Row="1" Margin="40,0">
                                                     <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                                                     <Grid>
@@ -106,19 +105,41 @@
                                                             <RowDefinition Height="*"/>
                                                         </Grid.RowDefinitions>
                                                         <TextBlock Grid.Row="0" Margin="5" Text="배터리 정보" FontWeight="Bold" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-                                                        <TextBlock Grid.Row="1" Margin="5" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                                            <TextBlock.Text>
-                                                                <MultiBinding StringFormat="배터리 사용처: {0}&#10;&#10;배터리 타입: {1}&#10;&#10;배터리 형태: {2}">
-                                                                    <Binding Path="UsageName" />
-                                                                    <Binding Path="BatteryType" />
-                                                                    <Binding Path="BatteryShape" />
-                                                                </MultiBinding>
-                                                            </TextBlock.Text>
-                                                        </TextBlock>
+                                                        <Grid Grid.Row="1">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="*"/>
+                                                                <RowDefinition Height="*"/>
+                                                                <RowDefinition Height="*"/>
+                                                            </Grid.RowDefinitions>
+
+                                                            <!-- Row 0: 배터리 사용처 -->
+                                                            <TextBlock Grid.Row="0" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="배터리 사용처: {0}">
+                                                                        <Binding Path="UsageName" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                            <!-- Row 1: 배터리 타입 -->
+                                                            <TextBlock Grid.Row="1" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="배터리 타입: {0}">
+                                                                        <Binding Path="BatteryType" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                            <!-- Row 2: 배터리 형태 -->
+                                                            <TextBlock Grid.Row="2" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="배터리 형태: {0}">
+                                                                        <Binding Path="BatteryShape" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                        </Grid>
                                                     </Grid>
                                                 </Grid>
-
-                                                <!-- 세 번째 행 내용 -->
+                                                <!-- 세 번째 행 내용: 발주처 정보 -->
                                                 <Grid Grid.Row="2" Margin="40,0">
                                                     <Border BorderBrush="Gray" BorderThickness="0,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                                                     <Grid>
@@ -127,16 +148,39 @@
                                                             <RowDefinition Height="*"/>
                                                         </Grid.RowDefinitions>
                                                         <TextBlock Grid.Row="0" Margin="5" Text="발주처 정보" FontWeight="Bold" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-                                                        <TextBlock Grid.Row="1" Margin="5" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                                            <TextBlock.Text>
-                                                                <MultiBinding StringFormat="발주처: {0}&#10;&#10;할당량: {1}&#10;&#10;마감 기간: {2} ~ {3}">
-                                                                    <Binding Path="BuyerId.Key" />
-                                                                    <Binding Path="Quota" />
-                                                                    <Binding Path="DeadlineStart" />
-                                                                    <Binding Path="DeadlineEnd" />
-                                                                </MultiBinding>
-                                                            </TextBlock.Text>
-                                                        </TextBlock>
+                                                        <Grid Grid.Row="1">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="*"/>
+                                                                <RowDefinition Height="*"/>
+                                                                <RowDefinition Height="*"/>
+                                                            </Grid.RowDefinitions>
+
+                                                            <!-- Row 0: 발주처 -->
+                                                            <TextBlock Grid.Row="0" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="발주처: {0}">
+                                                                        <Binding Path="BuyerId.Key" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                            <!-- Row 1: 할당량 -->
+                                                            <TextBlock Grid.Row="1" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="할당량: {0}">
+                                                                        <Binding Path="Quota" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                            <!-- Row 2: 마감 기간 -->
+                                                            <TextBlock Grid.Row="2" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="마감 기간: {0} ~ {1}">
+                                                                        <Binding Path="DeadlineStart" />
+                                                                        <Binding Path="DeadlineEnd" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                        </Grid>
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
