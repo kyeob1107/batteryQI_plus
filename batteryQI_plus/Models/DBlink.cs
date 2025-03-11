@@ -72,7 +72,7 @@ namespace batteryQI_plus.Models
             }
             catch(Exception E)
             {
-                MessageBox.Show(E.ToString());
+                MessageBox.Show(E.ToString(),"DB연결실패", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         // DB 연결 확인 함수
