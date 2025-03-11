@@ -25,7 +25,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 
-                <Image Grid.Row="1" Source="/Images/logo.jpg" Width="200"/>
+                <Image Grid.Row="1" Source="/Images/logoplus.jpg" Width="200"/>
 
                 <!-- 로그인 UI -->
                 <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"
