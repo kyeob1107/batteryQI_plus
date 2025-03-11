@@ -16,15 +16,15 @@ namespace batteryQI_plus.ViewModels
     {
         // 필드 및 프로퍼티-----------------------------------------------------------------------------------------
         // 설정 옵션 combobox Item 목록
-        private IList<string> _lineIdList; // 생산라인 Id 옵션 목록
+        private IList<int> _lineIdList; // 생산라인 Id 옵션 목록
         private IList<string> _usageNameList; // 배터리 사용처 옵션 목록
         private IList<string> _batteryTypeList; // 배터리 타입 옵션 목록
         private IList<string> _batteryShapeList; // 배터리 형태 옵션 목록
         private Dictionary<string, string> _buyerDataDic; // Key: 발주처 Id, Value: 발주처 이름을 저장한 딕셔너리. 같은 발주처를 의미하는 Id와 이름끼리 묶어 한 요소로 취급
         private ProductionLine _selectedLineSetting = new ProductionLine(); // 선택된 설정 옵션 필드
-        private string _selectedLineId; // EditSetting View에서 선택한 LineId에 따라 나머지 설정 옵션들이 현재 설정값을 가리키도록 Triger를 설정하기 위한 필드
+        private int _selectedLineId; // EditSetting View에서 선택한 LineId에 따라 나머지 설정 옵션들이 현재 설정값을 가리키도록 Triger를 설정하기 위한 필드
 
-        public IList<string> LineIdList // 생산라인 Id 프로퍼티
+        public IList<int> LineIdList // 생산라인 Id 프로퍼티
         {
             get => _lineIdList;
             set => SetProperty(ref _lineIdList, value);
@@ -54,12 +54,12 @@ namespace batteryQI_plus.ViewModels
             get => _selectedLineSetting;
             set => SetProperty(ref _selectedLineSetting, value);
         }
-        public string SelectedLineId // 생산라인 Id 기반 Triger 프로퍼티
+        public int SelectedLineId // 생산라인 Id 기반 Triger 프로퍼티
         {
             get => _selectedLineId;
             set // EditSetting View에서 특정 생산라인을 선택했을 경우 나머지 설정 옵션들이 해당 생산라인의 현재 설정값을 가리키도록 Triger 설정
             {
-                if (value != null && SetProperty(ref _selectedLineId, value))
+                if (value > 0 && SetProperty(ref _selectedLineId, value))
                 {
                     var selectedLine = _lineSettingCollection.FirstOrDefault(line => line.LineId == value);
                     if (selectedLine != null)
@@ -97,7 +97,7 @@ namespace batteryQI_plus.ViewModels
         // 커멘드------------------------------------------------------------------------------------------
         [RelayCommand] private void SaveLineSettingButtonClick(object sender) // 변경된 설정 저장 커멘드
         {
-            if (_selectedLineSetting.LineId != "") // 생산라인 Id를 선택했을 때만 저장
+            if (_selectedLineSetting.LineId > 0) // 생산라인 Id를 선택했을 때만 저장
             {
                 if (System.Windows.Forms.MessageBox.Show($"설정을 저장하시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes) // 설정 저장 여부를 묻는 메시지
                 {
@@ -120,7 +120,7 @@ namespace batteryQI_plus.ViewModels
                             // 프로퍼티 정보를 동적으로 저장할 변수
                             IEnumerable<PropertyInfo> properties = _selectedLineSetting.GetType()
                                                             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                                            .Where(p => p.Name != "LineId");
+                                                            .Where(p => p.Name != "LineId" && p.Name != "IsLinePower");
                             // 업데이트할 열의 할당 구문을 저장할 리스트
                             List<string> updateSettingColumns = new List<string>();
                             Dictionary<string, string> sqlColumnMapping = new Dictionary<string, string>

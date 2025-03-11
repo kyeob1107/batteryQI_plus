@@ -57,43 +57,56 @@ namespace batteryQI_plus.ViewModels
         }
 
         // 메소드----------------------------------------------------------------------------
-        private string GetTabByLineId(int selectedTabIndex) // Setting View에서 선택한 Tab의 lineId를 찾아 반환하는 메소드
+        private int GetTabByLineId(int selectedTabIndex) // Setting View에서 선택한 Tab의 lineId를 찾아 반환하는 메소드
         {
             if (selectedTabIndex < 0) // 선택한 Tab의 Index가 아무것도 선택하지 않은 상태(-1)일 경우 빈 문자열 반환
-                return string.Empty;
+            {
+                //return -1;
+                throw new InvalidOperationException("탭이 선택되지 않았습니다.");
+            }
             return LineSettingCollection[selectedTabIndex].LineId;
         }
 
         private void getLineSetting() // DB에서 값을 가져와 Setting View에 사용할 프로퍼티 초기화
         {
+            #region model 부분
             //_lineSettingCollection.Clear();
-            List<Dictionary<string, object>> lineSettingCollection =
-                _dblink.Select("SELECT pl.lineId, pl.usageName, pl.batteryType, pl.batteryShape, pl.buyerId, b.buyerName, pl.quota, pl.deadlineStart, pl.deadlineEnd " +
-                "FROM productionLines pl LEFT JOIN buyers b ON pl.buyerId = b.buyerId WHERE lineId<> 0; "); // 0번 행(관리자 직책)은 실질적인 생산라인이 아니기 때문에 제외 
-            foreach (var row in lineSettingCollection) // 생산라인 행별로 설정 저장. TryGetValue 사용시 불필요한 인덱싱과 예외 발생 가능성을 줄여 더 빠르다고함
-            {
-                string? lineId = row.TryGetValue("lineId", out var lineIdObj) && lineIdObj != null ? lineIdObj.ToString() : "";
-                string? usageName = row.TryGetValue("usageName", out var usageNameObj) && usageNameObj != null ? usageNameObj.ToString() : "";
-                string? batteryType = row.TryGetValue("batteryType", out var batteryTypeObj) && batteryTypeObj != null ? batteryTypeObj.ToString() : "";
-                string? batteryShape = row.TryGetValue("batteryShape", out var batteryShapeObj) && batteryShapeObj != null ? batteryShapeObj.ToString() : "";
-                string? buyerId = row.TryGetValue("buyerId", out var buyerIdObj) && buyerIdObj != null ? buyerIdObj.ToString() : "";
-                string? buyerName = row.TryGetValue("buyerName", out var buyerNameObj) && buyerNameObj != null ? buyerNameObj.ToString() : "";
-                string? quota = row.TryGetValue("quota", out var quotaObj) && quotaObj != null ? quotaObj.ToString() : "";
-                string? deadlineStart = row.TryGetValue("deadlineStart", out var deadlineStartObj) && deadlineStartObj != null ? deadlineStartObj.ToString() : "";
-                string? deadlineEnd = row.TryGetValue("deadlineEnd", out var deadlineEndObj) && deadlineEndObj != null ? deadlineEndObj.ToString() : "";
+            //List<Dictionary<string, object>> lineSettingCollection =
+            //    _dblink.Select("SELECT pl.lineId, pl.usageName, pl.batteryType, pl.batteryShape, pl.buyerId, b.buyerName, pl.quota, pl.deadlineStart, pl.deadlineEnd " +
+            //    "FROM productionLines pl LEFT JOIN buyers b ON pl.buyerId = b.buyerId WHERE lineId<> 0; "); // 0번 행(관리자 직책)은 실질적인 생산라인이 아니기 때문에 제외 
+            //foreach (var row in lineSettingCollection) // 생산라인 행별로 설정 저장. TryGetValue 사용시 불필요한 인덱싱과 예외 발생 가능성을 줄여 더 빠르다고함
+            //{
+            //string? lineId = row.TryGetValue("lineId", out var lineIdObj) && lineIdObj != null ? lineIdObj.ToString() : "";
+            //string? usageName = row.TryGetValue("usageName", out var usageNameObj) && usageNameObj != null ? usageNameObj.ToString() : "";
+            //string? batteryType = row.TryGetValue("batteryType", out var batteryTypeObj) && batteryTypeObj != null ? batteryTypeObj.ToString() : "";
+            //string? batteryShape = row.TryGetValue("batteryShape", out var batteryShapeObj) && batteryShapeObj != null ? batteryShapeObj.ToString() : "";
+            //string? buyerId = row.TryGetValue("buyerId", out var buyerIdObj) && buyerIdObj != null ? buyerIdObj.ToString() : "";
+            //string? buyerName = row.TryGetValue("buyerName", out var buyerNameObj) && buyerNameObj != null ? buyerNameObj.ToString() : "";
+            //string? quota = row.TryGetValue("quota", out var quotaObj) && quotaObj != null ? quotaObj.ToString() : "";
+            //string? deadlineStart = row.TryGetValue("deadlineStart", out var deadlineStartObj) && deadlineStartObj != null ? deadlineStartObj.ToString() : "";
+            //string? deadlineEnd = row.TryGetValue("deadlineEnd", out var deadlineEndObj) && deadlineEndObj != null ? deadlineEndObj.ToString() : "";
 
-                _lineSettingCollection.Add(new ProductionLine()
-                {
-                    LineId = lineId,
-                    UsageName = usageName,
-                    BatteryType = batteryType,
-                    BatteryShape = batteryShape,
-                    BuyerId = new KeyValuePair<string, string>(buyerName, buyerId),
-                    Quota = quota,
-                    DeadlineStart = deadlineStart,
-                    DeadlineEnd = deadlineEnd
-                });
+            //_lineSettingCollection.Add(new ProductionLine()
+            //{
+            //    LineId = lineId,
+            //    UsageName = usageName,
+            //    BatteryType = batteryType,
+            //    BatteryShape = batteryShape,
+            //    BuyerId = new KeyValuePair<string, string>(buyerName, buyerId),
+            //    Quota = quota,
+            //    DeadlineStart = deadlineStart,
+            //    DeadlineEnd = deadlineEnd
+            //});
+            //}
+            #endregion
+            var result = _dblink.Select($"SELECT COUNT(DISTINCT lineId) AS Count FROM batteryQIPlus.productionLines;");
+            int numOfLinePlusOne = Convert.ToInt32(result[0]["Count"]);
+            for (int lineNum=1; lineNum<numOfLinePlusOne; lineNum++) // 이거 라인 카운트 바꿔줘야함
+            {
+                _lineSettingCollection.Add(new ProductionLine(lineNum)); 
             }
+
+
         }
 
         // 커멘드---------------------------------------------------------------------------------------------

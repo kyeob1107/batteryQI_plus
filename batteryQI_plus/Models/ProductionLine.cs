@@ -14,7 +14,7 @@ namespace batteryQI_plus.Models
     public class ProductionLine : ModelBase
     {
         // 내부 필드와 프로퍼티
-        private string _lineId;
+        private int _lineId;
         private string _usageName;
         private string _batteryType;
         private string _batteryShape;
@@ -24,9 +24,9 @@ namespace batteryQI_plus.Models
         private string _deadlineEnd;
         private bool _isLinePower; // 생산라인 전원
 
-        public ProductionLine() // 기본 생성자
+        public ProductionLine()
         {
-            _lineId = "";
+            _lineId = 0;
             _usageName = "";
             _batteryType = "";
             _batteryShape = "";
@@ -34,6 +34,23 @@ namespace batteryQI_plus.Models
             _quota = "";
             _deadlineStart = "";
             _deadlineEnd = "";
+        }
+        public ProductionLine(int lineNum) // 기본 생성자
+        {
+            if (lineNum <= 0)
+            {
+                throw new ArgumentException("lineNum는 0보다 커야합니다.", nameof(lineNum));
+            }
+
+            _lineId = lineNum;
+            //_usageName = "";
+            //_batteryType = "";
+            //_batteryShape = "";
+            //_buyerId = new KeyValuePair<string, string>();
+            //_quota = "";
+            //_deadlineStart = "";
+            //_deadlineEnd = "";
+            ProductionLineInitialize();
             CheckInspectionState(); // _isLinePower 초기화 // _isLinePower = false;
         } 
         public ProductionLine(ProductionLine other) // 깊은 복사를 수행하는 생성자
@@ -51,7 +68,7 @@ namespace batteryQI_plus.Models
             _isLinePower = other._isLinePower;
         }
 
-        public string LineId
+        public int LineId
         {
             get => _lineId;
             set => SetProperty(ref _lineId, value);
@@ -101,6 +118,33 @@ namespace batteryQI_plus.Models
         }
          
         // 메소드-------------------------------------------------------------------------
+        private void ProductionLineInitialize()
+        {
+            string prdoctionSettingSelectQuery = $@"SELECT 
+                                                        pl.usageName, 
+                                                        pl.batteryType, 
+                                                        pl.batteryShape, 
+                                                        pl.buyerId, 
+                                                        b.buyerName, 
+                                                        pl.quota, 
+                                                        pl.deadlineStart, 
+                                                        pl.deadlineEnd
+                                                    FROM productionLines pl 
+                                                    LEFT JOIN buyers b 
+                                                        ON pl.buyerId = b.buyerId 
+                                                    WHERE lineId = {_lineId};";
+            var result = _dblink.Select(prdoctionSettingSelectQuery);
+            _usageName = result[0].TryGetValue("usageName", out var usageNameObj) && usageNameObj != null ? usageNameObj.ToString() : "";
+            _batteryType = result[0].TryGetValue("batteryType", out var batteryTypeObj) && batteryTypeObj != null ? batteryTypeObj.ToString() : "";
+            _batteryShape = result[0].TryGetValue("batteryShape", out var batteryShapeObj) && batteryShapeObj != null ? batteryShapeObj.ToString() : "";
+            string? buyerId = result[0].TryGetValue("buyerId", out var buyerIdObj) && buyerIdObj != null ? buyerIdObj.ToString() : "";
+            string? buyerName = result[0].TryGetValue("buyerName", out var buyerNameObj) && buyerNameObj != null ? buyerNameObj.ToString() : "";
+            _buyerId = new KeyValuePair<string, string>(buyerName, buyerId);
+            _quota = result[0].TryGetValue("quota", out var quotaObj) && quotaObj != null ? quotaObj.ToString() : "";
+            _deadlineStart = result[0].TryGetValue("deadlineStart", out var deadlineStartObj) && deadlineStartObj != null ? deadlineStartObj.ToString() : "";
+            _deadlineEnd = result[0].TryGetValue("deadlineEnd", out var deadlineEndObj) && deadlineEndObj != null ? deadlineEndObj.ToString() : "";
+        }
+
         private void CheckInspectionState()
         {
             string checkQuery = $@"SELECT processState 
@@ -122,13 +166,32 @@ namespace batteryQI_plus.Models
 
         private bool LinePower() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
         {
-            CheckInspectionState(); // 변경하기 전 DB에서 상태 조회하여 동기화 체크
+            string testOnQuery = $@"UPDATE inspectionCurrentState
+                                   SET processState = 1
+                                   WHERE stateId = {_lineId};";
+            string testOffQuery = $@"UPDATE inspectionCurrentState
+                                   SET processState = -1
+                                   WHERE stateId = {_lineId};";
+            string testExecuteQuery = "";
+            string onCommandQuery = $@"UPDATE inspectionCurrentState
+                                   SET onOffCommand = 1
+                                   WHERE stateId = {_lineId};";
+            string offCommandQuery = $@"UPDATE inspectionCurrentState
+                                   SET onOffCommand = 0
+                                   WHERE stateId = {_lineId};";
+            string executeQuery = "";
 
+            bool selectYes = false;
+
+            CheckInspectionState(); // 변경하기 전 DB에서 상태 조회하여 동기화 체크
             if (_isLinePower == false)
             {
                 if (System.Windows.Forms.MessageBox.Show($"생산라인의 전원을 켜시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     _isLinePower = true;
+                    testExecuteQuery = testOnQuery;
+                    executeQuery = onCommandQuery;
+                    selectYes = true;
                 }
             }
             else if (_isLinePower == true)
@@ -136,6 +199,9 @@ namespace batteryQI_plus.Models
                 if (System.Windows.Forms.MessageBox.Show($"정말로 생산라인의 전원을 끄시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     _isLinePower = false;
+                    testExecuteQuery = testOffQuery;
+                    executeQuery = offCommandQuery;
+                    selectYes = true;
                 }
             }
             //else
@@ -146,6 +212,19 @@ namespace batteryQI_plus.Models
             //    else
             //        _isLinePower = false;
             //}
+
+            if (selectYes == true)
+            {
+                _dblink.Update(testExecuteQuery); // 테스트용 상태 업데이트
+                _dblink.Update(executeQuery); // 명령 업데이트
+
+                // 업데이트 날짜시간 갱신
+                string updateDateTimeQuery = $@"UPDATE inspectionCurrentState
+                                            SET lastUpdateDateTime = '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}'
+                                            WHERE stateId = {_lineId};";
+                _dblink.Update(updateDateTimeQuery);
+            }
+
             return _isLinePower;
         }
     }
