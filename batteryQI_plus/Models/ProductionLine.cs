@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
+using batteryQI_plus.Models.Bases;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MySql.Data.MySqlClient;
 
@@ -10,7 +11,7 @@ namespace batteryQI_plus.Models
     // 생산라인 설정 Model
     // IReadOnlyDictionary: 모든 키-값 쌍 기반 컬렉션의 표준 프로토콜을 정의.
     // Dictionary로 구현했던 기존 코드와 충돌 방지. 설정 항목 자체를 추가하거나 삭제할 일은 없기 때문에 ReadOnly형 상속.
-    public class ProductionLine : ObservableObject
+    public class ProductionLine : ModelBase
     {
         // 내부 필드와 프로퍼티
         private string _lineId;
@@ -21,7 +22,7 @@ namespace batteryQI_plus.Models
         private string _quota;
         private string _deadlineStart;
         private string _deadlineEnd;
-        private bool? _isLinePower; // 생산라인 전원
+        private bool _isLinePower; // 생산라인 전원
 
         public ProductionLine() // 기본 생성자
         {
@@ -33,6 +34,7 @@ namespace batteryQI_plus.Models
             _quota = "";
             _deadlineStart = "";
             _deadlineEnd = "";
+            CheckInspectionState(); // _isLinePower 초기화 // _isLinePower = false;
         } 
         public ProductionLine(ProductionLine other) // 깊은 복사를 수행하는 생성자
         {
@@ -46,6 +48,7 @@ namespace batteryQI_plus.Models
             _quota = other._quota;
             _deadlineStart = other._deadlineStart;
             _deadlineEnd = other._deadlineEnd;
+            _isLinePower = other._isLinePower;
         }
 
         public string LineId
@@ -88,7 +91,7 @@ namespace batteryQI_plus.Models
             get => _deadlineEnd;
             set => SetProperty(ref _deadlineEnd, value);
         }
-        public bool? IsLinePower // 생산라인 전원 프로퍼티
+        public bool IsLinePower // 생산라인 전원 프로퍼티
         {
             get => _isLinePower;
             set
@@ -98,8 +101,29 @@ namespace batteryQI_plus.Models
         }
          
         // 메소드-------------------------------------------------------------------------
-        private bool? LinePower() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
+        private void CheckInspectionState()
         {
+            string checkQuery = $@"SELECT processState 
+                                    FROM inspectionCurrentState 
+                                    WHERE lineId = {_lineId};";
+            var result = _dblink.Select(checkQuery);
+            int state = (int)(sbyte)result[0]["processState"];
+
+            if (state > 0)
+            { 
+                _isLinePower = true; 
+            }
+
+            else
+            {
+                _isLinePower = false;
+            }
+        }
+
+        private bool LinePower() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
+        {
+            CheckInspectionState(); // 변경하기 전 DB에서 상태 조회하여 동기화 체크
+
             if (_isLinePower == false)
             {
                 if (System.Windows.Forms.MessageBox.Show($"생산라인의 전원을 켜시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -114,14 +138,14 @@ namespace batteryQI_plus.Models
                     _isLinePower = false;
                 }
             }
-            else
-            {
-                DialogResult dialogResult = System.Windows.Forms.MessageBox.Show($"생산라인의 작동 여부가 저장되어있지 않습니다.\r\n현재 생산라인이 작동 중입니까?", "Yes-No", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                    _isLinePower = true;
-                else
-                    _isLinePower = false;
-            }
+            //else
+            //{
+            //    DialogResult dialogResult = System.Windows.Forms.MessageBox.Show($"생산라인의 작동 여부가 저장되어있지 않습니다.\r\n현재 생산라인이 작동 중입니까?", "Yes-No", MessageBoxButtons.YesNo);
+            //    if (dialogResult == DialogResult.Yes)
+            //        _isLinePower = true;
+            //    else
+            //        _isLinePower = false;
+            //}
             return _isLinePower;
         }
     }
