@@ -86,94 +86,42 @@
                                     </Ellipse.Fill>
                                 </Ellipse>
 
-                                <TextBlock Text="SF_ZONE님 환영합니다." VerticalAlignment="Center" Margin="10 0 0 0" FontSize="15" FontWeight="Medium"/>
+                                <TextBlock Text="{Binding Employee.EmployeeID, StringFormat='{}{0}님 환영합니다.'}" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="18" FontWeight="Medium" />
                             </StackPanel>
                         </Grid>
 
                         <!-- Employee List Section -->
                         <Grid Grid.Row="1" Margin="30 30 10 0">
                             <TextBlock Text="팀원 리스트" FontSize="18" FontWeight="SemiBold" Margin="10 15 0 0"/>
-                            <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="15 20 0 0">
-                                <StackPanel Orientation="Horizontal" Margin="0 50 0 0">
-                                    <Ellipse Width="30" Height="30">
-                                        <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/7.png"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock Text="한도윤 본부장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
-                                </StackPanel>
-
-                                <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
-
-                                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                                    <Ellipse Width="30" Height="30">
-                                        <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/2.png"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock Text="김영훈 이사 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
-                                </StackPanel>
-
-                                <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
-
-                                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                                    <Ellipse Width="30" Height="30">
-                                        <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/3.png"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock Text="이민아 부장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
-                                </StackPanel>
-
-                                <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
-
-                                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                                    <Ellipse Width="30" Height="30">
-                                        <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/4.png"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock Text="박성준 과장 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
-                                </StackPanel>
-
-                                <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
-
-                                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                                    <Ellipse Width="30" Height="30">
-                                        <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/5.png"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock Text="최수연 대리 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
-                                </StackPanel>
-
-                                <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
-
-                                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                                    <Ellipse Width="30" Height="30">
-                                        <Ellipse.Fill>
-                                            <ImageBrush ImageSource="/Images/6.png"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock Text="정현우 사원 " VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15" FontWeight="Medium"/>
-                                </StackPanel>
-
-                                <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
-
-
-
-
-
-                            </StackPanel>
-
-
-
-
+                            <!-- ItemsControl을 사용하여 EmployeeIds 컬렉션을 출력 -->
+                            <ItemsControl ItemsSource="{Binding EmployeeList}" Margin="15 35 0 0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+                                                <!-- 필요에 따라 이미지 소스는 고정된 값 혹은 Converter로 동적으로 지정 -->
+                                                <Ellipse Width="30" Height="30">
+                                                    <Ellipse.Fill>
+                                                        <ImageBrush ImageSource="{Binding Value}"/>
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                                <!-- 단순히 EmployeeId 문자열을 출력 -->
+                                                <TextBlock Text="{Binding Key}" VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15"  FontWeight="Medium"/>
+                                            </StackPanel>
+                                            <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <!-- ItemsPanelTemplate을 통해 수직 StackPanel 사용 -->
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
                         </Grid>
                     </Grid>
-
                 </Grid>
-
             </Grid>
         </Border>
     </Border>
