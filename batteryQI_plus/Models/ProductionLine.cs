@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MySql.Data.MySqlClient;
 
@@ -20,6 +21,7 @@ namespace batteryQI_plus.Models
         private string _quota;
         private string _deadlineStart;
         private string _deadlineEnd;
+        private bool? _isLinePower; // 생산라인 전원
 
         public ProductionLine() // 기본 생성자
         {
@@ -85,6 +87,42 @@ namespace batteryQI_plus.Models
         {
             get => _deadlineEnd;
             set => SetProperty(ref _deadlineEnd, value);
+        }
+        public bool? IsLinePower // 생산라인 전원 프로퍼티
+        {
+            get => _isLinePower;
+            set
+            {
+                SetProperty(ref _isLinePower, LinePower());
+            }
+        }
+         
+        // 메소드-------------------------------------------------------------------------
+        private bool? LinePower() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
+        {
+            if (_isLinePower == false)
+            {
+                if (System.Windows.Forms.MessageBox.Show($"생산라인의 전원을 켜시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    _isLinePower = true;
+                }
+            }
+            else if (_isLinePower == true)
+            {
+                if (System.Windows.Forms.MessageBox.Show($"정말로 생산라인의 전원을 끄시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    _isLinePower = false;
+                }
+            }
+            else
+            {
+                DialogResult dialogResult = System.Windows.Forms.MessageBox.Show($"생산라인의 작동 여부가 저장되어있지 않습니다.\r\n현재 생산라인이 작동 중입니까?", "Yes-No", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                    _isLinePower = true;
+                else
+                    _isLinePower = false;
+            }
+            return _isLinePower;
         }
     }
 }

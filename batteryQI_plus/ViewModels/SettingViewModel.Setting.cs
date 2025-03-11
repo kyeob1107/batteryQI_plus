@@ -17,7 +17,6 @@ namespace batteryQI_plus.ViewModels
     {
         // 필드 및 프로퍼티---------------------------------------------------------------------------
         private Employee _employee;
-        private bool? _isLinePower; // 생산라인 전원
         private bool _isEditSettingRole; // 설정 편집창을 열 수 있는 권한 설정
         private int _selectedTabIndex; // 선택된 Tab index
         private ObservableCollection<ProductionLine> _lineSettingCollection; // Setting View 각 생산라인별 설정 저장
@@ -27,14 +26,6 @@ namespace batteryQI_plus.ViewModels
         {
             get => _employee;
             set => SetProperty(ref _employee, value);
-        }
-        public bool? IsLinePower // 생산라인 전원 프로퍼티
-        {
-            get => _isLinePower;
-            set
-            {
-                SetProperty(ref _isLinePower, LinePower());
-            }
         }
         public bool IsEditSettingRole // 설정 편집창을 열 수 있는 권한 프로퍼티
         {
@@ -66,33 +57,6 @@ namespace batteryQI_plus.ViewModels
         }
 
         // 메소드----------------------------------------------------------------------------
-        private bool? LinePower() // 생산라인 전원. 본래 전원을 끄고켜는 Command 였지만 프로퍼티 Set 내부 메소드로 전환 
-        {
-            if (_isLinePower == false)
-            {
-                if (System.Windows.Forms.MessageBox.Show($"생산라인의 전원을 켜시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    _isLinePower = true;
-                }
-            }
-            else if (_isLinePower == true)
-            {
-                if (System.Windows.Forms.MessageBox.Show($"정말로 생산라인의 전원을 끄시겠습니까?", "Yes-No", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    _isLinePower = false;
-                }
-            }
-            else
-            {
-                DialogResult dialogResult = System.Windows.Forms.MessageBox.Show($"생산라인의 작동 여부가 저장되어있지 않습니다.\r\n현재 생산라인이 작동 중입니까?", "Yes-No", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                    _isLinePower = true;
-                else
-                    _isLinePower = false;
-            }
-            return _isLinePower;
-        }
-
         private string GetTabByLineId(int selectedTabIndex) // Setting View에서 선택한 Tab의 lineId를 찾아 반환하는 메소드
         {
             if (selectedTabIndex < 0) // 선택한 Tab의 Index가 아무것도 선택하지 않은 상태(-1)일 경우 빈 문자열 반환
