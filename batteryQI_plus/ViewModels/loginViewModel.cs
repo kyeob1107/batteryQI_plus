@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using batteryQI_plus.Models;
 using batteryQI_plus.Views;
@@ -11,12 +12,13 @@ namespace batteryQI_plus.ViewModels.Bases
     public partial class LoginViewModel : ViewModelBases
     {
         private Employee _employee = Employee.Instance();
+        private readonly ViewModelLocator _viewModelLocator;
         public Employee Employee
         {
             get => _employee;
             set => SetProperty(ref _employee, value);
         }
-        public LoginViewModel()
+        public LoginViewModel(ViewModelLocator viewModelLocator)
         {
            //MessageBox.Show(DateTime.Now.ToString()); // 시간 확인용 나중에 확인할 때 제거 예정
             //Manager 객체 생성
@@ -24,10 +26,19 @@ namespace batteryQI_plus.ViewModels.Bases
             // 로그인 창 열면서 DB 연결
             _dblink = DBlink.Instance();
             _dblink.Connect();
+            _viewModelLocator = viewModelLocator; // viewModelLocater에 구현된 메소드 사용을 위해
+        }
+
+        private void PrintLoginPopup()
+        {
+            string loginPopupInput = _viewModelLocator.BringlastInspectionResultDuringLogOut();
+            string pattern = @"\[.*?\]";
+            string loginPopupOutput = "로그아웃동안 검사결과\r\n\r\n" + Regex.Replace(loginPopupInput, pattern, "");
+            Console.WriteLine(loginPopupOutput);
+            MessageBox.Show(loginPopupOutput, "Login Sucess", MessageBoxButton.OK,MessageBoxImage.Information);
         }
 
         [RelayCommand]
-
         private void Login(object obj)
         {
             // DB가 제대로 연결되어 있고 PassBox가 안 비어져 있으면 수행
@@ -36,14 +47,15 @@ namespace batteryQI_plus.ViewModels.Bases
                 List<Dictionary<string, object>> login = _dblink.Select($"SELECT * FROM employees WHERE employeeId='{Employee.EmployeeID}';");
                 if (login.Count != 0 && (pw.Password == login[0]["employeePw"].ToString()))
                 {
-                    MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    //MessageBox.Show("로그인 완료", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     _employee.EmployeeNum = (int)(sbyte)login[0]["employeeNum"]; // 관리자 번호 저장
                     _employee.EmployeeID = login[0]["employeeId"].ToString(); // 관리자 아이디 저장
                     //_employee.WorkAmount = (int)login[0]["workAmount"]; // DB에 저장된 작업량 가져옴
                     _employee.EmployeeRole = (int)(sbyte)login[0]["employeeRole"]; // 권한 정보 저장
                     _employee.LineId = (int)(sbyte)login[0]["lineId"]; // 할당된 생산 라인 저장
                     _employee.LastLogoutDateTime = (DateTime)login[0]["lastLogoutDateTime"];
-                    
+
+                    PrintLoginPopup(); // 로그인 팝업
                     // 권한에 따라 화면 구성 및 기능들 활성화 조절할 위치
                     try
                     {

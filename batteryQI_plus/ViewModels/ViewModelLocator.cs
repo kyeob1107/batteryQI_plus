@@ -15,9 +15,15 @@ namespace batteryQI_plus.ViewModels
                 // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
 
                 if (_loginViewModel == null)
-                    _loginViewModel = new LoginViewModel();
+                    _loginViewModel = new LoginViewModel(this);
                 return _loginViewModel;
             }
+        }
+
+        public string BringlastInspectionResultDuringLogOut() 
+        {
+            string result = DashboardViewModel.LogContent[0];
+            return result;
         }
 
         private MainWindowViewModel? _mainWindowViewModel; // 메인화면 View
