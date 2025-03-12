@@ -120,7 +120,9 @@ namespace batteryQI_plus.ViewModels
                             // 프로퍼티 정보를 동적으로 저장할 변수
                             IEnumerable<PropertyInfo> properties = _selectedLineSetting.GetType()
                                                             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                                            .Where(p => p.Name != "LineId" && p.Name != "IsLinePower");
+                                                            .Where(p => p.Name != "LineId" 
+                                                                    && p.Name != "IsLinePower"
+                                                                    && p.Name != "CommandValue");
                             // 업데이트할 열의 할당 구문을 저장할 리스트
                             List<string> updateSettingColumns = new List<string>();
                             Dictionary<string, string> sqlColumnMapping = new Dictionary<string, string>
