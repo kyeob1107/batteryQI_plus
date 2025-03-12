@@ -1,4 +1,5 @@
-﻿using batteryQI_plus.ViewModels.Bases;
+﻿using batteryQI_plus.Models;
+using batteryQI_plus.ViewModels.Bases;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -22,7 +23,7 @@ namespace batteryQI_plus.ViewModels
 
         public string BringlastInspectionResultDuringLogOut() 
         {
-            string result = DashboardViewModel.LogContent[0];
+            string result = DashboardViewModel.LogContent[DashboardViewModel.Employee.LineId];
             return result;
         }
 
@@ -40,7 +41,9 @@ namespace batteryQI_plus.ViewModels
 
         public string BringTotalInspectionResultDuringLogIn()
         {
-            string result = DashboardViewModel.TotalLogContent[0];
+            string result = "";
+            if (DashboardViewModel.Employee.LineId != 0) result += $"Line{DashboardViewModel.Employee.LineId}\r\n";
+            result += DashboardViewModel.TotalLogContent[DashboardViewModel.Employee.LineId];
             return result;
         }
 
