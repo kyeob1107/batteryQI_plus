@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:batteryQI_plus.ViewModels"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              >
     <UserControl.Resources>
         <Style x:Key="AngularGaugeStyle" TargetType="lvc:AngularGauge">
@@ -35,11 +36,17 @@
 
                     <!-- Title -->
                     <TextBlock Grid.Row="0" Text="단위시간 검사 모니터링" FontSize="17" Foreground="White" FontWeight="SemiBold" Margin="0 0 0 10"/>
+                    <Button Grid.Row="0" HorizontalAlignment="Right" Margin="254,4,0,0" VerticalAlignment="Top"
+        Command="{Binding RefreshButtonCommand}"
+        Style="{StaticResource refreshButton}" Height="23" Width="23">
+                        <fa:IconImage Icon="Sync" Style="{StaticResource menuButtonIcon}" Height="12" Width="12"/>
+                    </Button>
 
                     <!-- TabControl -->
                     <TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="0">
                         <!-- 전체 탭 -->
-                        <TabItem Header="전체" Visibility="{Binding TabItemVisibility[0]}">
+                        <TabItem Header="전체" Visibility="{Binding TabItemVisibility[0]}"
+                                 Style="{StaticResource CustomTabItemStyle}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <RichTextBox IsReadOnly="True" 
                                              BorderThickness="0" 
@@ -56,7 +63,8 @@
                         </TabItem>
 
                         <!-- Line1 탭 -->
-                        <TabItem Header="Line1" Visibility="{Binding TabItemVisibility[1]}">
+                        <TabItem Header="Line1" Visibility="{Binding TabItemVisibility[1]}"
+                                 Style="{StaticResource CustomTabItemStyle}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text ="{Binding LogContent[1]}" 
                                            TextWrapping="Wrap" FontSize="14" 
@@ -65,7 +73,8 @@
                         </TabItem>
 
                         <!-- Line2 탭 -->
-                        <TabItem Header="Line2" Visibility="{Binding TabItemVisibility[2]}">
+                        <TabItem Header="Line2" Visibility="{Binding TabItemVisibility[2]}"
+                                 Style="{StaticResource CustomTabItemStyle}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text ="{Binding LogContent[2]}" 
                                            TextWrapping="Wrap" FontSize="14" 
@@ -74,7 +83,8 @@
                         </TabItem>
 
                         <!-- Line3 탭 -->
-                        <TabItem Header="Line3" Visibility="{Binding TabItemVisibility[3]}">
+                        <TabItem Header="Line3" Visibility="{Binding TabItemVisibility[3]}"
+                                 Style="{StaticResource CustomTabItemStyle}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text="{Binding LogContent[3]}" 
                                            TextWrapping="Wrap" FontSize="14" 
@@ -82,8 +92,6 @@
                             </ScrollViewer>
                         </TabItem>
                     </TabControl>
-                    <Button Content="Button" HorizontalAlignment="Left" Margin="227,16,0,0" Grid.RowSpan="2" VerticalAlignment="Top"
-                            Command="{Binding RefreshButtonCommand}"/>
                 </Grid>
             </Border>
 
@@ -170,7 +178,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            
+
                             <TextBlock Grid.Row="0" Text="Line1" 
                                        FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
                                        Foreground="White" Margin="0 0 0 10" />
@@ -242,7 +250,7 @@
            FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
            Foreground="White"  VerticalAlignment="Center" Padding="0,20,0,0" />
                         </Grid>
-                        
+
 
                         <!-- Line2 -->
                         <Grid Grid.Column="1" Visibility="{Binding TabItemVisibility[2]}">

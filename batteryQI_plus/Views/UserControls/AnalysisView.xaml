@@ -168,7 +168,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                     <!-- 조회 버튼 -->
                     <Button Grid.Column="2" Content="조회" Width="60" Height="60"
                             Command="{Binding SearchCommand}" Margin="10,0,0,0"
-                            Style="{StaticResource imageSectionButton}"
+                            Style="{StaticResource commonButton}"
                             />
                 </Grid>
             </Border>
@@ -177,7 +177,8 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
             <TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="1"
                          SelectedIndex="{Binding SelectedTabIndex}">
                 <!-- 타임차트 탭 -->
-                <TabItem Header="타임차트">
+                <TabItem Header="타임차트" Style="{StaticResource CustomTabItemStyle}"
+                         Foreground="Black">
                     <Border Background="#FFFFFF" Padding="10">
                         <lvc:CartesianChart Series="{Binding SeriesCollectionTimeChart}" LegendLocation="Right">
                             <lvc:CartesianChart.AxisX>
@@ -191,7 +192,8 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                 </TabItem>
 
                 <!-- 불량비율 탭 -->
-                <TabItem Header="불량비율">
+                <TabItem Header="불량비율" Style="{StaticResource CustomTabItemStyle}"
+                         Foreground="Black">
                     <Border Background="#FFFFFF" Padding="10">
                         <!-- 그래프 Placeholder -->
                         <!--<TextBlock Text="불량비율 그래프 영역 (바인딩 필요)" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
@@ -208,7 +210,8 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                 </TabItem>
 
                 <!-- 유형별 수 탭 -->
-                <TabItem Header="유형별 수">
+                <TabItem Header="유형별 수" Style="{StaticResource CustomTabItemStyle}"
+                         Foreground="Black">
                     <Border Background="#FFFFFF" Padding="10">
                         <lvc:CartesianChart Series="{Binding SeriesCollectionColumn}" LegendLocation="Right">
                             <lvc:CartesianChart.AxisX>
@@ -222,7 +225,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                 </TabItem>
 
                 <!-- 데이터 조회 탭 -->
-                <TabItem Header="데이터 조회">
+                <TabItem Header="데이터 조회" Style="{StaticResource CustomTabItemStyle}">
                     <Border Background="#FFFFFF" Padding="10">
                         <!-- 데이터 테이블 Placeholder -->
                         <DataGrid ItemsSource="{Binding QueryResultsTable}" AutoGenerateColumns="True"

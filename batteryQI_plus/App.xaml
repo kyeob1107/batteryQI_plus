@@ -90,6 +90,20 @@
             </Setter>
         </Style>
 
+        <Style x:Key="refreshButton" TargetType="Button" BasedOn="{StaticResource menuButton}">
+            <Setter Property="Background" Value="#5a5080"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5"
+                            BorderThickness="1" BorderBrush="#8a7fc7">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
 
         <Style TargetType="ComboBox">
             <Setter Property="MaxDropDownHeight" Value="100"/>
@@ -150,7 +164,75 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
+        <!-- TabControl 스타일 -->
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+
+        <!-- TabItem 스타일 -->
+        <Style x:Key="CustomTabItemStyle" TargetType="TabItem">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#6A5ACD"/>
+            <!-- 기본 보라색 배경 -->
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderBrush" Value="#6A5ACD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+
+            <!-- ControlTemplate을 사용하여 CornerRadius 추가 -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Grid>
+                            <!-- 둥근 모서리를 가진 Border -->
+                            <!-- 여기서 CornerRadius라 적은 곳에 CornerRadius 설정 -->
+                            <Border 
+                                Name="Border"
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5,5,0,0" 
+                                Padding="{TemplateBinding Padding}">
+                                <ContentPresenter 
+                                    x:Name="ContentSite"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    ContentSource="Header" />
+                            </Border>
+                        </Grid>
+                        <!-- 트리거 설정 -->
+                        <ControlTemplate.Triggers>
+                            <!-- 선택된 탭 스타일 -->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="White"/>
+                                <!-- 선택된 탭 배경색 -->
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#6A5ACD"/>
+                                <!-- 선택된 탭 테두리색 -->
+                                <Setter Property="HeaderTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}" />
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- 텍스트 색상 변경 -->
+                            </Trigger>
+                            <!-- 마우스 오버 효과 -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#9370DB"/>
+                                <!-- 밝은 보라색 배경 -->
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Application.Resources>
 
 </Application>
