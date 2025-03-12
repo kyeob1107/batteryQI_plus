@@ -123,17 +123,19 @@
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
                                                                 <StackPanel>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                                                                        <!-- 필요에 따라 이미지 소스는 고정된 값 혹은 Converter로 동적으로 지정 -->
-                                                                        <Ellipse Width="30" Height="30">
-                                                                            <Ellipse.Fill>
-                                                                                <ImageBrush ImageSource="{Binding ImagePath}"/>
-                                                                            </Ellipse.Fill>
-                                                                        </Ellipse>
-                                                                        <!-- 단순히 EmployeeId 문자열을 출력 -->
-                                                                        <TextBlock Text="{Binding EmployeeId}" VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15"  FontWeight="Medium"/>
-                                                                    </StackPanel>
-                                                                    <Separator Background="#877cc5" Margin="0 15 0 0" Height="0.8" VerticalAlignment="Center"/>
+                                                                    <Grid Background="{Binding BackgroundColor}" Margin="0,0,0,0">
+                                                                        <StackPanel Orientation="Horizontal" Margin="5,15,0,15">
+                                                                            <!-- 필요에 따라 이미지 소스는 고정된 값 혹은 Converter로 동적으로 지정 -->
+                                                                            <Ellipse Width="30" Height="30">
+                                                                                <Ellipse.Fill>
+                                                                                    <ImageBrush ImageSource="{Binding ImagePath}"/>
+                                                                                </Ellipse.Fill>
+                                                                            </Ellipse>
+                                                                            <!-- 단순히 EmployeeId 문자열을 출력 -->
+                                                                            <TextBlock Text="{Binding EmployeeId}" VerticalAlignment="Center" Margin="30 0 0 0" FontSize="15"  FontWeight="Medium"/>
+                                                                        </StackPanel>
+                                                                    </Grid>
+                                                                    <Separator Background="#877cc5" Margin="0 0 0 0" Height="0.8" VerticalAlignment="Center"/>
                                                                 </StackPanel>
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
