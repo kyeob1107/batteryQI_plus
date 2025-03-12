@@ -8,6 +8,7 @@
         WindowStartupLocation="CenterScreen" 
         WindowState="Maximized" 
         Background="White" 
+        Closing="MainWindow_Closing"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
     >
 

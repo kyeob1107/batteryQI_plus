@@ -17,6 +17,7 @@ namespace batteryQI_plus.ViewModels
         private string _dbConnectState; // 연결상태 메시지
         private string _dbConnectionIcon; // 아이콘 이름 (FontAwesome 아이콘)
         private Brush _dbConnectionColor; // 아이콘 색상
+        private readonly ViewModelLocator _viewModelLocator;
 
         public Employee Employee
         {
@@ -50,7 +51,7 @@ namespace batteryQI_plus.ViewModels
         }
         public Action? CloseAction { get; set; }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(ViewModelLocator viewModelLocator)
         {
             // 로그인 직원, 직원 리스트 초기화
             _employee = Employee.Instance();
@@ -62,6 +63,8 @@ namespace batteryQI_plus.ViewModels
             UpdateDbConnectionState();
             // 연결 모니터링 시작
             _dblink.MonitorConnection();
+            //
+            _viewModelLocator = viewModelLocator; // viewModelLocater에 구현된 메소드 사용을 위해
 
             // 초기 화면 설정
             _currentPage = new DashboardView();
@@ -84,6 +87,14 @@ namespace batteryQI_plus.ViewModels
             }
             return employeeList;
         }
+
+        // 로그아웃시 검사 결과 정리
+        public void TotalInspectionResult()
+        {
+            string result = _viewModelLocator.BringTotalInspectionResultDuringLogIn();
+            MessageBox.Show(result,"검사결과 요약",MessageBoxButton.OK,MessageBoxImage.Information);
+        }
+
         // 이벤트 핸들러
         private void OnDbConnectionStateChanged(object sender, EventArgs e)
         {
@@ -132,15 +143,15 @@ namespace batteryQI_plus.ViewModels
         }
 
         [RelayCommand]
-        private void TestConnection()
+        public void DBConnectButton()
         {
-            MessageBox.Show("연결 동작");
+            //MessageBox.Show("연결 동작");
             _dblink.Connect();
         }
         [RelayCommand]
-        private void TestDisconnection()
+        private void DBDisconnectButton()
         {
-            MessageBox.Show("연결 해제");
+            //MessageBox.Show("연결 해제");
             _dblink.Dispose();
         }
     }

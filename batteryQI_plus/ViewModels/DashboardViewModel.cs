@@ -148,7 +148,7 @@ namespace batteryQI_plus.ViewModels
                 string newLogEntry = $"검사수: {_totalUnitTest[line].InspectionCount}개 | 정상: {_totalUnitTest[line].NormalCount}개 | "
                                     + $"불량: {_totalUnitTest[line].DefectCount}개 (불량률: {_totalUnitTest[line].DefectRate.ToString("F2")}%) "
                                     + "\r\n";
-                this.TotalLogContent[0] += newLogEntry;
+                this.TotalLogContent[0] += $"Line{line}\r\n" + newLogEntry;
                 this.TotalLogContent[line] = newLogEntry;
             }
         }

@@ -33,9 +33,15 @@ namespace batteryQI_plus.ViewModels
             {
                 // if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return null;
                 if (_mainWindowViewModel == null)
-                    _mainWindowViewModel = new MainWindowViewModel();
+                    _mainWindowViewModel = new MainWindowViewModel(this);
                 return _mainWindowViewModel;
             }
+        }
+
+        public string BringTotalInspectionResultDuringLogIn()
+        {
+            string result = DashboardViewModel.TotalLogContent[0];
+            return result;
         }
 
         //private CompositeViewModel? _compositeViewModel; // 데시보드, 불량정보확인 View
