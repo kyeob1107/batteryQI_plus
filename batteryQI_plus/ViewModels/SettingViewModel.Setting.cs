@@ -21,7 +21,6 @@ namespace batteryQI_plus.ViewModels
         private int _selectedTabIndex; // 선택된 Tab index
         private ObservableCollection<ProductionLine> _lineSettingCollection; // Setting View 각 생산라인별 설정 저장
         private readonly ViewModelLocator _viewModelLocator;
-
         public Employee Employee
         {
             get => _employee;
@@ -54,6 +53,7 @@ namespace batteryQI_plus.ViewModels
             _lineSettingCollection = new ObservableCollection<ProductionLine>();
             getLineSetting(); // 설정 조회창의 설정 목록 초기화
             getSettingItemList(); // 설정 편집창의 설정 옵션 목록 초기화
+            _selectedTabIndex = Employee.LineId != 0? Employee.LineId - 1 : 0;
         }
 
         // 메소드----------------------------------------------------------------------------
@@ -105,7 +105,6 @@ namespace batteryQI_plus.ViewModels
             {
                 _lineSettingCollection.Add(new ProductionLine(lineNum)); 
             }
-
 
         }
 

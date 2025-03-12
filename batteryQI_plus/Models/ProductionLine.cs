@@ -52,7 +52,7 @@ namespace batteryQI_plus.Models
             //_deadlineStart = "";
             //_deadlineEnd = "";
             ProductionLineInitialize();
-            CheckInspectionState(); // _isLinePower 초기화 // _isLinePower = false;
+            CheckCommandState(); // _commandValue 초기화 // _commandValue = false;
         } 
         public ProductionLine(ProductionLine other) // 깊은 복사를 수행하는 생성자
         {
