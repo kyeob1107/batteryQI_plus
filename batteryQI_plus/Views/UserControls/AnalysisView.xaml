@@ -121,7 +121,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=BatteryTypeExpander}">
 
                             </StackPanel>
                             <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Expander Header="상태" IsExpanded="False" Margin="0,10,0,0" x:Name="StatusExpander">
+                                <Expander Header="상태" IsExpanded="False" Margin="5,10,5,0" x:Name="StatusExpander">
                                     <Expander.Content>
                                         <Popup IsOpen="{Binding IsExpanded, ElementName=StatusExpander}" 
 Placement="Bottom" PlacementTarget="{Binding ElementName=StatusExpander}">
@@ -137,7 +137,7 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=StatusExpander}">
                                         </Popup>
                                     </Expander.Content>
                                 </Expander>
-                                <Expander Header="생산 라인" IsExpanded="False" Margin="0,10,0,0" x:Name="ProductionLineExpander">
+                                <Expander Header="생산 라인" IsExpanded="False" Margin="5,10,5,0" x:Name="ProductionLineExpander">
                                     <Expander.Content>
                                         <Popup IsOpen="{Binding IsExpanded, ElementName=ProductionLineExpander}" 
 Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}">
@@ -159,15 +159,17 @@ Placement="Bottom" PlacementTarget="{Binding ElementName=ProductionLineExpander}
                     </StackPanel>
                     <!-- id 검색 영역 -->
                     <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="배터리 id:" HorizontalAlignment="Left" 
-                                   VerticalAlignment="Center" Margin="20,0,5,0"
+                        <TextBlock Text="배터리 id:" HorizontalAlignment="Left"
+                                   VerticalAlignment="Center" Margin="0,0,5,0"
                                    Visibility="{Binding TextBoxVisibility}"/>
                         <TextBox Text="{Binding BatteryId}" PreviewTextInput="TextBox_PreviewTextInput"
                                  Visibility="{Binding TextBoxVisibility}" IsEnabled="{Binding IsTextBoxEnabled}"/>
                     </StackPanel>
                     <!-- 조회 버튼 -->
                     <Button Grid.Column="2" Content="조회" Width="60" Height="60"
-                            Command="{Binding SearchCommand}" Margin="10,0,0,0"/>
+                            Command="{Binding SearchCommand}" Margin="10,0,0,0"
+                            Style="{StaticResource imageSectionButton}"
+                            />
                 </Grid>
             </Border>
 
