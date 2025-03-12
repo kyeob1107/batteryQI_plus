@@ -4,6 +4,7 @@ using batteryQI_plus.Views.UserControls;
 using batteryQI_plus.Models;
 using System.Windows.Media;
 using System.Windows;
+using System.Collections.ObjectModel;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -11,7 +12,7 @@ namespace batteryQI_plus.ViewModels
     {
         // MainWindowView 우측 직원 리스트
         private Employee _employee; // 로그인한 직원
-        private Dictionary<string, string> _employeeList; // 직원 Id, 같이 출력할 Image 경로
+        //private Dictionary<int, List<KeyValuePair<string, string>>> _employeeList; // Line: list<pair직원 Id, 같이 출력할 Image 경로>
         // MainWindowView 중앙 화면 프레임
         private object _currentPage;
         private string _dbConnectState; // 연결상태 메시지
@@ -24,11 +25,11 @@ namespace batteryQI_plus.ViewModels
             get => _employee;
             set => SetProperty(ref _employee, value);
         }
-        public Dictionary<string, string> EmployeeList
-        {
-            get => _employeeList;
-            set => SetProperty(ref _employeeList, value);
-        }
+        //public Dictionary<int, List<KeyValuePair<string, string>>> EmployeeList
+        //{
+        //    get => _employeeList;
+        //    set => SetProperty(ref _employeeList, value);
+        //}
         public object CurrentPage
         {
             get => _currentPage;
@@ -55,7 +56,7 @@ namespace batteryQI_plus.ViewModels
         {
             // 로그인 직원, 직원 리스트 초기화
             _employee = Employee.Instance();
-            _employeeList = EmployeeListInit();
+            EmployeeListInit();
             
             // 이벤트 구독
             _dblink.ConnectionStateChanged += OnDbConnectionStateChanged;
@@ -70,23 +71,115 @@ namespace batteryQI_plus.ViewModels
             _currentPage = new DashboardView();
         }
 
-        // 직원 리스트 초기화 메소드
-        public Dictionary<string, string> EmployeeListInit()
+        #region 직원 리스트 부분(급하게 하느라 정리 없이 하드코딩)
+        public class EmployeeGroup
         {
+            public int LineId { get; set; }
+            public string DisplayRole => LineId == 0 ? "Manager" : $"Line {LineId}";
+            public List<Employee_List> Employees { get; set; }
+        }
+
+        public class Employee_List
+        {
+            public string EmployeeId { get; set; }
+            public string ImagePath { get; set; }
+            public bool IsCurrentUser { get; set; } // 접속 여부, bool값은 기본값이 false
+            public string BackgroundColor => IsCurrentUser ? "#FFD700" : "#FFFFFF";
+        }
+
+        private ObservableCollection<EmployeeGroup> _employeeGroups;
+        public ObservableCollection<EmployeeGroup> EmployeeGroups
+        {
+            get => _employeeGroups;
+            set => SetProperty(ref _employeeGroups, value);
+        }
+        
+        // 직원 리스트 초기화 메소드
+        public void EmployeeListInit()
+        {
+            _employeeGroups = new ObservableCollection<EmployeeGroup>();
             // employeeNum 테이블에서 employeeId 컬럼 조회.
-            string sql = $"SELECT employeeId FROM employees WHERE employeeNum <> {Employee.EmployeeNum};";
+            string sql = @$"SELECT employeeId, LineId FROM employees ORDER BY LineId;";
             List<Dictionary<string, object>> rows = _dblink.Select(sql);
 
-            // 각 행에서 "employeeId" 값만 추출하여 List<string>으로 변환
-            //IList<string> employeeIds = rows.Select(row => row["employeeId"].ToString()).ToList();
+            // 결과를 딕셔너리로 변환
+            var employeeList = new Dictionary<int, List<KeyValuePair<string, string>>>();
 
-            Dictionary<string, string> employeeList = new Dictionary<string, string>();
+            //foreach (var row in rows)
+            //{
+            //    int lineId = (int)(sbyte)row["LineId"];
+            //    string employeeId = row["employeeId"].ToString();
+
+            //    // LineId에 해당하는 리스트가 없으면 생성
+            //    if (!employeeList.ContainsKey(lineId))
+            //    {
+            //        employeeList[lineId] = new List<KeyValuePair<string, string>>();
+            //    }
+
+            //    // 이미지 파일명 생성 (i + 2 대신 row의 인덱스를 사용하지 않고, 고유한 파일명 생성)
+            //    string imageFile = string.Format("/Images/{0}.png", employeeId);
+
+            //    // 딕셔너리에 추가
+            //    employeeList[lineId].Add(new KeyValuePair<string, string>(employeeId, imageFile));
+            //}
+
             for (int i = 0; i < rows.Count; i++)
             {
-                employeeList.Add(rows[i]["employeeId"].ToString(), string.Format("/Images/{0}.png", i + 2));
+                int lineId = (int)(sbyte)rows[i]["LineId"];
+                string employeeId = rows[i]["employeeId"].ToString();
+
+                //// LineId에 해당하는 리스트가 없으면 생성
+                //if (!employeeList.ContainsKey(lineId))
+                //{
+                //    employeeList[lineId] = new List<KeyValuePair<string, string>>();
+                //}
+
+                //// 이미지 파일명 생성
+                //string imageFile = string.Format("/Images/{0}.png", i + 2);
+
+                //// 딕셔너리에 추가
+                //employeeList[lineId].Add(new KeyValuePair<string, string>(employeeId, imageFile));
+
+                // LineId에 해당하는 그룹이 없으면 생성
+                var group = _employeeGroups.FirstOrDefault(g => g.LineId == lineId);
+                if (group == null)
+                {
+                    group = new EmployeeGroup { LineId = lineId, Employees = new List<Employee_List>() };
+                    _employeeGroups.Add(group);
+                }
+
+                // 직원 정보 추가
+                string imageFile = string.Format("/Images/{0}.png", i + 2);
+                var employee = new Employee_List { EmployeeId = employeeId, ImagePath = imageFile };
+
+                // 접속한 사용자 여부 설정
+                if (employeeId == Employee.EmployeeID) // CurrentUserId는 접속한 사용자 ID
+                {
+                    employee.IsCurrentUser = true;
+                }
+                else { employee.IsCurrentUser = false; } // 굳이 할 필요 없는 듯하지만 혹시 몰라 안전장치로
+
+                group.Employees.Add(employee);
             }
-            return employeeList;
+
+            //// EmployeeGroups에 데이터 할당
+            //_employeeGroups = new ObservableCollection<EmployeeGroup>();
+            //foreach (var kvp in employeeList)
+            //{
+            //    var group = new EmployeeGroup
+            //    {
+            //        LineId = kvp.Key,
+            //        Employees = kvp.Value.Select(e => new Employee_List
+            //        {
+            //            EmployeeId = e.Key,
+            //            ImagePath = e.Value
+            //        }).ToList()
+            //    };
+
+            //    _employeeGroups.Add(group);
+            //}
         }
+        #endregion
 
         // 로그아웃시 검사 결과 정리
         public void TotalInspectionResult()
