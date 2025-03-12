@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using batteryQI_plus.Models;
 using batteryQI_plus.ViewModels;
 using batteryQI_plus.Views;
 using Microsoft.Win32;
@@ -54,7 +55,7 @@ namespace batteryQI_plus.Views.UserControls
             if (viewModel != null)
             {
                 //string containerName = container.Name;
-                viewModel.UpdateGaugePositions(container.ActualWidth, container.ActualHeight);
+                viewModel.UpdateGaugePositions(container.ActualWidth, container.ActualHeight, viewModel.Employee.EmployeeRole);
             }
         }
 

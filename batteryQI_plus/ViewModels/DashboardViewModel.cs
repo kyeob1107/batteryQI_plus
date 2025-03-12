@@ -8,6 +8,7 @@ using LiveCharts.Wpf;
 using LiveCharts.Helpers;
 using System.Collections.ObjectModel;
 using System.Windows.Shapes;
+using System;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -71,6 +72,9 @@ namespace batteryQI_plus.ViewModels
         private ObservableCollection<DashboardModel> _totalUnitTest = new ObservableCollection<DashboardModel>();
         private ObservableCollection<string> _totalLogContent = new ObservableCollection<string>();
 
+        // Visibility설정
+        private List<Visibility> _tabItemVisibility = new List<Visibility> ();
+
         public ObservableCollection<DashboardModel> UnitTest 
         {  
             get { return _unitTest; } 
@@ -81,6 +85,12 @@ namespace batteryQI_plus.ViewModels
         {
             get { return _logContent; }
             set { SetProperty(ref _logContent, value); }
+        }
+
+        public List<Visibility> TabItemVisibility
+        {
+            get { return _tabItemVisibility; }
+            set { SetProperty(ref _tabItemVisibility, value); }
         }
 
         private void UpdateLogContent()
@@ -165,10 +175,12 @@ namespace batteryQI_plus.ViewModels
 
             InitializeTimer(); // 타이머 초기화
 
+            // 전체 탭인 인덱스 0번에 대해
             _unitTest.Add(new DashboardModel());
             _logContent.Add("");
             _totalUnitTest.Add(new DashboardModel());
             _totalLogContent.Add("");
+            _tabItemVisibility.Add(Visibility.Collapsed); // Visibility관련
 
             for (int line = 1; line < numOfLinePlusOne; line++)
             {
@@ -176,9 +188,11 @@ namespace batteryQI_plus.ViewModels
                 _logContent.Add("");
                 _totalUnitTest.Add(new DashboardModel(_dblink, _employee, line, "total"));
                 _totalLogContent.Add("");
+                _tabItemVisibility.Add(Visibility.Collapsed); // Visibility관련
             }
             UpdateLogContent();
             TotalUpdateLogContent();
+            SetTabItemVisibility();
 
             // 차트 데이터 초기화
             //var values = new ChartValues<double> { 3, 5, 2, 6, 2, 7, 1 };
@@ -201,7 +215,24 @@ namespace batteryQI_plus.ViewModels
             dataListLiveChart = new List<List<double>>(numOfLinePlusOne - 1); // LiveChart y축 저장용
             SeriesCollectionLiveChart = new SeriesCollection();
 
-            for (int i = 0; i < numOfLinePlusOne-1; i++)
+            for (int i = 0; i < numOfLinePlusOne - 1; i++)
+            {
+                var innerList = new List<double>(numOfData);
+                innerList.AddRange(new double[numOfData]); // 일단 현재는 초기값 0으로 초기화
+                dataListLiveChart.Add(innerList);
+                if (Employee.LineId == 0)
+                {
+                    SeriesCollectionLiveChart.Add(
+                    new LineSeries
+                    {
+                        Title = $"Line{i + 1}",
+                        Values = innerList.AsChartValues(),
+                        Fill = System.Windows.Media.Brushes.Transparent
+                    });
+                }
+                      
+            }
+            if(Employee.LineId != 0) 
             {
                 var innerList = new List<double>(numOfData);
                 innerList.AddRange(new double[numOfData]); // 일단 현재는 초기값 0으로 초기화
@@ -209,11 +240,12 @@ namespace batteryQI_plus.ViewModels
                 SeriesCollectionLiveChart.Add(
                 new LineSeries
                 {
-                    Title = $"Line{i+1}",
+                    Title = $"Line{Employee.LineId}",
                     Values = innerList.AsChartValues(),
                     Fill = System.Windows.Media.Brushes.Transparent
                 });
             }
+            
 
             //DateTimeLabels = dates.ConvertAll(d => d.ToString("yyyy-MM-dd HH:mm:ss")); // 이거 안쓰는듯?  
 
@@ -278,6 +310,22 @@ namespace batteryQI_plus.ViewModels
                 }
                 TotalUpdateLogContent();
             });
+        }
+
+        private void SetTabItemVisibility()
+        {
+            if (Employee.EmployeeRole >= 10)
+            {
+                for(int index = 0; index<_unitTest.Count; index++) 
+                {
+                    _tabItemVisibility[index] = Visibility.Visible;
+                }
+            }
+            else 
+            {
+                int index = Employee.LineId;
+                _tabItemVisibility[index] = Visibility.Visible;
+            }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -370,10 +418,18 @@ namespace batteryQI_plus.ViewModels
         private void UpdateLiveChart()
         {
             UpdatedataListLiveChart();
-            for (int i = 0; i < numOfLinePlusOne-1; i++)
+            if (Employee.LineId == 0)
             {
-                SeriesCollectionLiveChart[i].Values = dataListLiveChart[i].AsChartValues();
+                for (int i = 0; i < numOfLinePlusOne - 1; i++)
+                {
+                    SeriesCollectionLiveChart[i].Values = dataListLiveChart[i].AsChartValues();
+                }
             }
+            else 
+            {
+                SeriesCollectionLiveChart[0].Values = dataListLiveChart[Employee.LineId - 1].AsChartValues();
+            }
+            
         }
 
         //// (앵글러)게이지 차트 사이즈 조절
@@ -459,27 +515,59 @@ namespace batteryQI_plus.ViewModels
             set => SetProperty(ref _angularGaugeHeight, value);
         }
 
-        public void UpdateGaugePositions(double parentWidth, double parentHeight)
+        public void UpdateGaugePositions(double parentWidth, double parentHeight, int employeeRole)
         {
-            // Gauge 크기 및 위치 계산 (왼쪽 배치)
-            ProgressWidth = Math.Min(parentWidth, parentHeight) * 0.7; // 부모 크기의 40%
-            ProgressHeight = ProgressWidth;
-            //GaugeLeft = parentWidth * 0.025; // 왼쪽 여백
-            ProgressLeft = parentWidth * 0.035; // 왼쪽 여백
-            ProgressTop = (parentHeight - ProgressHeight) / 2; // 중앙 배치
-            Console.WriteLine($"{ProgressWidth},{ProgressHeight}");
-            // TextBlock의 위치 계산 승엽 화면 기준으로는 2.5에 한글자정도 인듯
-            CenterTextLeft = ProgressLeft + ProgressWidth / 2 - 15; // Textblock의 너비를 고려하여 조정
-            //CenterTextTop = ProgressTop + ProgressHeight / 2 + ProgressHeight * 0.53; // Textblock의 높이를 고려하여 조정
-            CenterTextTop = ProgressTop + ProgressHeight; // Textblock의 높이를 고려하여 조정
+            
+            if (employeeRole >= 10)
+            {
+                // Gauge 크기 및 위치 계산 (왼쪽 배치)
+                ProgressWidth = Math.Min(parentWidth, parentHeight) * 0.7; // 부모 크기의 70%
+                ProgressHeight = ProgressWidth;
+                //GaugeLeft = parentWidth * 0.025; // 왼쪽 여백
+                ProgressLeft = parentWidth * 0.035; // 왼쪽 여백
+                ProgressTop = (parentHeight - ProgressHeight) / 2; // 중앙 배치
+                Console.WriteLine($"{ProgressWidth},{ProgressHeight}");
+                // TextBlock의 위치 계산 승엽 화면 기준으로는 2.5에 한글자정도 인듯
+                CenterTextLeft = ProgressLeft + ProgressWidth / 2 - 15; // Textblock의 너비를 고려하여 조정
+                //CenterTextTop = ProgressTop + ProgressHeight / 2 + ProgressHeight * 0.53; // Textblock의 높이를 고려하여 조정
+                CenterTextTop = ProgressTop + ProgressHeight; // Textblock의 높이를 고려하여 조정
 
-            // AngularGauge 크기 및 위치 계산 (오른쪽 배치)
-            double offset = 50; // 오프셋 설정 (중앙보다 20px 아래쪽으로 이동)
-            RateWidth = Math.Min(parentWidth, parentHeight) * 1.3; // 부모 크기의 60%
-            RateHeight = RateWidth;
-            //AngularGaugeLeft = parentWidth * 0.375; // 오른쪽 여백
-            RateLeft = parentWidth * 0.355; // 오른쪽 여백
-            RateTop = (parentHeight - RateHeight) / 2 + offset; // 중앙 배치
+                // AngularGauge 크기 및 위치 계산 (오른쪽 배치)
+                double offset = 50; // 오프셋 설정 (중앙보다 20px 아래쪽으로 이동)
+                RateWidth = Math.Min(parentWidth, parentHeight) * 1.3; // 부모 크기의 130%
+                RateHeight = RateWidth;
+                //AngularGaugeLeft = parentWidth * 0.375; // 오른쪽 여백
+                RateLeft = parentWidth * 0.355; // 오른쪽 여백
+                RateTop = (parentHeight - RateHeight) / 2 + offset; // 중앙 배치
+            }
+            else 
+            {
+                // Gauge 크기 및 위치 계산 (왼쪽 배치)
+                ProgressWidth = Math.Min(parentWidth, parentHeight) * 0.7; // 부모 크기의 70%
+                ProgressHeight = ProgressWidth;
+                //GaugeLeft = parentWidth * 0.025; // 왼쪽 여백
+                ProgressLeft = (parentWidth/3) * 1.035; // 왼쪽 여백
+                ProgressTop = (parentHeight - ProgressHeight) / 2; // 중앙 배치
+                Console.WriteLine($"{ProgressWidth},{ProgressHeight}");
+                // TextBlock의 위치 계산 승엽 화면 기준으로는 2.5에 한글자정도 인듯
+                CenterTextLeft = ProgressLeft + ProgressWidth / 2 - 15; // Textblock의 너비를 고려하여 조정
+                //CenterTextTop = ProgressTop + ProgressHeight / 2 + ProgressHeight * 0.53; // Textblock의 높이를 고려하여 조정
+                CenterTextTop = ProgressTop + ProgressHeight; // Textblock의 높이를 고려하여 조정
+
+                // AngularGauge 크기 및 위치 계산 (오른쪽 배치)
+                double offset = 50; // 오프셋 설정 (중앙보다 20px 아래쪽으로 이동)
+                RateWidth = Math.Min(parentWidth, parentHeight) * 1.3; // 부모 크기의 130%
+                RateHeight = RateWidth;
+                //AngularGaugeLeft = parentWidth * 0.375; // 오른쪽 여백
+                RateLeft = (parentWidth/3) * 1.355; // 오른쪽 여백
+                RateTop = (parentHeight - RateHeight) / 2 + offset; // 중앙 배치
+            }
+            Console.WriteLine($"너비:{parentWidth}, 높이:{parentHeight}\r\n" +
+                            $"ProgressWidth: {ProgressWidth}, ProgressHeight: {ProgressHeight}\r\n" +
+                            $"ProgressLeft: {ProgressLeft}, ProgressTop: {ProgressTop}\r\n" +
+                            $"CenterTextLeft: {CenterTextLeft}, CenterTextTop: {CenterTextTop}\r\n" +
+                            $"RateWidth: {RateWidth}, RateHeight: {RateHeight}\r\n" +
+                            $"RateLeft: {RateLeft}, RateTop: {RateTop}\r\n");
         }
 
         // 값표시를 위한 텍스트블록 위치설정

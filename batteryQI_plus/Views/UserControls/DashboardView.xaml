@@ -39,7 +39,7 @@
                     <!-- TabControl -->
                     <TabControl Grid.Row="1" Background="#FFFFFF" BorderThickness="0">
                         <!-- 전체 탭 -->
-                        <TabItem Header="전체">
+                        <TabItem Header="전체" Visibility="{Binding TabItemVisibility[0]}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <RichTextBox IsReadOnly="True" 
                                              BorderThickness="0" 
@@ -56,7 +56,7 @@
                         </TabItem>
 
                         <!-- Line1 탭 -->
-                        <TabItem Header="Line1">
+                        <TabItem Header="Line1" Visibility="{Binding TabItemVisibility[1]}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text ="{Binding LogContent[1]}" 
                                            TextWrapping="Wrap" FontSize="14" 
@@ -65,7 +65,7 @@
                         </TabItem>
 
                         <!-- Line2 탭 -->
-                        <TabItem Header="Line2">
+                        <TabItem Header="Line2" Visibility="{Binding TabItemVisibility[2]}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text ="{Binding LogContent[2]}" 
                                            TextWrapping="Wrap" FontSize="14" 
@@ -74,7 +74,7 @@
                         </TabItem>
 
                         <!-- Line3 탭 -->
-                        <TabItem Header="Line3">
+                        <TabItem Header="Line3" Visibility="{Binding TabItemVisibility[3]}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <TextBlock Text="{Binding LogContent[3]}" 
                                            TextWrapping="Wrap" FontSize="14" 
@@ -162,231 +162,247 @@
                             </ScrollViewer>
                         </TabItem>
                     </TabControl>-->
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                    <UniformGrid Grid.Row="1" Rows="1">
                         <!-- Line1 -->
-                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Line1" 
-                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
-                                   Foreground="White" Margin="0 0 0 10" />
-                        <Canvas Grid.Column="0" Grid.Row="1" x:Name="Line1ParentContainer"
-                                SizeChanged="ParentContainer_SizeChanged">
-                            <!-- Progress -->
-                            <lvc:AngularGauge x:Name="Line1Progress"
-                                              Value="{Binding TotalUnitTest[1].TotalProgress}"
-                                              FromValue="0" ToValue="100"
-                                              LabelsStep="10" TicksStep="5"
-                                              Wedge="360"
-                                              TicksForeground="Transparent" Foreground="Transparent"
-                                              FontWeight="Bold" FontSize="16"
-                                              SectionsInnerRadius=".5"
-                                              Style="{StaticResource AngularGaugeStyle}"
-                                              Width="{Binding ProgressWidth}"
-                                              Height="{Binding ProgressHeight}"
-                                              Canvas.Left="{Binding ProgressLeft}"
-                                              Canvas.Top="{Binding ProgressTop}">
-                                <lvc:AngularGauge.Sections>
-                                    <lvc:AngularSection FromValue="0" 
-                                                        ToValue="{Binding TotalUnitTest[1].PreviousProgress}" 
-                                                        Fill="#6BAEFF"/><!--"#3A86FF"/>-->
-                                    <lvc:AngularSection FromValue="{Binding TotalUnitTest[1].PreviousProgress}" 
-                                                        ToValue="{Binding TotalUnitTest[1].TotalProgress}" 
-                                                        Fill="#267AFF"/><!--"#267AFF" "#339BFF" "#0056FF"/>-->
-                                    <lvc:AngularSection FromValue="{Binding TotalUnitTest[1].TotalProgress}" 
-                                                        ToValue="100" 
-                                                        Fill="#A9A9A9"/>
-                                </lvc:AngularGauge.Sections>
-                            </lvc:AngularGauge>
-                            <!-- 값 표시-->
-                            <TextBlock FontSize="10" FontWeight="Bold" Foreground="White"
-                                       Canvas.Left="{Binding CenterTextLeft}"
-                                       Canvas.Top="{Binding CenterTextTop}">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0:F2}%">
-                                        <Binding Path="TotalUnitTest[1].TotalProgress"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                        <Grid Grid.Column="0" Visibility="{Binding TabItemVisibility[1]}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Text="Line1" 
+                                       FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                       Foreground="White" Margin="0 0 0 10" />
+                            <Canvas Grid.Row="1" x:Name="Line1ParentContainer"
+                                    SizeChanged="ParentContainer_SizeChanged">
+                                <!-- Progress -->
+                                <lvc:AngularGauge x:Name="Line1Progress"
+                      Value="{Binding TotalUnitTest[1].TotalProgress}"
+                      FromValue="0" ToValue="100"
+                      LabelsStep="10" TicksStep="5"
+                      Wedge="360"
+                      TicksForeground="Transparent" Foreground="Transparent"
+                      FontWeight="Bold" FontSize="16"
+                      SectionsInnerRadius=".5"
+                      Style="{StaticResource AngularGaugeStyle}"
+                      Width="{Binding ProgressWidth}"
+                      Height="{Binding ProgressHeight}"
+                      Canvas.Left="{Binding ProgressLeft}"
+                      Canvas.Top="{Binding ProgressTop}">
+                                    <lvc:AngularGauge.Sections>
+                                        <lvc:AngularSection FromValue="0" 
+                                ToValue="{Binding TotalUnitTest[1].PreviousProgress}" 
+                                Fill="#6BAEFF"/>
+                                        <!--"#3A86FF"/>-->
+                                        <lvc:AngularSection FromValue="{Binding TotalUnitTest[1].PreviousProgress}" 
+                                ToValue="{Binding TotalUnitTest[1].TotalProgress}" 
+                                Fill="#267AFF"/>
+                                        <!--"#267AFF" "#339BFF" "#0056FF"/>-->
+                                        <lvc:AngularSection FromValue="{Binding TotalUnitTest[1].TotalProgress}" 
+                                ToValue="100" 
+                                Fill="#A9A9A9"/>
+                                    </lvc:AngularGauge.Sections>
+                                </lvc:AngularGauge>
+                                <!-- 값 표시-->
+                                <TextBlock FontSize="10" FontWeight="Bold" Foreground="White"
+               Canvas.Left="{Binding CenterTextLeft}"
+               Canvas.Top="{Binding CenterTextTop}">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0:F2}%">
+                                            <Binding Path="TotalUnitTest[1].TotalProgress"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
 
-                            <!-- Defect Rate -->
-                            <lvc:AngularGauge x:Name="Line1AngularGauge"
-                                              Value="{Binding TotalUnitTest[1].DefectRate}"
-                                              FromValue="0" ToValue="100"
-                                              LabelsStep="10" TicksStep="5"
-                                              Wedge="180"
-                                              TicksForeground="White" Foreground="White"
-                                              FontWeight="Bold" FontSize="10"
-                                              SectionsInnerRadius=".5"
-                                              Style="{StaticResource AngularGaugeStyle}"
-                                              Width="{Binding RateWidth}"
-                                              Height="{Binding RateHeight}"
-                                              Canvas.Left="{Binding RateLeft}"
-                                              Canvas.Top="{Binding RateTop}">
-                                <lvc:AngularGauge.Sections>
-                                    <lvc:AngularSection FromValue="0" ToValue="20" Fill="#86E57F"/>
-                                    <lvc:AngularSection FromValue="20" ToValue="60" Fill="#FAED7D"/>
-                                    <lvc:AngularSection FromValue="60" ToValue="80" Fill="#F361A6"/>
-                                    <lvc:AngularSection FromValue="80" ToValue="100" Fill="#FF3939"/>
-                                </lvc:AngularGauge.Sections>
-                            </lvc:AngularGauge>
-                        </Canvas>
-                        <!-- 간단 정보 출력 -->
-                        <TextBlock Grid.Column="0" Grid.Row="2" Text="{Binding TotalLogContent[1]}" 
-                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
-                                   Foreground="White"  VerticalAlignment="Center" Padding="0,20,0,0" />
+                                <!-- Defect Rate -->
+                                <lvc:AngularGauge x:Name="Line1AngularGauge"
+                      Value="{Binding TotalUnitTest[1].DefectRate}"
+                      FromValue="0" ToValue="100"
+                      LabelsStep="10" TicksStep="5"
+                      Wedge="180"
+                      TicksForeground="White" Foreground="White"
+                      FontWeight="Bold" FontSize="10"
+                      SectionsInnerRadius=".5"
+                      Style="{StaticResource AngularGaugeStyle}"
+                      Width="{Binding RateWidth}"
+                      Height="{Binding RateHeight}"
+                      Canvas.Left="{Binding RateLeft}"
+                      Canvas.Top="{Binding RateTop}">
+                                    <lvc:AngularGauge.Sections>
+                                        <lvc:AngularSection FromValue="0" ToValue="20" Fill="#86E57F"/>
+                                        <lvc:AngularSection FromValue="20" ToValue="60" Fill="#FAED7D"/>
+                                        <lvc:AngularSection FromValue="60" ToValue="80" Fill="#F361A6"/>
+                                        <lvc:AngularSection FromValue="80" ToValue="100" Fill="#FF3939"/>
+                                    </lvc:AngularGauge.Sections>
+                                </lvc:AngularGauge>
+                            </Canvas>
+                            <!-- 간단 정보 출력 -->
+                            <TextBlock Grid.Row="2" Text="{Binding TotalLogContent[1]}" 
+           FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+           Foreground="White"  VerticalAlignment="Center" Padding="0,20,0,0" />
+                        </Grid>
+                        
 
                         <!-- Line2 -->
-                        <TextBlock Grid.Column="1" Grid.Row="0" Text="Line2" 
-                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
-                                   Foreground="White" Margin="0 0 0 10" />
-                        <Canvas Grid.Column="1" Grid.Row="1" x:Name="Line2ParentContainer"
+                        <Grid Grid.Column="1" Visibility="{Binding TabItemVisibility[2]}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Text="Line2" 
+           FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+           Foreground="White" Margin="0 0 0 10" />
+                            <Canvas Grid.Row="1" x:Name="Line2ParentContainer"
         SizeChanged="ParentContainer_SizeChanged">
-                            <!-- Progress -->
-                            <lvc:AngularGauge x:Name="Line2Progress"
-                                              Value="{Binding TotalUnitTest[2].TotalProgress}"
-                                              FromValue="0" ToValue="100"
-                                              LabelsStep="10" TicksStep="5"
-                                              Wedge="360"
-                                              TicksForeground="Transparent" Foreground="Transparent"
-                                              FontWeight="Bold" FontSize="16"
-                                              SectionsInnerRadius=".5"
-                                              Style="{StaticResource AngularGaugeStyle}"
-                                              Width="{Binding ProgressWidth}"
-                                              Height="{Binding ProgressHeight}"
-                                              Canvas.Left="{Binding ProgressLeft}"
-                                              Canvas.Top="{Binding ProgressTop}">
-                                <lvc:AngularGauge.Sections>
-                                    <lvc:AngularSection FromValue="0" 
-                            ToValue="{Binding TotalUnitTest[2].PreviousProgress}" 
-                            Fill="#6BAEFF"/>
-                                    <!--"#3A86FF"/>-->
-                                    <lvc:AngularSection FromValue="{Binding TotalUnitTest[2].PreviousProgress}" 
-                            ToValue="{Binding TotalUnitTest[2].TotalProgress}" 
-                            Fill="#267AFF"/>
-                                    <!--"#267AFF" "#339BFF" "#0056FF"/>-->
-                                    <lvc:AngularSection FromValue="{Binding TotalUnitTest[2].TotalProgress}" 
-                            ToValue="100" 
-                            Fill="#A9A9A9"/>
-                                </lvc:AngularGauge.Sections>
-                            </lvc:AngularGauge>
-                            <!-- 값 표시-->
-                            <TextBlock FontSize="10" FontWeight="Bold" Foreground="White"
-           Canvas.Left="{Binding CenterTextLeft}"
-           Canvas.Top="{Binding CenterTextTop}">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0:F2}%">
-                                        <Binding Path="TotalUnitTest[2].TotalProgress"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                                <!-- Progress -->
+                                <lvc:AngularGauge x:Name="Line2Progress"
+                      Value="{Binding TotalUnitTest[2].TotalProgress}"
+                      FromValue="0" ToValue="100"
+                      LabelsStep="10" TicksStep="5"
+                      Wedge="360"
+                      TicksForeground="Transparent" Foreground="Transparent"
+                      FontWeight="Bold" FontSize="16"
+                      SectionsInnerRadius=".5"
+                      Style="{StaticResource AngularGaugeStyle}"
+                      Width="{Binding ProgressWidth}"
+                      Height="{Binding ProgressHeight}"
+                      Canvas.Left="{Binding ProgressLeft}"
+                      Canvas.Top="{Binding ProgressTop}">
+                                    <lvc:AngularGauge.Sections>
+                                        <lvc:AngularSection FromValue="0" 
+                                ToValue="{Binding TotalUnitTest[2].PreviousProgress}" 
+                                Fill="#6BAEFF"/>
+                                        <!--"#3A86FF"/>-->
+                                        <lvc:AngularSection FromValue="{Binding TotalUnitTest[2].PreviousProgress}" 
+                                ToValue="{Binding TotalUnitTest[2].TotalProgress}" 
+                                Fill="#267AFF"/>
+                                        <!--"#267AFF" "#339BFF" "#0056FF"/>-->
+                                        <lvc:AngularSection FromValue="{Binding TotalUnitTest[2].TotalProgress}" 
+                                ToValue="100" 
+                                Fill="#A9A9A9"/>
+                                    </lvc:AngularGauge.Sections>
+                                </lvc:AngularGauge>
+                                <!-- 값 표시-->
+                                <TextBlock FontSize="10" FontWeight="Bold" Foreground="White"
+            Canvas.Left="{Binding CenterTextLeft}"
+            Canvas.Top="{Binding CenterTextTop}">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0:F2}%">
+                                            <Binding Path="TotalUnitTest[2].TotalProgress"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
 
-                            <!-- Defect Rate -->
-                            <lvc:AngularGauge x:Name="Line2AngularGauge"
-                                              Value="{Binding TotalUnitTest[2].DefectRate}"
-                                              FromValue="0" ToValue="100"
-                                              LabelsStep="10" TicksStep="5"
-                                              Wedge="180"
-                                              TicksForeground="White" Foreground="White"
-                                              FontWeight="Bold" FontSize="10"
-                                              SectionsInnerRadius=".5"
-                                              Style="{StaticResource AngularGaugeStyle}"
-                                              Width="{Binding RateWidth}"
-                                              Height="{Binding RateHeight}"
-                                              Canvas.Left="{Binding RateLeft}"
-                                              Canvas.Top="{Binding RateTop}">
-                                <lvc:AngularGauge.Sections>
-                                    <lvc:AngularSection FromValue="0" ToValue="20" Fill="#86E57F"/>
-                                    <lvc:AngularSection FromValue="20" ToValue="60" Fill="#FAED7D"/>
-                                    <lvc:AngularSection FromValue="60" ToValue="80" Fill="#F361A6"/>
-                                    <lvc:AngularSection FromValue="80" ToValue="100" Fill="#FF3939"/>
-                                </lvc:AngularGauge.Sections>
-                            </lvc:AngularGauge>
-                        </Canvas>
-                        <!-- 간단 정보 출력 -->
-                        <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding TotalLogContent[2]}" 
-                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
-                                   Foreground="White" VerticalAlignment="Center" Padding="0,20,0,0" />
-
+                                <!-- Defect Rate -->
+                                <lvc:AngularGauge x:Name="Line2AngularGauge"
+                      Value="{Binding TotalUnitTest[2].DefectRate}"
+                      FromValue="0" ToValue="100"
+                      LabelsStep="10" TicksStep="5"
+                      Wedge="180"
+                      TicksForeground="White" Foreground="White"
+                      FontWeight="Bold" FontSize="10"
+                      SectionsInnerRadius=".5"
+                      Style="{StaticResource AngularGaugeStyle}"
+                      Width="{Binding RateWidth}"
+                      Height="{Binding RateHeight}"
+                      Canvas.Left="{Binding RateLeft}"
+                      Canvas.Top="{Binding RateTop}">
+                                    <lvc:AngularGauge.Sections>
+                                        <lvc:AngularSection FromValue="0" ToValue="20" Fill="#86E57F"/>
+                                        <lvc:AngularSection FromValue="20" ToValue="60" Fill="#FAED7D"/>
+                                        <lvc:AngularSection FromValue="60" ToValue="80" Fill="#F361A6"/>
+                                        <lvc:AngularSection FromValue="80" ToValue="100" Fill="#FF3939"/>
+                                    </lvc:AngularGauge.Sections>
+                                </lvc:AngularGauge>
+                            </Canvas>
+                            <!-- 간단 정보 출력 -->
+                            <TextBlock Grid.Row="2" Text="{Binding TotalLogContent[2]}" 
+                                       FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                       Foreground="White" VerticalAlignment="Center" Padding="0,20,0,0" />
+                        </Grid>
                         <!-- Line3 -->
-                        <TextBlock Grid.Column="2" Grid.Row="0" Text="Line3" 
-                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
-                                   Foreground="White" Margin="0 0 0 10" />
-                        <Canvas Grid.Column="2" Grid.Row="1" x:Name="Line3ParentContainer"
-                                SizeChanged="ParentContainer_SizeChanged">
-                            <!-- Progress -->
-                            <lvc:AngularGauge x:Name="Line3Progress"
-                                              Value="{Binding TotalUnitTest[3].TotalProgress}"
-                                              FromValue="0" ToValue="100"
-                                              LabelsStep="10" TicksStep="5"
-                                              Wedge="360"
-                                              TicksForeground="Transparent" Foreground="Transparent"
-                                              FontWeight="Bold" FontSize="16"
-                                              SectionsInnerRadius=".5"
-                                              Style="{StaticResource AngularGaugeStyle}"
-                                              Width="{Binding ProgressWidth}"
-                                              Height="{Binding ProgressHeight}"
-                                              Canvas.Left="{Binding ProgressLeft}"
-                                              Canvas.Top="{Binding ProgressTop}">
-                                <lvc:AngularGauge.Sections>
-                                    <lvc:AngularSection FromValue="0" 
-                                                        ToValue="{Binding TotalUnitTest[3].PreviousProgress}" 
-                                                        Fill="#6BAEFF"/>
-                                    <!--"#3A86FF"/>-->
-                                    <lvc:AngularSection FromValue="{Binding TotalUnitTest[3].PreviousProgress}" 
-                                                        ToValue="{Binding TotalUnitTest[3].TotalProgress}" 
-                                                        Fill="#267AFF"/>
-                                    <!--"#267AFF" "#339BFF" "#0056FF"/>-->
-                                    <lvc:AngularSection FromValue="{Binding TotalUnitTest[3].TotalProgress}" 
-                                                        ToValue="100" 
-                                                        Fill="#A9A9A9"/>
-                                </lvc:AngularGauge.Sections>
-                            </lvc:AngularGauge>
-                            <!-- 값 표시-->
-                            <TextBlock FontSize="10" FontWeight="Bold" Foreground="White"
-                                       Canvas.Left="{Binding CenterTextLeft}"
-                                       Canvas.Top="{Binding CenterTextTop}">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0:F2}%">
-                                        <Binding Path="TotalUnitTest[3].TotalProgress"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                        <Grid Grid.Column="2" Visibility="{Binding TabItemVisibility[3]}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                            <!-- Defect Rate -->
-                            <lvc:AngularGauge x:Name="Line3AngularGauge"
-                                              Value="{Binding TotalUnitTest[3].DefectRate}"
-                                              FromValue="0" ToValue="100"
-                                              LabelsStep="10" TicksStep="5"
-                                              Wedge="180"
-                                              TicksForeground="White" Foreground="White"
-                                              FontWeight="Bold" FontSize="10"
-                                              SectionsInnerRadius=".5"
-                                              Style="{StaticResource AngularGaugeStyle}"
-                                              Width="{Binding RateWidth}"
-                                              Height="{Binding RateHeight}"
-                                              Canvas.Left="{Binding RateLeft}"
-                                              Canvas.Top="{Binding RateTop}">
-                                <lvc:AngularGauge.Sections>
-                                    <lvc:AngularSection FromValue="0" ToValue="20" Fill="#86E57F"/>
-                                    <lvc:AngularSection FromValue="20" ToValue="60" Fill="#FAED7D"/>
-                                    <lvc:AngularSection FromValue="60" ToValue="80" Fill="#F361A6"/>
-                                    <lvc:AngularSection FromValue="80" ToValue="100" Fill="#FF3939"/>
-                                </lvc:AngularGauge.Sections>
-                            </lvc:AngularGauge>
-                        </Canvas>
-                        <!-- 간단 정보 출력 -->
-                        <TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding TotalLogContent[3]}" 
-                                   FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
-                                   Foreground="White" VerticalAlignment="Center" Padding="0,20,0,0" />
-                    </Grid>
+                            <TextBlock Grid.Row="0" Text="Line3" 
+                                       FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                       Foreground="White" Margin="0 0 0 10" />
+                            <Canvas Grid.Row="1" x:Name="Line3ParentContainer"
+                                    SizeChanged="ParentContainer_SizeChanged">
+                                <!-- Progress -->
+                                <lvc:AngularGauge x:Name="Line3Progress"
+                                                    Value="{Binding TotalUnitTest[3].TotalProgress}"
+                                                    FromValue="0" ToValue="100"
+                                                    LabelsStep="10" TicksStep="5"
+                                                    Wedge="360"
+                                                    TicksForeground="Transparent" Foreground="Transparent"
+                                                    FontWeight="Bold" FontSize="16"
+                                                    SectionsInnerRadius=".5"
+                                                    Style="{StaticResource AngularGaugeStyle}"
+                                                    Width="{Binding ProgressWidth}"
+                                                    Height="{Binding ProgressHeight}"
+                                                    Canvas.Left="{Binding ProgressLeft}"
+                                                    Canvas.Top="{Binding ProgressTop}">
+                                    <lvc:AngularGauge.Sections>
+                                        <lvc:AngularSection FromValue="0" 
+                                                            ToValue="{Binding TotalUnitTest[3].PreviousProgress}" 
+                                                            Fill="#6BAEFF"/>
+                                        <!--"#3A86FF"/>-->
+                                        <lvc:AngularSection FromValue="{Binding TotalUnitTest[3].PreviousProgress}" 
+                                                            ToValue="{Binding TotalUnitTest[3].TotalProgress}" 
+                                                            Fill="#267AFF"/>
+                                        <!--"#267AFF" "#339BFF" "#0056FF"/>-->
+                                        <lvc:AngularSection FromValue="{Binding TotalUnitTest[3].TotalProgress}" 
+                                                            ToValue="100" 
+                                                            Fill="#A9A9A9"/>
+                                    </lvc:AngularGauge.Sections>
+                                </lvc:AngularGauge>
+                                <!-- 값 표시-->
+                                <TextBlock FontSize="10" FontWeight="Bold" Foreground="White"
+                                           Canvas.Left="{Binding CenterTextLeft}"
+                                           Canvas.Top="{Binding CenterTextTop}">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0:F2}%">
+                                            <Binding Path="TotalUnitTest[3].TotalProgress"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+
+                                <!-- Defect Rate -->
+                                <lvc:AngularGauge x:Name="Line3AngularGauge"
+                                                    Value="{Binding TotalUnitTest[3].DefectRate}"
+                                                    FromValue="0" ToValue="100"
+                                                    LabelsStep="10" TicksStep="5"
+                                                    Wedge="180"
+                                                    TicksForeground="White" Foreground="White"
+                                                    FontWeight="Bold" FontSize="10"
+                                                    SectionsInnerRadius=".5"
+                                                    Style="{StaticResource AngularGaugeStyle}"
+                                                    Width="{Binding RateWidth}"
+                                                    Height="{Binding RateHeight}"
+                                                    Canvas.Left="{Binding RateLeft}"
+                                                    Canvas.Top="{Binding RateTop}">
+                                    <lvc:AngularGauge.Sections>
+                                        <lvc:AngularSection FromValue="0" ToValue="20" Fill="#86E57F"/>
+                                        <lvc:AngularSection FromValue="20" ToValue="60" Fill="#FAED7D"/>
+                                        <lvc:AngularSection FromValue="60" ToValue="80" Fill="#F361A6"/>
+                                        <lvc:AngularSection FromValue="80" ToValue="100" Fill="#FF3939"/>
+                                    </lvc:AngularGauge.Sections>
+                                </lvc:AngularGauge>
+                            </Canvas>
+                            <!-- 간단 정보 출력 -->
+                            <TextBlock Grid.Row="2" Text="{Binding TotalLogContent[3]}" 
+                                       FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                       Foreground="White" VerticalAlignment="Center" Padding="0,20,0,0" />
+                        </Grid>
+                    </UniformGrid>
                     <!-- 계산된 날짜시간 범위 표시 -->
                     <TextBlock Grid.Row="2" FontSize="9" 
                                FontWeight="Light" HorizontalAlignment="Center"
