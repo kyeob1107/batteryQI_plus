@@ -13,7 +13,7 @@ Members : <a href = "https://github.com/kyeob1107">곽승엽</a>, <a href = "htt
 2차 전지 품질 관리 소프트웨어는 배터리 생산 품질 검사를 혁신적으로 지원하는 AI 기반 솔루션입니다. 이 도구는 관리자 육안 검사와 AI 분석을 결합하여 품질 검사의 정확도와 효율성을 획기적으로 향상시킵니다. AI 기술은 검사 데이터를 정밀하게 분석하고, 관리자의 판단을 보조하여 잠재적인 결함을 선제적으로 식별합니다. 또한, 검사 결과를 기반으로 다양한 통계와 인사이트를 제공하여 생산 품질 관리의 전반적인 수준을 향상시킬 수 있도록 지원합니다.
 
 
-### 1. 로그인 페이지
+<!--### 1. 로그인 페이지
 
 <img src = "./img/login.gif"/>
 
@@ -70,4 +70,6 @@ Members : <a href = "https://github.com/kyeob1107">곽승엽</a>, <a href = "htt
 <img src = "./img/batteryQI-ViewModel.drawio.svg"/>
 
 - View 클래스 다이어그램   
-<img src = "./img/batteryQI-View.drawio.svg"/>
+<img src = "./img/batteryQI-View.drawio.svg"/>-->
+
+### 이전 프로젝트에 있던 것처럼 시연 gif, UML은 추후 정리 및 작업하여 업데이트할 예정
