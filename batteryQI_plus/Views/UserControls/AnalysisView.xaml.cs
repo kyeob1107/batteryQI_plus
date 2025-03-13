@@ -13,8 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ScottPlot.WPF;
-using ScottPlot;
 using batteryQI_plus.ViewModels;
 using LiveCharts.Wpf;
 using LiveCharts;

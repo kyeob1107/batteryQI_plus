@@ -12,8 +12,6 @@ using System.ComponentModel;
 using ZstdSharp.Unsafe;
 using System.Windows.Shapes;
 using Google.Protobuf.WellKnownTypes;
-using Newtonsoft.Json.Linq;
-using Microsoft.ML.OnnxRuntime;
 using System.Collections.Generic;
 
 namespace batteryQI_plus.ViewModels
