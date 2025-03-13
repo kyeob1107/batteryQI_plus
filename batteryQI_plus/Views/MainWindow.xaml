@@ -4,6 +4,7 @@
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:viewmodels="clr-namespace:batteryQI_plus.ViewModels"
         xmlns:Default="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="Default" x:Class="batteryQI_plus.Views.MainWindow"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         Title="BatteryQI"         
         WindowStartupLocation="CenterScreen" 
         WindowState="Maximized" 
@@ -165,6 +166,17 @@
             <!-- 상태 표시줄 -->
             <StatusBar Grid.Row="1" Background="Transparent">
                 <StatusBarItem HorizontalAlignment="Stretch">
+                    <TextBlock VerticalAlignment="Center" 
+                                HorizontalAlignment="Center" Padding="0">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}접속자: {0} | 등급: {1}">
+                                <Binding Path="Employee.EmployeeID"/>
+                                <Binding Path="RoleGrade"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Stretch">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <!-- FontAwesome 아이콘 -->
                         <fa:IconBlock Icon="{Binding DbConnectionIcon}" 
@@ -183,6 +195,9 @@
                             </TextBlock.Text>
                         </TextBlock>
                     </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding Source={x:Static system:DateTime.Now}, StringFormat='{}yyyy-MM-dd ddd HH:mm:ss'}"/>
                 </StatusBarItem>
                 <!-- 연결 테스트 용도 -->
                 <!--<StatusBarItem HorizontalAlignment="Right">

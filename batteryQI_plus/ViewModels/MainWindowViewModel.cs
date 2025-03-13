@@ -5,6 +5,7 @@ using batteryQI_plus.Models;
 using System.Windows.Media;
 using System.Windows;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -19,6 +20,7 @@ namespace batteryQI_plus.ViewModels
         private string _dbConnectionIcon; // 아이콘 이름 (FontAwesome 아이콘)
         private Brush _dbConnectionColor; // 아이콘 색상
         private readonly ViewModelLocator _viewModelLocator;
+        private string _roleGrade; // 역할등급
 
         public Employee Employee
         {
@@ -50,6 +52,11 @@ namespace batteryQI_plus.ViewModels
             get => _dbConnectionColor;
             set => SetProperty(ref _dbConnectionColor, value);
         }
+        public string RoleGrade
+        {
+            get => _roleGrade;
+            set => SetProperty(ref _roleGrade, value);
+        }
         public Action? CloseAction { get; set; }
 
         public MainWindowViewModel(ViewModelLocator viewModelLocator)
@@ -57,7 +64,7 @@ namespace batteryQI_plus.ViewModels
             // 로그인 직원, 직원 리스트 초기화
             _employee = Employee.Instance();
             EmployeeListInit();
-            
+            SetRoleGrade();
             // 이벤트 구독
             _dblink.ConnectionStateChanged += OnDbConnectionStateChanged;
             // 연결상태 초기 상태 설정
@@ -180,6 +187,22 @@ namespace batteryQI_plus.ViewModels
             //}
         }
         #endregion
+
+        // 접속자 역할 등급 설정 메소드
+        private void SetRoleGrade() 
+        {
+            //var matchingGroups = _employeeGroups.FirstOrDefault(group => group.LineId == Employee.LineId);
+            //try
+            //{
+            //    _roleGrade = Employee.LineId==0 ? matchingGroups.DisplayRole : matchingGroups.DisplayRole + " 근무자";
+            //}
+            //catch (Exception ex) 
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
+
+            _roleGrade = Employee.LineId == 0 ? "Manager" : $"Line{Employee.LineId} 근무자";
+        }
 
         // 로그아웃시 검사 결과 정리
         public void TotalInspectionResult()
