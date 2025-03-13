@@ -170,7 +170,12 @@
                             </ScrollViewer>
                         </TabItem>
                     </TabControl>-->
-                    <UniformGrid Grid.Row="1" Rows="1">
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <UniformGrid Grid.Column="0" Rows="1">
                         <!-- Line1 -->
                         <Grid Grid.Column="0" Visibility="{Binding TabItemVisibility[1]}">
                             <Grid.RowDefinitions>
@@ -180,7 +185,7 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Text="Line1" 
-                                       FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                       FontSize="12" FontWeight="DemiBold" HorizontalAlignment="Center"
                                        Foreground="White" Margin="0 0 0 10" />
                             <Canvas Grid.Row="1" x:Name="Line1ParentContainer"
                                     SizeChanged="ParentContainer_SizeChanged">
@@ -261,7 +266,7 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Text="Line2" 
-           FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+           FontSize="12" FontWeight="DemiBold" HorizontalAlignment="Center"
            Foreground="White" Margin="0 0 0 10" />
                             <Canvas Grid.Row="1" x:Name="Line2ParentContainer"
         SizeChanged="ParentContainer_SizeChanged">
@@ -340,7 +345,7 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Text="Line3" 
-                                       FontSize="9" FontWeight="Medium" HorizontalAlignment="Center"
+                                       FontSize="12" FontWeight="DemiBold" HorizontalAlignment="Center"
                                        Foreground="White" Margin="0 0 0 10" />
                             <Canvas Grid.Row="1" x:Name="Line3ParentContainer"
                                     SizeChanged="ParentContainer_SizeChanged">
@@ -411,6 +416,39 @@
                                        Foreground="White" VerticalAlignment="Center" Padding="0,20,0,0" />
                         </Grid>
                     </UniformGrid>
+                        <Border Grid.Column="1" Background="#8d82c8" Margin="0,5,10,0" 
+                                Padding="10,0,10,0" CornerRadius="10">
+                            <StackPanel Margin="0">
+                                <StackPanel>
+                                    <TextBlock Text="진행도" FontSize="12" FontWeight="DemiBold" Foreground="White" Margin="2" HorizontalAlignment="Center"/>
+                                    <ItemsControl ItemsSource="{Binding LegendDataProgress}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Rectangle Width="10" Height="10" Fill="{Binding Value}" Margin="2" />
+                                                    <TextBlock Text="{Binding Key}" FontWeight="Medium" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                                <Separator Background="#7163ba" Margin="0,8,0,3" Height="0.8" VerticalAlignment="Center"/>
+                                <StackPanel Margin="0">
+                                    <TextBlock Text="불량률" FontSize="12" FontWeight="DemiBold" Foreground="White" Margin="2" HorizontalAlignment="Center"/>
+                                    <ItemsControl ItemsSource="{Binding LegendDataRate}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Rectangle Width="10" Height="10" Fill="{Binding Value}" Margin="2" />
+                                                    <TextBlock Text="{Binding Key}" FontWeight="Medium" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
                     <!-- 계산된 날짜시간 범위 표시 -->
                     <TextBlock Grid.Row="2" FontSize="9" 
                                FontWeight="Light" HorizontalAlignment="Center"

@@ -9,6 +9,7 @@ using LiveCharts.Helpers;
 using System.Collections.ObjectModel;
 using System.Windows.Shapes;
 using System;
+using System.Windows.Media;
 
 namespace batteryQI_plus.ViewModels
 {
@@ -74,6 +75,10 @@ namespace batteryQI_plus.ViewModels
 
         // Visibility설정
         private List<Visibility> _tabItemVisibility = new List<Visibility> ();
+
+        // 진행도 불량률 차트 설정 관련
+        public Dictionary<string, string> LegendDataProgress { get; set; }
+        public Dictionary<string, string> LegendDataRate { get; set; }
 
         public ObservableCollection<DashboardModel> UnitTest 
         {  
@@ -192,6 +197,7 @@ namespace batteryQI_plus.ViewModels
             }
             UpdateLogContent();
             TotalUpdateLogContent();
+            SetProgreesNRateColors();
             SetTabItemVisibility();
 
             // 차트 데이터 초기화
@@ -326,6 +332,23 @@ namespace batteryQI_plus.ViewModels
                 int index = Employee.LineId;
                 _tabItemVisibility[index] = Visibility.Visible;
             }
+        }
+
+        private void SetProgreesNRateColors()
+        {
+            LegendDataProgress = new Dictionary<string, string>
+            {
+                { "이전 검사량", "#6BAEFF" },
+                { "추가 검사량", "#267AFF" },
+                { "남은 검사량", "#A9A9A9" },
+            };
+            LegendDataRate = new Dictionary<string, string>
+            {
+                { "안전", "#86E57F" },
+                { "양호", "#FAED7D" },
+                { "주의", "#F361A6" },
+                { "위험", "#FF3939" },
+            };
         }
 
         private void Timer_Tick(object sender, EventArgs e)
